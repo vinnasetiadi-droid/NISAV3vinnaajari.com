@@ -1,0 +1,311 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+html.dark {
+  color-scheme: dark;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  @apply font-sans text-[15px] antialiased text-slate-800 dark:text-slate-200;
+}
+
+/* ---------- Mesh / hero backgrounds (Pippit x Google Labs vibes) ---------- */
+
+.bg-hero-dark {
+  background-color: #04060b;
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1.5px),
+    radial-gradient(52rem 40rem at 18% -8%, rgba(10, 112, 255, 0.2), transparent 60%),
+    radial-gradient(46rem 36rem at 108% 22%, rgba(0, 255, 255, 0.1), transparent 62%),
+    radial-gradient(50rem 42rem at 42% 118%, rgba(10, 112, 255, 0.16), transparent 60%);
+  background-size: 26px 26px, 100% 100%, 100% 100%, 100% 100%;
+}
+
+.bg-app-light {
+  background-color: #eef3f8;
+  background-image:
+    radial-gradient(rgba(10, 60, 120, 0.05) 1px, transparent 1.5px),
+    radial-gradient(48rem 38rem at 12% 4%, rgba(102, 170, 255, 0.35), transparent 58%),
+    radial-gradient(44rem 36rem at 96% 16%, rgba(0, 255, 255, 0.2), transparent 60%),
+    radial-gradient(46rem 40rem at 42% 112%, rgba(10, 112, 255, 0.16), transparent 62%),
+    linear-gradient(180deg, #f2f8ff 0%, #eefcfe 100%);
+  background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+}
+
+.dark .bg-app-light {
+  /* ala Siri: atas hitam pekat, glow biru naik dari bawah — tanpa dot pattern */
+  background-color: #04060b;
+  background-image: linear-gradient(
+    to top,
+    rgba(10, 112, 255, 0.42) 0%,
+    rgba(0, 140, 255, 0.2) 18%,
+    rgba(0, 80, 200, 0.08) 38%,
+    transparent 62%
+  );
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* ---------- Glass system ---------- */
+
+.glass {
+  @apply border border-white/50 bg-white/60 shadow-glass backdrop-blur-xl;
+}
+.dark .glass {
+  @apply border-white/10 bg-white/[0.06] shadow-glass-dark;
+}
+
+.glass-soft {
+  @apply border border-white/40 bg-white/40 backdrop-blur-lg;
+}
+.dark .glass-soft {
+  @apply border-white/[0.07] bg-white/[0.04];
+}
+
+.glass-pop {
+  @apply border border-white/70 bg-white/[0.94] shadow-pop backdrop-blur-2xl;
+  backdrop-filter: blur(40px) saturate(1.4);
+  -webkit-backdrop-filter: blur(40px) saturate(1.4);
+}
+.dark .glass-pop {
+  @apply border-white/10 bg-[#10141c]/95 shadow-glass-dark;
+}
+
+.glass-input {
+  @apply border border-white/60 bg-white/70 shadow-glass backdrop-blur-2xl;
+}
+.dark .glass-input {
+  @apply border-white/10 bg-white/[0.07] shadow-glass-dark;
+}
+
+.glass-dark {
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.055);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* ---------- Text helpers ---------- */
+
+/* Headline font: General Sans, kerning -2 (−0.02em) di semua pemakaian */
+.font-display {
+  letter-spacing: -0.02em;
+}
+
+.text-gradient {
+  @apply bg-gradient-to-r from-[#66c4ff] via-[#00ffff] to-[#0a70ff] bg-clip-text text-transparent;
+}
+.text-gradient-strong {
+  @apply bg-gradient-to-r from-brand-500 to-teal2 bg-clip-text text-transparent;
+}
+
+.btn-gradient {
+  @apply bg-gradient-to-r from-brand-600 via-[#4f5be8] to-teal2 text-white transition
+    hover:brightness-110 active:scale-[0.99];
+}
+
+/* Tombol aurora — light: gradien biru solid ber-wave (tanpa lewat putih/mint), teks putih */
+.btn-aurora {
+  background: linear-gradient(
+    100deg,
+    #8fdcff 0%,
+    #4db4ff 25%,
+    #0a70ff 50%,
+    #4db4ff 75%,
+    #8fdcff 100%
+  );
+  background-size: 300% 100%;
+  animation: aurora-flow 9s ease-in-out infinite;
+  color: #ffffff;
+  box-shadow: 0 0 22px rgba(60, 170, 255, 0.45),
+    inset 0 1px 1px rgba(255, 255, 255, 0.55);
+  transition: filter 0.15s, box-shadow 0.15s, transform 0.1s;
+}
+/* dark: ramp cyan→putih→biru seperti semula, teks gelap */
+.dark .btn-aurora {
+  background: linear-gradient(
+    100deg,
+    #9ffbff 0%,
+    #d8fcff 12%,
+    #eefdff 24%,
+    #b3ddff 38%,
+    #66aaff 52%,
+    #0a70ff 64%,
+    #66aaff 76%,
+    #d8fcff 88%,
+    #9ffbff 100%
+  );
+  background-size: 300% 100%;
+  animation: aurora-flow 9s ease-in-out infinite;
+  color: #0b0e1a;
+  box-shadow: 0 0 24px rgba(0, 220, 255, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+@keyframes aurora-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+.btn-aurora:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 0 36px rgba(0, 230, 255, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+.btn-aurora:active {
+  transform: scale(0.98);
+}
+
+/* varian diam — dipakai tombol kirim bundar */
+.aurora-still,
+.dark .aurora-still {
+  animation: none;
+  background-size: 100% 100%;
+}
+
+/* Pill kaca (sama seperti tombol ide di landing) */
+.pill-glass {
+  @apply flex items-center gap-2 rounded-full border border-slate-300/70 bg-white/70 font-medium text-slate-600 transition hover:bg-white;
+}
+.dark .pill-glass {
+  @apply border-white/15 bg-white/[0.07] text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] hover:border-white/30 hover:bg-white/[0.13];
+}
+
+.shimmer-text {
+  background: linear-gradient(90deg, #94a3b8 25%, #0f172a 50%, #94a3b8 75%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 1.6s linear infinite;
+}
+.dark .shimmer-text {
+  background: linear-gradient(90deg, #64748b 25%, #f1f5f9 50%, #64748b 75%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- Entrance (dashboard welcome) ---------- */
+
+@keyframes enter-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes enter-orb {
+  0% {
+    opacity: 0;
+    transform: scale(0.55);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.enter-up {
+  animation: enter-up 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.enter-orb {
+  animation: enter-orb 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* panel artifact: slide masuk ke kiri dari tepi kanan */
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateX(56px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.panel-in {
+  animation: panel-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ---------- Theme switch animation (View Transitions) ---------- */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 2;
+}
+
+/* fallback: browser tanpa View Transitions tetap dapat crossfade warna */
+html.theme-anim,
+html.theme-anim *,
+html.theme-anim *::before,
+html.theme-anim *::after {
+  transition: background-color 0.45s ease, color 0.45s ease,
+    border-color 0.45s ease, fill 0.45s ease, box-shadow 0.45s ease !important;
+}
+
+/* ---------- Scrollbars ---------- */
+
+.nice-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.nice-scroll::-webkit-scrollbar-thumb {
+  @apply rounded-full bg-slate-400/30;
+}
+.nice-scroll::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-400/50;
+}
+.nice-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---------- Misc ---------- */
+
+kbd {
+  @apply rounded-md border border-slate-300/70 bg-white/60 px-1.5 py-0.5 font-mono text-[10px] text-slate-500
+    dark:border-white/10 dark:bg-white/10 dark:text-slate-400;
+}
+
+input,
+textarea {
+  outline: none;
+}
+
+.fade-edge-b {
+  mask-image: linear-gradient(to bottom, black calc(100% - 28px), transparent);
+}

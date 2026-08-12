@@ -1,0 +1,657 @@
+"use client";
+
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import {
+  ArrowUp,
+  Bot,
+  Check,
+  ChevronDown,
+  FileText,
+  FlaskConical,
+  GraduationCap,
+  Lightbulb,
+  ListChecks,
+  Mic,
+  Paperclip,
+  Plus,
+  Scale,
+  Send,
+  Settings2,
+  SlidersHorizontal,
+  Sparkles,
+  Square,
+  X,
+  Zap,
+} from "lucide-react";
+import { MenuShell, useOutside, useToast } from "@/components/ui";
+import { GradSparkle } from "@/components/GradSparkle";
+import { AI_MODELS, COMMANDS, MODES, TEMPLATES } from "@/lib/registry";
+import { useDB } from "@/lib/store";
+import { cn } from "@/lib/utils";
+import type { ModeId } from "@/lib/types";
+
+export interface PendingFile {
+  name: string;
+  size: number;
+  mime: string;
+  text?: string;
+  dataUrl?: string;
+}
+
+interface Props {
+  placeholder: string;
+  streaming?: boolean;
+  onSend: (text: string, files: PendingFile[]) => void;
+  onStop?: () => void;
+  mode: ModeId;
+  onMode: (m: ModeId) => void;
+  showHints?: boolean;
+  autoFocus?: boolean;
+  inputId?: string;
+  /** "pill" (default, dipakai di chat) atau "panel" (dashboard) */
+  variant?: "pill" | "panel";
+  /** teks awal (mis. prompt bawaan dari landing) */
+  initialText?: string;
+}
+
+/** Satu menu gabungan (mode + templates + recent) + menu model. */
+type Pop = null | "tools" | "model";
+
+const MODE_ICONS: Record<ModeId, import("lucide-react").LucideIcon> = {
+  auto: Sparkles,
+  brainstorm: Lightbulb,
+  comprehensive: Scale,
+  deep: FlaskConical,
+  plan: ListChecks,
+  ringkas: Zap,
+  socratic: GraduationCap,
+};
+
+export function ChatInput({
+  placeholder,
+  streaming,
+  onSend,
+  onStop,
+  mode,
+  onMode,
+  showHints,
+  autoFocus,
+  inputId,
+  variant = "pill",
+  initialText,
+}: Props) {
+  const [text, setText] = useState(initialText ?? "");
+  const [files, setFiles] = useState<PendingFile[]>([]);
+  const [pop, setPop] = useState<Pop>(null);
+  const aiModel = useDB((s) => s.aiModel);
+  const setAiModel = useDB((s) => s.setAiModel);
+  const curAiModel = AI_MODELS.find((m) => m.id === aiModel) || AI_MODELS[1];
+  const [slashIdx, setSlashIdx] = useState(0);
+  const taRef = useRef<HTMLTextAreaElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const recent = useDB((s) => s.d().recent);
+  const drive = useDB((s) => s.d());
+  const toast = useToast();
+  const closePop = useCallback(() => setPop(null), []);
+  const popRef = useOutside(closePop);
+
+  // slash menu
+  const slashMatch = text.match(/^\/([\w-]*)$/);
+  const slashItems = useMemo(() => {
+    if (!slashMatch) return [];
+    const q = slashMatch[1].toLowerCase();
+    return COMMANDS.filter((c) => c.id.includes(q));
+  }, [slashMatch]);
+
+  // @ mention menu
+  const mentionMatch = text.match(/@([\w-]*)$/);
+  const mentionItems = useMemo(() => {
+    if (!mentionMatch) return [];
+    const q = mentionMatch[1].toLowerCase();
+    const docs = drive.files
+      .filter((f) => f.name.toLowerCase().includes(q))
+      .map((f) => ({ name: f.name, type: "doc" as const }));
+    const arts = drive.artifacts
+      .filter((a) => a.title.toLowerCase().includes(q))
+      .map((a) => ({ name: a.title, type: "artifact" as const }));
+    return [...docs, ...arts].slice(0, 7);
+  }, [mentionMatch, drive.files, drive.artifacts]);
+
+  useEffect(() => setSlashIdx(0), [slashMatch?.[1]]);
+
+  const recalcHeight = useCallback(() => {
+    const ta = taRef.current;
+    if (!ta) return;
+    ta.style.height = "0px";
+    ta.style.height = Math.min(ta.scrollHeight, 200) + "px";
+  }, []);
+
+  useEffect(() => {
+    recalcHeight();
+  }, [text, recalcHeight]);
+
+  useEffect(() => {
+    window.addEventListener("resize", recalcHeight);
+    return () => window.removeEventListener("resize", recalcHeight);
+  }, [recalcHeight]);
+
+  useEffect(() => {
+    if (autoFocus) taRef.current?.focus();
+  }, [autoFocus]);
+
+  const doSend = () => {
+    const t = text.trim();
+    if (!t && files.length === 0) return;
+    onSend(t, files);
+    setText("");
+    setFiles([]);
+  };
+
+  const pickSlash = (id: string) => {
+    setText(`/${id} `);
+    taRef.current?.focus();
+  };
+
+  const pickMention = (name: string) => {
+    setText(text.replace(/@([\w-]*)$/, `@"${name}" `));
+    taRef.current?.focus();
+  };
+
+  const addFiles = async (list: FileList | null) => {
+    if (!list) return;
+    const out: PendingFile[] = [...files];
+    for (const f of Array.from(list)) {
+      if (f.size > 2 * 1024 * 1024) {
+        alert(`${f.name} terlalu besar (maks 2 MB untuk penyimpanan lokal).`);
+        continue;
+      }
+      const isText =
+        f.type.startsWith("text/") ||
+        /\.(md|txt|csv|json|html?)$/i.test(f.name);
+      const entry: PendingFile = { name: f.name, size: f.size, mime: f.type || "file" };
+      if (isText) entry.text = await f.text();
+      else
+        entry.dataUrl = await new Promise<string>((res) => {
+          const r = new FileReader();
+          r.onload = () => res(String(r.result));
+          r.readAsDataURL(f);
+        });
+      out.push(entry);
+    }
+    setFiles(out);
+  };
+
+  const curMode = MODES.find((m) => m.id === mode) || MODES[0];
+
+  // /perintah di awal teks di-highlight biru (overlay di belakang textarea transparan)
+  const cmdMatch = text.match(/^(\/[\w-]+)([\s\S]*)$/);
+  const overlayRef = useRef<HTMLDivElement>(null);
+
+  const textareaEl = (
+    <div className="relative min-w-0 flex-1">
+      <div
+        ref={overlayRef}
+        aria-hidden
+        className={cn(
+          "pointer-events-none absolute inset-0 overflow-hidden whitespace-pre-wrap break-words text-slate-800 dark:text-slate-100",
+          variant === "panel"
+            ? "px-1 pt-0.5 text-[15px] leading-relaxed"
+            : "px-2 pb-0.5 text-[14.5px] leading-relaxed"
+        )}
+      >
+        {cmdMatch ? (
+          <>
+            <span className="font-medium text-brand-600 dark:text-brand-300">
+              {cmdMatch[1]}
+            </span>
+            {cmdMatch[2]}
+          </>
+        ) : (
+          text
+        )}
+      </div>
+      <textarea
+        id={inputId}
+        ref={taRef}
+        rows={1}
+        value={text}
+        onScroll={(e) => {
+          if (overlayRef.current)
+            overlayRef.current.scrollTop = e.currentTarget.scrollTop;
+        }}
+        onChange={(e) => setText(e.target.value)}
+        onKeyDown={(e) => {
+          const isEnter = e.key === "Enter" || e.key === "Return";
+          if (slashItems.length > 0) {
+            if (e.key === "ArrowDown") {
+              e.preventDefault();
+              setSlashIdx((i) => Math.min(i + 1, slashItems.length - 1));
+              return;
+            }
+            if (e.key === "ArrowUp") {
+              e.preventDefault();
+              setSlashIdx((i) => Math.max(i - 1, 0));
+              return;
+            }
+            if (e.key === "Tab" || (isEnter && !e.shiftKey)) {
+              e.preventDefault();
+              pickSlash(slashItems[slashIdx].id);
+              return;
+            }
+            if (e.key === "Escape") {
+              setText(text + " ");
+              return;
+            }
+          }
+          if (isEnter && !e.shiftKey) {
+            e.preventDefault();
+            if (!streaming) doSend();
+          }
+        }}
+        placeholder={placeholder}
+        className={cn(
+          "nice-scroll relative max-h-[200px] w-full resize-none bg-transparent text-transparent caret-slate-800 placeholder:text-slate-400 dark:caret-slate-100 dark:placeholder:text-slate-500",
+          variant === "panel"
+            ? "min-h-[52px] px-1 pt-0.5 text-[15px] leading-relaxed"
+            : "px-2 pb-0.5 text-[14.5px] leading-relaxed"
+        )}
+      />
+    </div>
+  );
+
+  /* ---------- gaya tombol (touch target ≥44px) ---------- */
+  const circleBtn =
+    "flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-slate-300/70 bg-white/70 text-slate-500 transition hover:bg-white dark:border-white/12 dark:bg-white/[0.05] dark:text-slate-300 dark:hover:bg-white/10";
+  const pillBtn =
+    "flex min-h-[44px] items-center gap-1.5 rounded-full border border-slate-300/70 bg-white/70 px-4 text-[13px] font-medium text-slate-600 transition hover:bg-white dark:border-white/12 dark:bg-white/[0.05] dark:text-slate-300 dark:hover:bg-white/10";
+
+  const menuPos =
+    variant === "panel" ? "bottom-[72px]" : "bottom-full mb-2";
+
+  const sectionLabel =
+    "px-3 pb-1 pt-2 text-[10.5px] font-semibold uppercase tracking-wider text-slate-400";
+  const rowCls = (active?: boolean) =>
+    cn(
+      "flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-[13.5px] transition",
+      active
+        ? "bg-brand-500/10 font-medium text-slate-800 dark:bg-white/10 dark:text-white"
+        : "text-slate-600 hover:bg-slate-900/[0.04] dark:text-slate-300 dark:hover:bg-white/5"
+    );
+
+  return (
+    <div className="relative w-full">
+      {/* ---------- slash menu ---------- */}
+      {slashItems.length > 0 && (
+        <MenuShell className="bottom-full left-0 right-0 mb-2 max-h-[300px] overflow-y-auto p-1.5 nice-scroll">
+          {slashItems.map((c, i) => (
+            <button
+              key={c.id}
+              onMouseEnter={() => setSlashIdx(i)}
+              onClick={() => pickSlash(c.id)}
+              className={cn(
+                "flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left",
+                i === slashIdx && "bg-brand-500/10 dark:bg-white/10"
+              )}
+            >
+              {c.type === "AGENT" ? (
+                <Bot size={16} className="shrink-0 text-slate-400" />
+              ) : (
+                <GradSparkle size={16} className="shrink-0" />
+              )}
+              <span className="font-mono text-[13px] font-medium text-slate-700 dark:text-slate-200">
+                {c.id}
+              </span>
+              <span
+                className={cn(
+                  "rounded-md px-1.5 py-0.5 text-[9.5px] font-bold tracking-wide",
+                  c.type === "AGENT"
+                    ? "bg-slate-500/15 text-slate-500 dark:bg-white/10 dark:text-slate-300"
+                    : "bg-brand-500/15 text-brand-600 dark:text-brand-300"
+                )}
+              >
+                {c.type}
+              </span>
+              <span className="flex-1 truncate text-right text-[12px] text-slate-400">
+                {c.desc}
+              </span>
+            </button>
+          ))}
+        </MenuShell>
+      )}
+
+      {/* ---------- mention menu ---------- */}
+      {mentionItems.length > 0 && (
+        <MenuShell className="bottom-full left-0 mb-2 w-[340px] p-1.5">
+          <div className={sectionLabel}>Drive docs</div>
+          {mentionItems.map((m, i) => (
+            <button
+              key={i}
+              onClick={() => pickMention(m.name)}
+              className={rowCls()}
+            >
+              {m.type === "doc" ? (
+                <FileText size={15} className="text-slate-400" />
+              ) : (
+                <GradSparkle size={15} />
+              )}
+              <span className="truncate">{m.name}</span>
+            </button>
+          ))}
+        </MenuShell>
+      )}
+
+      {/* ---------- popovers ---------- */}
+      {pop && (
+        <div ref={popRef}>
+          {pop === "tools" && (
+            <MenuShell
+              className={cn(
+                "nice-scroll max-h-[380px] w-[260px] overflow-y-auto p-1.5",
+                menuPos,
+                variant === "panel" ? "right-[155px]" : "left-0"
+              )}
+            >
+              <div className={sectionLabel}>Response mode</div>
+              {MODES.map((m) => {
+                const Icon = MODE_ICONS[m.id];
+                return (
+                  <button
+                    key={m.id}
+                    onClick={() => {
+                      onMode(m.id);
+                      setPop(null);
+                    }}
+                    className={rowCls(m.id === mode)}
+                  >
+                    <Icon size={15} className="shrink-0 opacity-70" />
+                    <span className="flex-1">{m.name}</span>
+                    {m.id === mode && (
+                      <Check size={13} className="text-brand-400" />
+                    )}
+                  </button>
+                );
+              })}
+
+              <div className="my-1.5 border-t border-slate-200/60 dark:border-white/10" />
+              <div className={sectionLabel}>Templates</div>
+              {TEMPLATES.map((t) => (
+                <button
+                  key={t.name}
+                  onClick={() => {
+                    setText(t.text);
+                    setPop(null);
+                    taRef.current?.focus();
+                  }}
+                  className={rowCls()}
+                >
+                  <FileText size={15} className="shrink-0 opacity-70" />
+                  {t.name}
+                </button>
+              ))}
+
+              {recent.length > 0 && (
+                <>
+                  <div className="my-1.5 border-t border-slate-200/60 dark:border-white/10" />
+                  <div className={sectionLabel}>Recent prompts</div>
+                  {recent.slice(0, 5).map((r, i) => (
+                    <button
+                      key={i}
+                      onClick={() => {
+                        setText(r);
+                        setPop(null);
+                        taRef.current?.focus();
+                      }}
+                      className={cn(rowCls(), "block truncate")}
+                    >
+                      {r}
+                    </button>
+                  ))}
+                </>
+              )}
+            </MenuShell>
+          )}
+
+          {pop === "model" && (
+            <MenuShell
+              className={cn("w-[250px] p-1.5", menuPos, "right-0")}
+            >
+              {AI_MODELS.map((m) => (
+                <button
+                  key={m.id}
+                  onClick={() => {
+                    setAiModel(m.id);
+                    setPop(null);
+                  }}
+                  className={rowCls(m.id === aiModel)}
+                >
+                  <span
+                    className={cn(
+                      "h-3 w-3 shrink-0 rounded-full bg-gradient-to-br",
+                      m.grad
+                    )}
+                  />
+                  <span className="flex-1">{m.name}</span>
+                  <span className="text-[11px] text-slate-400">{m.kb}</span>
+                  {m.id === aiModel && (
+                    <Check size={13} className="text-brand-400" />
+                  )}
+                </button>
+              ))}
+            </MenuShell>
+          )}
+        </div>
+      )}
+
+      {/* ---------- attachments ---------- */}
+      {files.length > 0 && (
+        <div className="mb-2 flex flex-wrap gap-2">
+          {files.map((f, i) => (
+            <span
+              key={i}
+              className="glass flex items-center gap-2 rounded-full py-1 pl-3 pr-1.5 text-[12px] text-slate-600 dark:text-slate-300"
+            >
+              <Paperclip size={12} />
+              {f.name}
+              <button
+                aria-label={`Hapus lampiran ${f.name}`}
+                onClick={() => setFiles(files.filter((_, j) => j !== i))}
+                className="rounded-full p-0.5 hover:bg-slate-900/10 dark:hover:bg-white/10"
+              >
+                <X size={12} />
+              </button>
+            </span>
+          ))}
+        </div>
+      )}
+
+      <input
+        ref={fileRef}
+        type="file"
+        multiple
+        hidden
+        onChange={(e) => {
+          addFiles(e.target.files);
+          e.target.value = "";
+        }}
+      />
+
+      {variant === "panel" ? (
+        /* ---------- panel (dashboard): 3 zona — kiri | tools+model | send ---------- */
+        <div className="rounded-[20px] border border-slate-200/80 bg-white p-4 shadow-glass dark:border-white/10 dark:bg-[#10141c]/95 dark:shadow-glass-dark">
+          <div className="flex items-start gap-2.5 px-1 pt-0.5">
+            <svg width="0" height="0" className="absolute">
+              <defs>
+                <linearGradient id="aurora-ico" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="#00ffff" />
+                  <stop offset="55%" stopColor="#38b6ff" />
+                  <stop offset="100%" stopColor="#0a70ff" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <Sparkles
+              size={17}
+              stroke="url(#aurora-ico)"
+              fill="url(#aurora-ico)"
+              className="mt-1.5 shrink-0"
+            />
+            {textareaEl}
+          </div>
+          <div className="mt-3 flex items-center gap-2">
+            {/* zona kiri: attach + mic */}
+            <button
+              aria-label="Lampirkan file"
+              title="Lampirkan file"
+              onClick={() => fileRef.current?.click()}
+              className={circleBtn}
+            >
+              <Plus size={17} />
+            </button>
+            <button
+              aria-label="Voice"
+              title="Voice"
+              onClick={() => toast("Voice mode segera hadir 🎙")}
+              className={circleBtn}
+            >
+              <Mic size={15} />
+            </button>
+
+            <div className="flex-1" />
+
+            {/* zona kanan: tools gabungan + model */}
+            <button
+              aria-label="Tools: mode respons, templates, prompt terakhir"
+              title="Tools"
+              onClick={() => setPop(pop === "tools" ? null : "tools")}
+              className={cn(
+                pillBtn,
+                mode !== "auto" &&
+                  "border-brand-400/50 text-brand-600 dark:text-brand-300"
+              )}
+            >
+              <Settings2 size={14} />
+              {mode === "auto" ? "Tools" : curMode.name}
+              <ChevronDown size={13} className="opacity-60" />
+            </button>
+            <button
+              aria-label={`Model AI: ${curAiModel.name}`}
+              title="Pilih model AI"
+              onClick={() => setPop(pop === "model" ? null : "model")}
+              className={pillBtn}
+            >
+              <span
+                className={cn(
+                  "h-3.5 w-3.5 rounded-full bg-gradient-to-br",
+                  curAiModel.grad
+                )}
+              />
+              {curAiModel.name}
+              <ChevronDown size={13} className="opacity-60" />
+            </button>
+
+            {/* zona paling kanan: send */}
+            {streaming ? (
+              <button
+                aria-label="Hentikan"
+                title="Hentikan"
+                onClick={onStop}
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-ink text-white transition hover:bg-slate-700 dark:bg-white dark:text-ink"
+              >
+                <Square size={13} fill="currentColor" />
+              </button>
+            ) : (
+              <button
+                aria-label="Kirim"
+                title="Kirim"
+                onClick={doSend}
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#0a70ff] text-white shadow-[0_0_18px_rgba(10,112,255,0.45)] transition hover:bg-[#2a84ff] active:scale-95"
+              >
+                <Send size={15} className="-translate-x-[1px] translate-y-[1px]" />
+              </button>
+            )}
+          </div>
+        </div>
+      ) : (
+        /* ---------- pill (chat): teks di atas, 3 zona di bawah ---------- */
+        <div className="glass-input flex flex-col rounded-[24px] px-3.5 pb-2.5 pt-3">
+          <div className="flex px-1">{textareaEl}</div>
+          <div className="mt-1.5 flex items-center gap-1.5">
+            <button
+              aria-label="Lampirkan file"
+              title="Lampirkan file"
+              onClick={() => fileRef.current?.click()}
+              className="flex h-11 w-11 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-900/[0.05] hover:text-slate-600 dark:hover:bg-white/10 dark:hover:text-slate-200"
+            >
+              <Paperclip size={17} />
+            </button>
+            <button
+              aria-label="Tools: mode respons, templates, prompt terakhir"
+              title="Tools"
+              onClick={() => setPop(pop === "tools" ? null : "tools")}
+              className={cn(
+                "flex h-11 w-11 items-center justify-center rounded-full transition",
+                mode !== "auto"
+                  ? "text-brand-400"
+                  : "text-slate-400 hover:bg-slate-900/[0.05] hover:text-slate-600 dark:hover:bg-white/10 dark:hover:text-slate-200"
+              )}
+            >
+              <SlidersHorizontal size={17} />
+            </button>
+            <div className="flex-1" />
+            <button
+              aria-label={`Model AI: ${curAiModel.name}`}
+              title="Pilih model AI"
+              onClick={() => setPop(pop === "model" ? null : "model")}
+              className="flex min-h-[44px] items-center gap-1.5 rounded-full px-3 text-[12.5px] font-medium text-slate-400 transition hover:bg-slate-900/[0.05] hover:text-slate-600 dark:hover:bg-white/10 dark:hover:text-slate-200"
+            >
+              <span
+                className={cn(
+                  "h-3 w-3 rounded-full bg-gradient-to-br",
+                  curAiModel.grad
+                )}
+              />
+              {curAiModel.name}
+            </button>
+            {streaming ? (
+              <button
+                aria-label="Hentikan"
+                title="Hentikan"
+                onClick={onStop}
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-ink text-white transition hover:bg-slate-700 dark:bg-white dark:text-ink"
+              >
+                <Square size={13} fill="currentColor" />
+              </button>
+            ) : (
+              <button
+                aria-label="Kirim"
+                title="Kirim"
+                onClick={doSend}
+                disabled={!text.trim() && files.length === 0}
+                className={cn(
+                  "flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition",
+                  text.trim() || files.length
+                    ? "bg-[#0a70ff] text-white shadow-[0_0_18px_rgba(10,112,255,0.45)] hover:bg-[#2a84ff] active:scale-95"
+                    : "bg-brand-400/40 text-white/80 hover:bg-brand-500 hover:text-white"
+                )}
+              >
+                <ArrowUp size={17} />
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {showHints && (
+        <div className="mt-2 text-center text-[11.5px] text-slate-400">
+          Enter to send · Shift+Enter for a new line · / for agents &amp; tools ·
+          @ for drive docs
+        </div>
+      )}
+    </div>
+  );
+}
