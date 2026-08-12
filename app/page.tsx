@@ -131,7 +131,7 @@ function Landing() {
       {/* background video — fill seluruh halaman + overlay hitam 20% + vignette */}
       <div className="pointer-events-none fixed inset-0 z-0">
         <video
-          src="/hero.mov"
+          src="/hero.mp4"
           autoPlay
           muted
           loop
