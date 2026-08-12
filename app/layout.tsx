@@ -27,9 +27,9 @@ const trangels = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "NISA — Neural Interactive Systematic Assistant",
+  title: "NISA - Neural Interactive Systematic Assistant",
   description:
-    "NISA V.3 — Your AI Operating System. One workspace, many capabilities.",
+    "NISA V.3 - Your AI Operating System. One workspace, many capabilities.",
 };
 
 const themeScript = `try{var t="dark";var s=localStorage.getItem("nisa-db-v3");if(s){t=JSON.parse(s).state.theme||"dark";}if(t==="dark")document.documentElement.classList.add("dark");}catch(e){document.documentElement.classList.add("dark");}`;
