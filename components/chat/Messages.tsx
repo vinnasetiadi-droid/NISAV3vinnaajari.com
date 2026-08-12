@@ -19,6 +19,7 @@ import { useDB } from "@/lib/store";
 import { cn, downloadText } from "@/lib/utils";
 import type { Message } from "@/lib/types";
 import { REPLY_SUGGESTIONS } from "@/lib/registry";
+import { OrbVideo } from "@/components/OrbVideo";
 
 /* ---------------- user bubble ---------------- */
 
@@ -93,15 +94,8 @@ export function AssistantMessage({
     return (
       <div className="flex items-center gap-3.5 py-1">
         {/* avatar orb NISA */}
-        <div className="relative h-10 w-10 shrink-0 animate-pulse overflow-hidden rounded-full bg-[#04060b] [animation-duration:2.4s]">
-          <video
-            src="/orb.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="absolute left-1/2 top-1/2 h-[112%] w-auto max-w-none -translate-x-1/2 -translate-y-1/2"
-          />
+        <div className="relative h-10 w-10 shrink-0 animate-pulse overflow-hidden rounded-full bg-white dark:bg-[#04060b] [animation-duration:2.4s]">
+          <OrbVideo />
         </div>
         <div key={word} className="shimmer-text animate-rise text-[16px] font-medium">
           {word}

@@ -11,6 +11,7 @@ import { useToast } from "@/components/ui";
 import { useDB } from "@/lib/store";
 import { firstName, timeGreetingID } from "@/lib/utils";
 import type { ModeId } from "@/lib/types";
+import { OrbVideo } from "@/components/OrbVideo";
 
 const FEATURES = [
   {
@@ -81,22 +82,8 @@ export function HomeView({
       {/* hero */}
       <div className="mx-auto flex w-full max-w-[780px] flex-1 flex-col items-center justify-center py-10">
         {/* orb video */}
-        <div className="enter-orb relative h-[118px] w-[118px] overflow-hidden rounded-full bg-[#04060b]">
-          {/* bola mengisi ~88% frame → zoom 112% supaya pas memenuhi lingkaran */}
-          <video
-            src="/orb.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            onTimeUpdate={(e) => {
-              // loop mulus: lompat balik sesaat sebelum frame terakhir
-              const v = e.currentTarget;
-              if (v.duration && v.duration - v.currentTime < 0.1)
-                v.currentTime = 0.02;
-            }}
-            className="absolute left-1/2 top-1/2 h-[112%] w-auto max-w-none -translate-x-1/2 -translate-y-1/2"
-          />
+        <div className="enter-orb relative h-[118px] w-[118px] overflow-hidden rounded-full bg-white dark:bg-[#04060b]">
+          <OrbVideo smoothLoop />
         </div>
 
         <div className="enter-up mt-7 text-[13px] font-medium uppercase tracking-[0.35em] text-slate-500 [animation-delay:0.15s] dark:text-slate-300">
