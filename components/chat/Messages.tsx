@@ -94,7 +94,7 @@ export function AssistantMessage({
     return (
       <div className="flex items-center gap-3.5 py-1">
         {/* avatar orb NISA */}
-        <div className="relative h-10 w-10 shrink-0 animate-pulse overflow-hidden rounded-full bg-white dark:bg-[#04060b] [animation-duration:2.4s]">
+        <div className="relative h-10 w-10 shrink-0 animate-pulse overflow-hidden rounded-full bg-white [mask-image:radial-gradient(circle_closest-side,black_84%,transparent_100%)] dark:bg-[#04060b] dark:[mask-image:none] [animation-duration:2.4s]">
           <OrbVideo />
         </div>
         <div key={word} className="shimmer-text animate-rise text-[16px] font-medium">

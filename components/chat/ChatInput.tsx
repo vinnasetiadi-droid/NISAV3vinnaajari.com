@@ -31,7 +31,7 @@ import {
 } from "lucide-react";
 import { MenuShell, useOutside, useToast } from "@/components/ui";
 import { GradSparkle } from "@/components/GradSparkle";
-import { AI_MODELS, COMMANDS, MODES, TEMPLATES } from "@/lib/registry";
+import { COMMANDS, MODES, TEMPLATES } from "@/lib/registry";
 import { useDB } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import type { ModeId } from "@/lib/types";
@@ -61,7 +61,7 @@ interface Props {
 }
 
 /** Satu menu gabungan (mode + templates + recent) + menu model. */
-type Pop = null | "tools" | "model";
+type Pop = null | "tools";
 
 const MODE_ICONS: Record<ModeId, import("lucide-react").LucideIcon> = {
   auto: Sparkles,
@@ -89,9 +89,6 @@ export function ChatInput({
   const [text, setText] = useState(initialText ?? "");
   const [files, setFiles] = useState<PendingFile[]>([]);
   const [pop, setPop] = useState<Pop>(null);
-  const aiModel = useDB((s) => s.aiModel);
-  const setAiModel = useDB((s) => s.setAiModel);
-  const curAiModel = AI_MODELS.find((m) => m.id === aiModel) || AI_MODELS[1];
   const [slashIdx, setSlashIdx] = useState(0);
   const taRef = useRef<HTMLTextAreaElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -354,7 +351,7 @@ export function ChatInput({
               className={cn(
                 "nice-scroll max-h-[380px] w-[260px] overflow-y-auto p-1.5",
                 menuPos,
-                variant === "panel" ? "right-[155px]" : "left-0"
+                variant === "panel" ? "right-[52px]" : "left-0"
               )}
             >
               <div className={sectionLabel}>Response mode</div>
@@ -417,34 +414,6 @@ export function ChatInput({
             </MenuShell>
           )}
 
-          {pop === "model" && (
-            <MenuShell
-              className={cn("w-[250px] p-1.5", menuPos, "right-0")}
-            >
-              {AI_MODELS.map((m) => (
-                <button
-                  key={m.id}
-                  onClick={() => {
-                    setAiModel(m.id);
-                    setPop(null);
-                  }}
-                  className={rowCls(m.id === aiModel)}
-                >
-                  <span
-                    className={cn(
-                      "h-3 w-3 shrink-0 rounded-full bg-gradient-to-br",
-                      m.grad
-                    )}
-                  />
-                  <span className="flex-1">{m.name}</span>
-                  <span className="text-[11px] text-slate-400">{m.kb}</span>
-                  {m.id === aiModel && (
-                    <Check size={13} className="text-brand-400" />
-                  )}
-                </button>
-              ))}
-            </MenuShell>
-          )}
         </div>
       )}
 
@@ -523,7 +492,7 @@ export function ChatInput({
 
             <div className="flex-1" />
 
-            {/* zona kanan: tools gabungan + model */}
+            {/* zona kanan: tools gabungan */}
             <button
               aria-label="Tools: mode respons, templates, prompt terakhir"
               title="Tools"
@@ -536,21 +505,6 @@ export function ChatInput({
             >
               <Settings2 size={14} />
               {mode === "auto" ? "Tools" : curMode.name}
-              <ChevronDown size={13} className="opacity-60" />
-            </button>
-            <button
-              aria-label={`Model AI: ${curAiModel.name}`}
-              title="Pilih model AI"
-              onClick={() => setPop(pop === "model" ? null : "model")}
-              className={pillBtn}
-            >
-              <span
-                className={cn(
-                  "h-3.5 w-3.5 rounded-full bg-gradient-to-br",
-                  curAiModel.grad
-                )}
-              />
-              {curAiModel.name}
               <ChevronDown size={13} className="opacity-60" />
             </button>
 
@@ -603,20 +557,6 @@ export function ChatInput({
               <SlidersHorizontal size={17} />
             </button>
             <div className="flex-1" />
-            <button
-              aria-label={`Model AI: ${curAiModel.name}`}
-              title="Pilih model AI"
-              onClick={() => setPop(pop === "model" ? null : "model")}
-              className="flex min-h-[44px] items-center gap-1.5 rounded-full px-3 text-[12.5px] font-medium text-slate-400 transition hover:bg-slate-900/[0.05] hover:text-slate-600 dark:hover:bg-white/10 dark:hover:text-slate-200"
-            >
-              <span
-                className={cn(
-                  "h-3 w-3 rounded-full bg-gradient-to-br",
-                  curAiModel.grad
-                )}
-              />
-              {curAiModel.name}
-            </button>
             {streaming ? (
               <button
                 aria-label="Hentikan"

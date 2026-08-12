@@ -82,7 +82,7 @@ export function HomeView({
       {/* hero */}
       <div className="mx-auto flex w-full max-w-[780px] flex-1 flex-col items-center justify-center py-10">
         {/* orb video */}
-        <div className="enter-orb relative h-[118px] w-[118px] overflow-hidden rounded-full bg-white dark:bg-[#04060b]">
+        <div className="enter-orb relative h-[118px] w-[118px] overflow-hidden rounded-full bg-white [mask-image:radial-gradient(circle_closest-side,black_84%,transparent_100%)] dark:bg-[#04060b] dark:[mask-image:none]">
           <OrbVideo smoothLoop />
         </div>
 
