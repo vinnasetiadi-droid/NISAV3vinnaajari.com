@@ -24,7 +24,7 @@ export function OrbVideo({ smoothLoop }: { smoothLoop?: boolean }) {
         loop
         playsInline
         onTimeUpdate={onTime}
-        className={`${base} h-[107%] [filter:brightness(1.14)_saturate(1.4)_contrast(1.12)] dark:hidden`}
+        className={`${base} h-[107%] [filter:brightness(1.08)_saturate(1.05)] dark:hidden`}
       />
       <video
         src="/orb.mp4"
