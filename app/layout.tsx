@@ -27,7 +27,7 @@ const trangels = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "NISA - Neural Interactive Systematic Assistant",
+  title: "NISA AI • Ask. Generate. Done.",
   description:
     "NISA V.3 - Your AI Operating System. One workspace, many capabilities.",
 };
