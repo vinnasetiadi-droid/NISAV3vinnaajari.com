@@ -312,6 +312,31 @@ body {
 }
 .glow-ring {
   border-radius: 26px;
+  /* cahaya biru meluber dari sisi bawah box */
+  box-shadow: 0 10px 24px -4px rgba(60, 170, 255, 1),
+    0 22px 46px -6px rgba(40, 150, 255, 0.8),
+    0 40px 90px -8px rgba(25, 120, 240, 0.55);
+}
+.glow-ring::after {
+  content: "";
+  position: absolute;
+  left: 1%;
+  right: 1%;
+  bottom: -34px;
+  height: 84px;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 9999px;
+  background: radial-gradient(
+    ellipse 62% 100% at 50% 0%,
+    rgba(120, 200, 255, 1) 0%,
+    rgba(60, 170, 255, 0.85) 34%,
+    rgba(30, 130, 250, 0.45) 60%,
+    rgba(20, 110, 235, 0.12) 78%,
+    transparent 90%
+  );
+  filter: blur(14px);
+  animation: glow-breathe 4s ease-in-out infinite;
 }
 .glow-ring::before {
   content: "";
@@ -337,57 +362,28 @@ body {
   filter: blur(1px) drop-shadow(0 0 20px rgba(80, 210, 255, 0.75));
   animation: glow-spin 5s linear infinite;
 }
-.glow-ring::after {
-  /* pendaran tipis tepat di bawah box (penyambung dua sinar) */
-  content: "";
-  position: absolute;
-  left: 12%;
-  right: 12%;
-  bottom: -8px;
-  height: 16px;
-  border-radius: 9999px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(60, 180, 255, 0.75),
-    rgba(150, 235, 255, 0.8),
-    rgba(60, 180, 255, 0.75),
-    transparent
-  );
-  filter: blur(14px);
-  animation: glow-breathe 4s ease-in-out infinite;
-}
 
-/* Sinar segitiga yang menyebar ke kiri & kanan bawah box (ala reference) */
+
+/* Sinar segitiga PNG (Vector 11): apex di sudut bawah box, ekor menyebar ke tengah */
 .glow-beam {
   position: absolute;
-  top: calc(100% - 12px);
+  top: calc(100% - 8px);
   z-index: 0;
-  height: 62px;
-  width: 46%;
-  opacity: 0.5;
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.5) 45%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.5) 45%, transparent 100%);
+  width: 34%;
+  max-width: none;
   pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    rgba(10, 130, 255, 0.85) 0%,
-    rgba(50, 190, 255, 0.7) 45%,
-    rgba(150, 235, 255, 0.25) 78%,
-    transparent 100%
-  );
-  filter: blur(26px);
+  user-select: none;
+  opacity: 0.9;
   animation: glow-breathe 4s ease-in-out infinite;
 }
 .glow-beam-l {
-  left: 1%;
-  clip-path: polygon(100% 0%, 100% 16%, 0% 100%, 0% 58%);
+  left: -1.5%;
 }
 .glow-beam-r {
-  right: 1%;
+  right: -1.5%;
   transform: scaleX(-1);
-  clip-path: polygon(100% 0%, 100% 16%, 0% 100%, 0% 58%);
 }
+
 /* isi box ber-glow: gelap tapi tetap glass — tint hitam pekat + blur tetap hidup */
 .dark .glow-ring > .glass-chat {
   background: rgba(8, 11, 17, 0.72);
