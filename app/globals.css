@@ -329,10 +329,10 @@ body {
   border-radius: 9999px;
   background: radial-gradient(
     ellipse 62% 100% at 50% 0%,
-    rgba(120, 200, 255, 1) 0%,
-    rgba(60, 170, 255, 0.85) 34%,
-    rgba(30, 130, 250, 0.45) 60%,
-    rgba(20, 110, 235, 0.12) 78%,
+    rgba(110, 195, 255, 0.8) 0%,
+    rgba(60, 170, 255, 0.55) 34%,
+    rgba(30, 130, 250, 0.28) 60%,
+    rgba(20, 110, 235, 0.08) 78%,
     transparent 90%
   );
   filter: blur(14px);
@@ -367,20 +367,23 @@ body {
 /* Sinar segitiga PNG (Vector 11): apex di sudut bawah box, ekor menyebar ke tengah */
 .glow-beam {
   position: absolute;
-  top: calc(100% - 8px);
+  top: calc(100% - 6px);
   z-index: 0;
-  width: 34%;
+  width: 42%;
   max-width: none;
   pointer-events: none;
   user-select: none;
-  opacity: 0.9;
+  opacity: 0.8;
+  filter: blur(16px) saturate(1.25);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.6) 55%, transparent 95%);
+  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.6) 55%, transparent 95%);
   animation: glow-breathe 4s ease-in-out infinite;
 }
 .glow-beam-l {
-  left: -1.5%;
+  left: 0;
 }
 .glow-beam-r {
-  right: -1.5%;
+  right: 0;
   transform: scaleX(-1);
 }
 
