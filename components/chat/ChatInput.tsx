@@ -536,6 +536,8 @@ export function ChatInput({
       {variant === "panel" ? (
         /* ---------- panel (dashboard): 3 zona — kiri | tools+model | send ---------- */
         <div className="glow-ring relative rounded-[26px]">
+        <span aria-hidden className="glow-beam glow-beam-l" />
+        <span aria-hidden className="glow-beam glow-beam-r" />
         <div className="glass-chat relative z-10 rounded-[26px] p-4">
           <div className="flex items-start gap-2.5 px-1 pt-0.5">
             <svg width="0" height="0" className="absolute">
