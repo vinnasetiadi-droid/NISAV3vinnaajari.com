@@ -94,6 +94,8 @@ export function LoginModal({
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErr(null);
+    // Demo: Sign in tanpa mengisi apa pun → langsung masuk dengan akun demo
+    if (mode === "signin" && !email.trim() && !pass) return googleDemo();
     if (mode === "signup" && !name.trim())
       return setErr("Name cannot be empty.");
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))
