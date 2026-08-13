@@ -100,6 +100,9 @@ interface DBState {
   setSelectMode: (v: boolean) => void;
   toggleSelected: (id: string) => void;
   setShowArchived: (v: boolean) => void;
+  /** true saat guest (coba-coba di landing) sudah memakai 3 kirim gratis */
+  guestGate: boolean;
+  setGuestGate: (v: boolean) => void;
   setFilterProject: (id: string | null) => void;
   setPaletteOpen: (v: boolean) => void;
   setHealth: (h: Health) => void;
@@ -381,6 +384,8 @@ export const useDB = create<DBState>()(
             : [...s.selectedIds, id],
         })),
       setShowArchived: (v) => set({ showArchived: v }),
+      guestGate: false,
+      setGuestGate: (v) => set({ guestGate: v }),
       setFilterProject: (id) => set({ filterProjectId: id }),
       setPaletteOpen: (v) => set({ paletteOpen: v }),
       setHealth: (h) => set({ health: h }),

@@ -15,6 +15,10 @@ import {
 } from "lucide-react";
 import { ToastProvider } from "@/components/ui";
 import { LoginModal } from "@/components/landing/LoginModal";
+import { ChatView } from "@/components/chat/ChatView";
+import { ArtifactPanel } from "@/components/artifact/ArtifactPanel";
+import { sendMessage } from "@/lib/engine";
+import { sha256 } from "@/lib/utils";
 import { GradSparkle } from "@/components/GradSparkle";
 import { COMMANDS } from "@/lib/registry";
 import { useDB } from "@/lib/store";
@@ -63,14 +67,29 @@ function Landing() {
   const [exIdx, setExIdx] = useState(0);
   const [modal, setModal] = useState<null | "signup" | "signin">(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
+  const guestGate = useDB((st) => st.guestGate);
+  const activeConvId = useDB((st) => st.activeConvId);
+  const me = useDB((st) => (st.sessionUserId ? st.me() : null));
+  const isGuest = !!me?.email?.endsWith("@guest.nisa");
+  const guestConv = useDB((st) =>
+    st.sessionUserId
+      ? st.d().conversations.find((c) => c.id === st.activeConvId) || null
+      : null
+  );
+  const openArtifactId = useDB((st) => (st.sessionUserId ? st.openArtifactId : null));
 
   useEffect(() => {
     setMounted(true);
-    // Landing selalu mengulang flow dari awal: reset sesi + prompt tertunda,
-    // supaya Generate SELALU memunculkan pop-up sign up dulu.
     sessionStorage.removeItem("nisa-pending");
-    if (useDB.getState().sessionUserId) useDB.getState().signOut();
   }, []);
+
+  // guest kehabisan jatah 3 chat → wajib sign in
+  useEffect(() => {
+    if (guestGate) {
+      setModal("signin");
+      useDB.getState().setGuestGate(false);
+    }
+  }, [guestGate]);
 
   // Placeholder typewriter: ketik pelan → jeda → hapus → contoh berikutnya.
   const [ph, setPh] = useState("");
@@ -118,12 +137,20 @@ function Landing() {
     taRef.current?.focus();
   };
 
-  const generate = (raw?: string) => {
-    // input kosong? pakai contoh yang sedang diketik placeholder — langsung pop-up
+  const generate = async (raw?: string) => {
+    // Try-first: 3 kirim pertama gratis sebagai guest, ke-4 wajib sign in.
     const prompt = (raw ?? text).trim() || EXAMPLES[exIdx];
-    sessionStorage.setItem("nisa-pending", prompt);
-    // sekali klik → selalu langsung pop-up sign up (flow lengkap setiap kali)
-    setModal("signin");
+    const st = useDB.getState();
+    if (!st.sessionUserId) {
+      const pass = await sha256("nisa-guest");
+      st.signUp({
+        name: "Guest",
+        email: `guest-${Date.now()}@guest.nisa`,
+        pass,
+      });
+    }
+    setText("");
+    sendMessage(prompt);
   };
 
   return (
@@ -184,6 +211,22 @@ function Landing() {
       </header>
 
       {/* hero */}
+      {mounted && isGuest && guestConv ? (
+        /* ---------- mode coba-coba: chat sungguhan di halaman depan ---------- */
+        <main className="relative z-10 mx-auto flex h-[calc(100vh-140px)] max-w-[1200px] gap-2.5 px-4 pt-2">
+          <div className="glass-mac flex min-w-0 flex-1 overflow-hidden rounded-[26px]">
+            <ChatView conv={guestConv} />
+          </div>
+          {openArtifactId && (
+            <div className="hidden w-[46%] min-w-[380px] md:flex">
+              <ArtifactPanel
+                artifactId={openArtifactId}
+                onClose={() => useDB.getState().setOpenArtifact(null)}
+              />
+            </div>
+          )}
+        </main>
+      ) : (
       <main className="relative z-10 mx-auto flex max-w-[1060px] flex-col items-center px-5 pt-10 md:pt-14">
         <h1 className="bg-gradient-to-r from-white/40 via-white to-white/30 bg-clip-text font-display text-[56px] font-medium leading-none text-transparent md:text-[84px]">
           Ask NISA
@@ -299,10 +342,12 @@ function Landing() {
           ))}
         </div>
 
-        <footer className="fixed inset-x-0 bottom-2.5 z-10 text-center text-[12px] text-slate-600">
-          © AJARI Technologies 2026
-        </footer>
       </main>
+      )}
+
+      <footer className="fixed inset-x-0 bottom-2.5 z-10 text-center text-[12px] text-slate-600">
+        © AJARI Technologies 2026
+      </footer>
 
       <LoginModal
         key={modal || "closed"}

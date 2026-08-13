@@ -353,6 +353,22 @@ export async function sendMessage(
   }
 ) {
   const { s, name } = ctx();
+
+  // Mode coba-coba (guest dari landing): maksimal 3 kirim, selanjutnya wajib sign in.
+  const me = s.me();
+  if (me?.email?.endsWith("@guest.nisa")) {
+    const sent = s
+      .d()
+      .conversations.reduce(
+        (n, c) => n + c.messages.filter((m) => m.role === "user").length,
+        0
+      );
+    if (sent >= 3) {
+      s.setGuestGate(true);
+      return;
+    }
+  }
+
   let conv = s.d().conversations.find((c) => c.id === s.activeConvId);
   if (!conv || conv.archived) conv = s.newConversation();
   const convId = conv.id;
@@ -361,8 +377,20 @@ export async function sendMessage(
 
   // slash command?
   const m = text.match(/^\/([\w-]+)\s*([\s\S]*)$/);
-  const cmd = m ? COMMANDS.find((c) => c.id === m[1].toLowerCase()) : null;
-  const arg = m ? m[2].trim() : "";
+  let cmd = m ? COMMANDS.find((c) => c.id === m[1].toLowerCase()) : null;
+  let arg = m ? m[2].trim() : "";
+
+  // Deteksi niat natural (tanpa slash): "create a quiz about…", "make an anagram game…"
+  if (!cmd) {
+    const lower = text.toLowerCase();
+    if (/\b(quiz|kuis|practice questions?|latihan soal)\b/.test(lower) && /\b(create|make|generate|build|buat(kan)?|bikin)\b/.test(lower)) {
+      cmd = COMMANDS.find((c) => c.id === "quiz") || null;
+      arg = text;
+    } else if (/\b(anagram|word builder)\b/.test(lower) && /\b(create|make|generate|build|buat(kan)?|bikin)\b/.test(lower)) {
+      cmd = COMMANDS.find((c) => c.id === "anagram") || null;
+      arg = text;
+    }
+  }
 
   const userMsg: Message = {
     id: uid("m_"),
@@ -382,7 +410,14 @@ export async function sendMessage(
   // --- quiz: needs elicitation first ---
   if (cmd?.id === "quiz") {
     const topic =
-      arg.replace(/^(buat(kan)?|create|make|generate)\s+((a|some)\s+)?(latihan\s+soal|soal|kuis|quiz|practice\s+questions?)?\s*(tentang|mengenai|about|on)?\s*/i, "").trim() ||
+      arg
+        .replace(/^(buat(kan)?|bikin|create|make|generate|build)\s+/i, "")
+        .replace(/^(a|an|some)\s+/i, "")
+        .replace(/^[\w-]*[- ]?(grade|kelas)\s*/i, "")
+        .replace(/^(science|math|history)?\s*(latihan\s+soal|soal|kuis|quiz|practice\s+questions?)\s*/i, "")
+        .replace(/^(tentang|mengenai|about|on)\s*/i, "")
+        .replace(/[.?!]+$/, "")
+        .trim() ||
       arg ||
       "this topic";
     const intro =
