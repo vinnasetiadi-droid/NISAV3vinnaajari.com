@@ -220,6 +220,45 @@ export function isStreaming(conv: Conversation | undefined | null) {
   );
 }
 
+/** Guest tease: tampilkan loading lengkap, lalu "hasilnya siap — sign in dulu". */
+async function runGuestTease(convId: string, kind: "quiz" | "game" | "slides") {
+  const { s } = ctx();
+  const wmsg: Message = {
+    id: uid("m_"),
+    role: "assistant",
+    kind: "text",
+    content: "",
+    createdAt: Date.now(),
+    status: "pending",
+  };
+  s.appendMsg(convId, wmsg);
+
+  const steps =
+    kind === "quiz"
+      ? ["Reading your topic…", "Drafting the first questions…", "Balancing difficulty…", "Writing the answer key…", "Final touches…"]
+      : kind === "game"
+      ? ["Picking the best words…", "Scrambling the letters…", "Writing the hints…", "Setting up the board…", "Final touches…"]
+      : ["Outlining the story…", "Drafting the slides…", "Arranging the layout…", "Polishing the wording…", "Final touches…"];
+  let i = 0;
+  useDB.getState().patchMsg(convId, wmsg.id, { statusLine: steps[0] });
+  const t = setInterval(() => {
+    i = Math.min(i + 1, steps.length - 1);
+    useDB.getState().patchMsg(convId, wmsg.id, { statusLine: steps[i] });
+  }, 1000);
+  await new Promise((r) => setTimeout(r, 5200));
+  clearInterval(t);
+
+  const what = kind === "quiz" ? "quiz" : kind === "game" ? "Word Builder game" : "slide outline";
+  useDB.getState().patchMsg(convId, wmsg.id, {
+    content:
+      `Your ${what} is ready! 🎉\n\n` +
+      `**Sign in (it's free) to view, edit, and download it** — I'll keep it warm for you. 😉`,
+    status: "done",
+    statusLine: undefined,
+  });
+  useDB.getState().setGuestGate(true);
+}
+
 /** Run a skill (quiz after answers / anagram direct): WORKING card → JSON → template → artifact. */
 async function runSkill(opts: {
   convId: string;
@@ -365,6 +404,36 @@ export async function sendMessage(
       );
     if (sent >= 3) {
       s.setGuestGate(true);
+      return;
+    }
+    // fitur generator (quiz / word builder / presentasi): kasih lihat loadingnya,
+    // lalu "hasilnya siap — tapi harus sign in dulu" 😏
+    const lower = text.toLowerCase();
+    const isQuizLike =
+      /^\/quiz/.test(lower) ||
+      (/\b(quiz|kuis|practice questions?|latihan soal)\b/.test(lower) &&
+        /\b(create|make|generate|build|buat(kan)?|bikin)\b/.test(lower));
+    const isGameLike =
+      /^\/anagram/.test(lower) ||
+      (/\b(anagram|word builder)\b/.test(lower) &&
+        /\b(create|make|generate|build|buat(kan)?|bikin)\b/.test(lower));
+    const isSlidesLike =
+      /\b(presentation|slides?|ppt)\b/.test(lower) &&
+      /\b(create|make|generate|build|buat(kan)?|bikin|outline)\b/.test(lower);
+    if (isQuizLike || isGameLike || isSlidesLike) {
+      let conv = s.d().conversations.find((c) => c.id === s.activeConvId);
+      if (!conv || conv.archived) conv = s.newConversation();
+      s.appendMsg(conv.id, {
+        id: uid("m_"),
+        role: "user",
+        kind: "text",
+        content: text,
+        createdAt: Date.now(),
+      });
+      await runGuestTease(
+        conv.id,
+        isQuizLike ? "quiz" : isGameLike ? "game" : "slides"
+      );
       return;
     }
   }

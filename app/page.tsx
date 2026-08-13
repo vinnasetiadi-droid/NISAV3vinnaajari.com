@@ -10,10 +10,12 @@ import {
   FlaskConical,
   Globe,
   Mail,
+  Mic,
+  Paperclip,
   Plus,
   Puzzle,
 } from "lucide-react";
-import { ToastProvider } from "@/components/ui";
+import { ToastProvider, useToast } from "@/components/ui";
 import { LoginModal } from "@/components/landing/LoginModal";
 import { ChatView } from "@/components/chat/ChatView";
 import { ArtifactPanel } from "@/components/artifact/ArtifactPanel";
@@ -67,6 +69,8 @@ function Landing() {
   const [exIdx, setExIdx] = useState(0);
   const [modal, setModal] = useState<null | "signup" | "signin">(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
+  const toast = useToast();
+  const [plusOpen, setPlusOpen] = useState(false);
   const guestGate = useDB((st) => st.guestGate);
   const activeConvId = useDB((st) => st.activeConvId);
   const me = useDB((st) => (st.sessionUserId ? st.me() : null));
@@ -193,7 +197,7 @@ function Landing() {
         <button className="hidden items-center gap-1.5 rounded-full px-3 py-1.5 text-[13.5px] text-slate-300 transition hover:bg-white/5 md:flex">
           <Globe size={15} /> EN <ChevronDown size={13} />
         </button>
-        {mounted && session ? (
+        {mounted && session && !isGuest ? (
           <Link
             href="/app"
             className="rounded-full bg-white px-5 py-2 text-[13.5px] font-semibold text-slate-900 transition hover:bg-slate-200"
@@ -275,13 +279,30 @@ function Landing() {
           </div>
           <div className="mt-2 flex items-center gap-2.5">
             <button
-              onClick={() => taRef.current?.focus()}
+              onClick={() => setPlusOpen((v) => !v)}
               className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 text-slate-100 backdrop-blur-md transition hover:bg-white/20"
-              title="Attach (after sign in)"
+              title="Add & tools"
+              aria-label="Add & tools"
             >
               <Plus size={18} />
             </button>
+            <button
+              onClick={() => toast("Voice mode coming soon 🎙")}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 text-slate-100 backdrop-blur-md transition hover:bg-white/20"
+              title="Voice"
+              aria-label="Voice"
+            >
+              <Mic size={16} />
+            </button>
             <div className="flex-1" />
+            <button
+              onClick={() => setModal("signin")}
+              title="Response mode (sign in to change)"
+              className="flex min-h-[40px] items-center gap-1.5 rounded-full px-3 text-[12.5px] font-medium text-slate-400 transition hover:bg-white/10 hover:text-slate-200"
+            >
+              Auto
+              <ChevronDown size={13} className="opacity-60" />
+            </button>
             <button
               onClick={() => generate()}
               className="btn-aurora rounded-full px-7 py-2.5 text-[14.5px] font-semibold"
@@ -289,6 +310,38 @@ function Landing() {
               Generate
             </button>
           </div>
+
+          {/* menu + ala dalam app — fitur generator butuh akun */}
+          {plusOpen && (
+            <div className="glass-menu absolute bottom-[76px] left-6 z-40 w-[min(400px,90vw)] rounded-[26px] p-2">
+              {[
+                { icon: Paperclip, title: "Add photos & files", desc: "Upload from computer" },
+                { icon: FlaskConical, title: "Quiz Generator", desc: "Print-ready quiz with answer key" },
+                { icon: Puzzle, title: "Word Builder", desc: "Playable anagram game" },
+                { icon: FileText, title: "Templates", desc: "Starter prompts to fill in" },
+              ].map((it) => (
+                <button
+                  key={it.title}
+                  onClick={() => {
+                    setPlusOpen(false);
+                    setModal("signin");
+                  }}
+                  className="flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-left transition hover:bg-white/[0.07]"
+                >
+                  <it.icon size={17} className="shrink-0 text-slate-200" />
+                  <span className="shrink-0 text-[14px] font-medium text-slate-100">
+                    {it.title}
+                  </span>
+                  <span className="min-w-0 flex-1 truncate text-[13.5px] text-slate-400">
+                    {it.desc}
+                  </span>
+                </button>
+              ))}
+              <div className="px-3 pb-1 pt-2 text-[12.5px] text-slate-500">
+                Sign in to use these tools
+              </div>
+            </div>
+          )}
 
           {/* dropdown fungsi saat mengetik "/" */}
           {slashItems.length > 0 && (
@@ -330,6 +383,10 @@ function Landing() {
             <button
               key={idea.label}
               onClick={() => {
+                if (/^\/(quiz|anagram)/.test(idea.prompt)) {
+                  setModal("signin");
+                  return;
+                }
                 setText(idea.prompt);
                 taRef.current?.focus();
                 window.scrollTo({ top: 0, behavior: "smooth" });
