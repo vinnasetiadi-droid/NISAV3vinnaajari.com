@@ -112,8 +112,12 @@ export function HomeView({
           Good {timeGreetingID()}, {name}
         </h1>
 
-        {/* prompt panel */}
-        <div className="enter-up mt-9 w-full [animation-delay:0.38s]">
+        {/* prompt panel — class animasi dilepas saat selesai:
+            animasi opacity pada ancestor mengisolasi backdrop-filter menu di dalamnya */}
+        <div
+          className="enter-up mt-9 w-full [animation-delay:0.38s]"
+          onAnimationEnd={(e) => e.currentTarget.classList.remove("enter-up")}
+        >
           <ChatInput
             variant="panel"
             placeholder="Ask me anything…"
