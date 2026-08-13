@@ -273,7 +273,8 @@ body {
 .glow-ring::after {
   content: "";
   position: absolute;
-  inset: 55% 10% -26px 10%;
+  inset: auto 12% -20px 12%;
+  height: 26px;
   border-radius: 9999px;
   background: radial-gradient(
     ellipse at center,
