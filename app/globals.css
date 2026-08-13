@@ -199,6 +199,34 @@ body {
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
+/* Glass bening untuk box chat — light: kaca putih translusen; dark: sama seperti .glass-mac */
+.glass-chat {
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.66) 0%,
+    rgba(255, 255, 255, 0.42) 40%,
+    rgba(255, 255, 255, 0.36) 62%,
+    rgba(255, 255, 255, 0.58) 100%
+  );
+  backdrop-filter: blur(26px) saturate(1.45);
+  -webkit-backdrop-filter: blur(26px) saturate(1.45);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 18px 50px rgba(30, 60, 110, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+.dark .glass-chat {
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.055) 0%,
+    rgba(255, 255, 255, 0.015) 40%,
+    rgba(255, 255, 255, 0.008) 62%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
 /* Pill kaca (sama seperti tombol ide di landing) */
 .pill-glass {
   @apply flex items-center gap-2 rounded-full border border-slate-300/70 bg-white/70 font-medium text-slate-600 transition hover:bg-white;

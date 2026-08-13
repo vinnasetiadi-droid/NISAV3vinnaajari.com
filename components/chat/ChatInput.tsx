@@ -452,7 +452,7 @@ export function ChatInput({
 
       {variant === "panel" ? (
         /* ---------- panel (dashboard): 3 zona — kiri | tools+model | send ---------- */
-        <div className="rounded-[20px] border border-slate-200/80 bg-white p-4 shadow-glass dark:border-white/10 dark:bg-[#10141c]/95 dark:shadow-glass-dark">
+        <div className="glass-chat rounded-[20px] p-4">
           <div className="flex items-start gap-2.5 px-1 pt-0.5">
             <svg width="0" height="0" className="absolute">
               <defs>
@@ -532,7 +532,7 @@ export function ChatInput({
         </div>
       ) : (
         /* ---------- pill (chat): teks di atas, 3 zona di bawah ---------- */
-        <div className="glass-input flex flex-col rounded-[24px] px-3.5 pb-2.5 pt-3">
+        <div className="glass-chat flex flex-col rounded-[24px] px-3.5 pb-2.5 pt-3">
           <div className="flex px-1">{textareaEl}</div>
           <div className="mt-1.5 flex items-center gap-1.5">
             <button
