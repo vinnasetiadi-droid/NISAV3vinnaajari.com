@@ -46,17 +46,9 @@ body {
 }
 
 .dark .bg-app-light {
-  /* ala Siri: atas hitam pekat, glow biru naik dari bawah — tanpa dot pattern */
+  /* hitam pekat penuh — gradient biru bawah dimatikan agar chat lebih pop */
   background-color: #04060b;
-  background-image: linear-gradient(
-    to top,
-    rgba(10, 112, 255, 0.42) 0%,
-    rgba(0, 140, 255, 0.18) 12%,
-    rgba(0, 80, 200, 0.06) 26%,
-    transparent 44%
-  );
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  background-image: none;
 }
 
 /* ---------- Glass system ---------- */
