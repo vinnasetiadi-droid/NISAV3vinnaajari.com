@@ -140,6 +140,7 @@ export const useDB = create<DBState>()(
           sessionUserId: user.id,
           data: { ...s.data, [user.id]: emptyData() },
           activeConvId: null,
+          sidebarCollapsed: true,
         }));
         return null;
       },
@@ -154,6 +155,7 @@ export const useDB = create<DBState>()(
           data: s.data[user.id] ? s.data : { ...s.data, [user.id]: emptyData() },
           activeConvId: null,
           openArtifactId: null,
+          sidebarCollapsed: true,
         }));
         return null;
       },

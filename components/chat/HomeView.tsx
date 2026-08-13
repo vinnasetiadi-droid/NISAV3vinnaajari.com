@@ -4,7 +4,10 @@ import { useState } from "react";
 import {
   FileText,
   FlaskConical,
+  HelpCircle,
+  Home,
   Puzzle,
+  Settings,
 } from "lucide-react";
 import { ChatInput, type PendingFile } from "./ChatInput";
 import { useToast } from "@/components/ui";
@@ -57,21 +60,28 @@ export function HomeView({
       {/* top bar (ala referensi) */}
       <div className="flex items-center gap-3 pt-4">
         <div className="flex-1" />
-        <nav className="hidden items-center gap-5 text-[13px] md:flex">
-          <span className="font-semibold text-slate-800 dark:text-white">
-            Dashboard
+        <nav className="hidden items-center gap-1.5 md:flex">
+          <span
+            title="Dashboard"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-slate-800 dark:text-white"
+          >
+            <Home size={17} />
           </span>
           <button
+            title="Settings"
+            aria-label="Settings"
             onClick={() => toast("Pengaturan ada di bar bawah (tema, servers)")}
-            className="text-slate-400 transition hover:text-slate-600 dark:hover:text-slate-200"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-slate-400 transition hover:bg-white/60 hover:text-slate-600 dark:hover:bg-white/10 dark:hover:text-slate-200"
           >
-            Settings
+            <Settings size={17} />
           </button>
           <button
+            title="Help & Support"
+            aria-label="Help & Support"
             onClick={() => toast("Klik ikon ? di bar bawah untuk bantuan")}
-            className="text-slate-400 transition hover:text-slate-600 dark:hover:text-slate-200"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-slate-400 transition hover:bg-white/60 hover:text-slate-600 dark:hover:bg-white/10 dark:hover:text-slate-200"
           >
-            Help &amp; Support
+            <HelpCircle size={17} />
           </button>
         </nav>
         <div className="flex h-8 w-8 items-center justify-center rounded-full border-[1.5px] border-slate-500 text-[12.5px] font-semibold text-slate-700 dark:border-white dark:text-white">
@@ -84,9 +94,16 @@ export function HomeView({
         {/* orb video */}
         <div className="enter-orb relative h-[118px] w-[118px] overflow-hidden rounded-full bg-white [mask-image:radial-gradient(circle_closest-side,black_84%,transparent_100%)] dark:bg-[#04060b] dark:[mask-image:none]">
           <OrbVideo smoothLoop />
+          {/* logo AJARI menempel di tengah blob */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/ajari-mark.png"
+            alt=""
+            className="absolute left-1/2 top-1/2 z-10 h-[44px] w-auto -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_1px_6px_rgba(0,40,90,0.35)]"
+          />
         </div>
 
-        <div className="enter-up mt-7 text-[13px] font-medium uppercase tracking-[0.35em] text-slate-500 [animation-delay:0.15s] dark:text-slate-300">
+        <div className="enter-up mt-7 text-[14px] font-bold uppercase tracking-[0.35em] text-slate-500 [font-family:var(--font-brenda)] [animation-delay:0.15s] dark:text-slate-300">
           Welcome back
         </div>
         <h1

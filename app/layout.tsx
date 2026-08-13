@@ -18,6 +18,14 @@ const generalSans = localFont({
   ],
 });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
+const brandon = localFont({
+  variable: "--font-brenda",
+  src: [
+    { path: "../public/fonts/brandon_re.ttf", weight: "400", style: "normal" },
+    { path: "../public/fonts/Brandon_med.otf", weight: "500", style: "normal" },
+    { path: "../public/fonts/Brandon_bld.otf", weight: "700", style: "normal" },
+  ],
+});
 const trangels = localFont({
   variable: "--font-brand",
   src: [
@@ -43,7 +51,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body
-        className={`${inter.variable} ${generalSans.variable} ${mono.variable} ${trangels.variable} font-sans`}
+        className={`${inter.variable} ${generalSans.variable} ${mono.variable} ${trangels.variable} ${brandon.variable} font-sans`}
       >
         {children}
       </body>

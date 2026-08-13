@@ -65,7 +65,7 @@ export function StatusBar() {
   };
 
   return (
-    <div className="relative z-40 flex h-8 shrink-0 items-center gap-3 border-t border-slate-200/70 bg-white/60 px-3 text-[12px] text-slate-500 backdrop-blur-xl dark:border-white/[0.06] dark:bg-[#070a10]/85 dark:text-slate-400">
+    <div className="glass-chat relative z-40 mx-auto mb-2.5 flex h-9 w-[min(96%,720px)] shrink-0 items-center gap-3 rounded-full px-4 text-[12px] text-slate-500 dark:text-slate-400">
       <button
         onClick={() => setPaletteOpen(true)}
         className="flex items-center gap-2 rounded-lg px-2 py-0.5 transition hover:bg-white/60 hover:text-slate-700 dark:hover:bg-white/10 dark:hover:text-slate-200"
