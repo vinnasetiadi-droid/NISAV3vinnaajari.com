@@ -1,14 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  FileText,
-  FlaskConical,
-  HelpCircle,
-  Home,
-  Puzzle,
-  Settings,
-} from "lucide-react";
+import { HelpCircle, Home, Settings } from "lucide-react";
 import { ChatInput, type PendingFile } from "./ChatInput";
 import { useToast } from "@/components/ui";
 import { useDB } from "@/lib/store";
@@ -18,22 +11,19 @@ import { OrbVideo } from "@/components/OrbVideo";
 
 const FEATURES = [
   {
-    icon: FlaskConical,
-    title: "Quiz Generator",
-    desc: "Print-ready practice questions complete with an answer key.",
+    title: "Photosynthesis Quiz",
+    desc: "Print-ready 5th-grade quiz with answer key",
     prompt: "/quiz create practice questions about photosynthesis",
   },
   {
-    icon: Puzzle,
-    title: "Word Builder",
-    desc: "An educational anagram game you can play right away.",
+    title: "Solar System Game",
+    desc: "Playable Word Builder anagrams for science class",
     prompt: "/anagram create one about the solar system",
   },
   {
-    icon: FileText,
-    title: "Doc Assistant",
-    desc: "Draft documents, emails, and summaries in a snap.",
-    prompt: "Help me put together a realistic 30-day study plan.",
+    title: "Ecosystem Slides",
+    desc: "Outline a 10-slide classroom presentation",
+    prompt: "Outline a 10-slide presentation about ecosystems for middle school.",
   },
 ];
 
@@ -135,16 +125,20 @@ export function HomeView({
           />
         </div>
 
-        {/* feature pills — satu tombol sederhana per fitur */}
-        <div className="enter-up mt-5 flex flex-wrap items-center justify-center gap-2.5 [animation-delay:0.5s]">
+        {/* pinned project cards — skenario penting, ala reference */}
+        <div className="enter-up mt-6 grid w-full grid-cols-1 gap-3 [animation-delay:0.5s] sm:grid-cols-3">
           {FEATURES.map((f) => (
             <button
               key={f.title}
               onClick={() => onSend(f.prompt, [])}
-              className="pill-glass px-4 py-2 text-[12.5px]"
+              className="rounded-2xl border border-slate-300/60 bg-white/60 p-4 text-left transition hover:bg-white dark:border-white/10 dark:bg-white/[0.04] dark:hover:border-white/20 dark:hover:bg-white/[0.08]"
             >
-              <f.icon size={14} className="opacity-70" />
-              {f.title}
+              <div className="text-[15px] font-semibold text-slate-800 dark:text-slate-100">
+                {f.title}
+              </div>
+              <div className="mt-1.5 text-[12.5px] leading-relaxed text-slate-500 dark:text-slate-400">
+                {f.desc}
+              </div>
             </button>
           ))}
         </div>
