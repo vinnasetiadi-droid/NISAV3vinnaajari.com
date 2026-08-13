@@ -303,12 +303,12 @@ body {
 .dark .glass-menu {
   background: linear-gradient(
     120deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.04) 45%,
-    rgba(255, 255, 255, 0.075) 100%
+    rgba(22, 26, 34, 0.66) 0%,
+    rgba(18, 21, 28, 0.6) 50%,
+    rgba(22, 26, 34, 0.64) 100%
   );
-  backdrop-filter: blur(40px) saturate(2.4) brightness(1.15);
-  -webkit-backdrop-filter: blur(40px) saturate(2.4) brightness(1.15);
+  backdrop-filter: blur(44px) saturate(0.9) brightness(0.92);
+  -webkit-backdrop-filter: blur(44px) saturate(0.9) brightness(0.92);
   border: 1px solid rgba(255, 255, 255, 0.16);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
