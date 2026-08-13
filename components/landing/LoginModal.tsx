@@ -128,7 +128,7 @@ export function LoginModal({
         </div>
 
         {/* right auth pane */}
-        <div className="glass-mac relative flex flex-col justify-center rounded-none border-0 px-8 py-10 md:px-12">
+        <div className="glass-mac-strong relative flex flex-col justify-center rounded-none border-0 px-8 py-10 md:px-12">
           <button
             onClick={onClose}
             className="absolute right-5 top-5 rounded-lg p-1.5 text-slate-500 transition hover:bg-white/10 hover:text-slate-200"

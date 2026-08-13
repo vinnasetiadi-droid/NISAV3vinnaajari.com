@@ -188,9 +188,6 @@ function Landing() {
         <h1 className="bg-gradient-to-r from-white/40 via-white to-white/30 bg-clip-text font-display text-[56px] font-medium leading-none text-transparent md:text-[84px]">
           Ask NISA
         </h1>
-        <div className="mt-5 text-[12px] font-medium uppercase tracking-[0.35em] text-slate-300">
-          Neural Interactive Systematic Assistant
-        </div>
 
         {/* prompt card */}
         <div className="glass-mac relative z-10 mt-10 w-full rounded-[28px] p-6 pb-4">
