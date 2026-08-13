@@ -99,7 +99,7 @@ export function HomeView({
           <img
             src="/ajari-mark.png"
             alt=""
-            className="absolute left-1/2 top-1/2 z-10 h-[60px] w-auto -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_1px_6px_rgba(0,40,90,0.35)]"
+            className="absolute left-1/2 top-1/2 z-10 h-[74px] w-auto -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_1px_6px_rgba(0,40,90,0.35)]"
           />
         </div>
 

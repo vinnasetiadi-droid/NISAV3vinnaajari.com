@@ -271,7 +271,7 @@ export function Sidebar() {
         {data.projects.length === 0 && !newProject && (
           <EmptyRow
             icon={<Pin size={14} className="-rotate-45" />}
-            text="Pin projects to keep them here"
+            text="Pin projects"
           />
         )}
         <div className="mt-1 space-y-0.5">
