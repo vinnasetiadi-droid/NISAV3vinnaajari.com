@@ -327,9 +327,11 @@ body {
   background: conic-gradient(
     from var(--ga),
     #00ffff,
-    #0a70ff 30%,
+    #ffffff 14%,
+    #0a70ff 32%,
     #00e5c7 55%,
-    #4db4ff 78%,
+    #ffffff 70%,
+    #4db4ff 84%,
     #00ffff
   );
   /* hanya ring tepinya yang tampak, tengahnya dilubangi */
@@ -337,7 +339,7 @@ body {
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask-composite: exclude;
-  filter: blur(1px) drop-shadow(0 0 14px rgba(0, 190, 255, 0.55));
+  filter: blur(1px) drop-shadow(0 0 20px rgba(80, 210, 255, 0.75));
   animation: glow-spin 5s linear infinite;
 }
 .glow-ring::after {
@@ -350,17 +352,19 @@ body {
   background: conic-gradient(
     from var(--ga),
     #00ffff,
-    #0a70ff 30%,
+    #ffffff 14%,
+    #0a70ff 32%,
     #00e5c7 55%,
-    #4db4ff 78%,
+    #ffffff 70%,
+    #4db4ff 84%,
     #00ffff
   );
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask-composite: exclude;
-  filter: blur(10px);
-  opacity: 0.75;
+  filter: blur(14px);
+  opacity: 0.9;
   animation: glow-spin 5s linear infinite, glow-breathe 4s ease-in-out infinite;
 }
 /* isi box ber-glow: gelap tapi tetap glass — tint hitam pekat + blur tetap hidup */

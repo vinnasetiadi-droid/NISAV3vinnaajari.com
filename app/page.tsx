@@ -236,8 +236,9 @@ function Landing() {
           Ask NISA
         </h1>
 
-        {/* prompt card */}
-        <div className="glass-mac relative z-10 mt-10 w-full rounded-[26px] p-6 pb-4">
+        {/* prompt card + ring glow persis seperti di dalam */}
+        <div className="glow-ring relative z-10 mt-10 w-full rounded-[26px]">
+        <div className="glass-mac relative z-10 rounded-[26px] p-6 pb-4">
           <div className="relative">
             {/* overlay: /perintah tampil biru */}
             <div
@@ -372,6 +373,7 @@ function Landing() {
               ))}
             </div>
           )}
+        </div>
         </div>
 
         {/* ideas */}
