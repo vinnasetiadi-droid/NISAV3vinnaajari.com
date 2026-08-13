@@ -183,6 +183,23 @@ body {
   background-size: 100% 100%;
 }
 
+/* Liquid glass ala macOS: translusens tinggi + blur tebal + edge light */
+.glass-mac {
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.17) 0%,
+    rgba(255, 255, 255, 0.06) 38%,
+    rgba(255, 255, 255, 0.03) 62%,
+    rgba(255, 255, 255, 0.12) 100%
+  );
+  backdrop-filter: blur(34px) saturate(1.7);
+  -webkit-backdrop-filter: blur(34px) saturate(1.7);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.38),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.07);
+}
+
 /* Pill kaca (sama seperti tombol ide di landing) */
 .pill-glass {
   @apply flex items-center gap-2 rounded-full border border-slate-300/70 bg-white/70 font-medium text-slate-600 transition hover:bg-white;

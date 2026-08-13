@@ -201,7 +201,7 @@ function Landing() {
         </div>
 
         {/* prompt card */}
-        <div className="relative z-10 mt-10 w-full rounded-[28px] border border-white/[0.08] bg-[#10141c]/90 p-6 pb-4 shadow-[0_30px_80px_rgba(0,0,0,0.5)] backdrop-blur-xl">
+        <div className="glass-mac relative z-10 mt-10 w-full rounded-[28px] p-6 pb-4">
           <div className="relative">
             {/* overlay: /perintah tampil biru */}
             <div
@@ -244,7 +244,7 @@ function Landing() {
           <div className="mt-2 flex items-center gap-2.5">
             <button
               onClick={() => taRef.current?.focus()}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/[0.07] text-slate-300 transition hover:bg-white/15"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 text-slate-100 backdrop-blur-md transition hover:bg-white/20"
               title="Lampirkan (setelah masuk)"
             >
               <Plus size={18} />
