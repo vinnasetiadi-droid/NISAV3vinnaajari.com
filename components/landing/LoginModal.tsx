@@ -57,10 +57,13 @@ export function LoginModal({
   open,
   onClose,
   initialMode = "signin",
+  variant = "default",
 }: {
   open: boolean;
   onClose: () => void;
   initialMode?: "signup" | "signin";
+  /** "default" = dari tombol Sign in · "limit" = jatah 3 chat gratis habis */
+  variant?: "default" | "limit";
 }) {
   const router = useRouter();
   const toast = useToast();
@@ -120,13 +123,27 @@ export function LoginModal({
     >
       <div className="animate-rise grid w-full max-w-[960px] overflow-hidden rounded-[26px] border border-white/10 shadow-2xl md:grid-cols-2">
         {/* left preview pane — ilustrasi NISA */}
-        <div className="hidden bg-[#0b0e14] md:block">
+        <div className="relative hidden bg-[#0b0e14] md:block">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/login-preview.png"
+            src={variant === "limit" ? "/gate-preview.png" : "/login-preview.png"}
             alt="Preview NISA"
             className="h-full w-full object-cover"
           />
+          {variant === "limit" && (
+            <div className="absolute inset-x-0 bottom-0 top-[46%] flex flex-col items-center px-10 text-center">
+              <h2
+                className="font-display text-[27px] font-semibold leading-tight text-white"
+                style={{ letterSpacing: "-0.02em" }}
+              >
+                That&rsquo;s your 3 free chats!
+              </h2>
+              <p className="mt-3 max-w-[290px] text-[14px] leading-relaxed text-slate-300">
+                Sign in to keep the conversation going — your chat stays right
+                where you left it, and quizzes, games, and documents unlock too.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* right auth pane */}
@@ -144,7 +161,9 @@ export function LoginModal({
           </div>
           {mode === "signin" && (
             <p className="-mt-3 mb-8 text-center text-[15px] text-slate-400">
-              Welcome back — sign in to continue.
+              {variant === "limit"
+                ? "Sign in to continue chatting — it's free."
+                : "Welcome back — sign in to continue."}
             </p>
           )}
 

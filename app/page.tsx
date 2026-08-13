@@ -68,6 +68,7 @@ function Landing() {
   const [text, setText] = useState("");
   const [exIdx, setExIdx] = useState(0);
   const [modal, setModal] = useState<null | "signup" | "signin">(null);
+  const [modalVariant, setModalVariant] = useState<"default" | "limit">("default");
   const taRef = useRef<HTMLTextAreaElement>(null);
   const toast = useToast();
   const [plusOpen, setPlusOpen] = useState(false);
@@ -90,6 +91,7 @@ function Landing() {
   // guest kehabisan jatah 3 chat → wajib sign in
   useEffect(() => {
     if (guestGate) {
+      setModalVariant("limit");
       setModal("signin");
       useDB.getState().setGuestGate(false);
     }
@@ -206,7 +208,10 @@ function Landing() {
           </Link>
         ) : (
           <button
-            onClick={() => setModal("signin")}
+            onClick={() => {
+              setModalVariant("default");
+              setModal("signin");
+            }}
             className="rounded-full bg-white px-5 py-2 text-[13.5px] font-semibold text-slate-900 transition hover:bg-slate-200"
           >
             Sign in
@@ -328,7 +333,10 @@ function Landing() {
             </button>
             <div className="flex-1" />
             <button
-              onClick={() => setModal("signin")}
+              onClick={() => {
+              setModalVariant("default");
+              setModal("signin");
+            }}
               title="Response mode (sign in to change)"
               className="flex min-h-[40px] items-center gap-1.5 rounded-full px-3 text-[12.5px] font-medium text-slate-400 transition hover:bg-white/10 hover:text-slate-200"
             >
@@ -356,6 +364,7 @@ function Landing() {
                   key={it.title}
                   onClick={() => {
                     setPlusOpen(false);
+                    setModalVariant("default");
                     setModal("signin");
                   }}
                   className="flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-left transition hover:bg-white/[0.07]"
@@ -416,6 +425,7 @@ function Landing() {
               key={idea.label}
               onClick={() => {
                 if (/^\/(quiz|anagram)/.test(idea.prompt)) {
+                  setModalVariant("default");
                   setModal("signin");
                   return;
                 }
@@ -443,6 +453,7 @@ function Landing() {
         open={modal !== null}
         onClose={() => setModal(null)}
         initialMode={modal || "signin"}
+        variant={modalVariant}
       />
     </div>
   );
