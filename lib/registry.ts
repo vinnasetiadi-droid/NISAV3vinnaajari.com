@@ -17,42 +17,42 @@ export const MODES: ModeDef[] = [
   {
     id: "brainstorm",
     name: "Brainstorm",
-    desc: "Brainstorm — generate many ideas, build on theirs, explore before judging.",
+    desc: "Many ideas first, judge later",
     system:
       "Response style: BRAINSTORM. Generate many diverse ideas, build on the user's ideas, explore before judging.",
   },
   {
     id: "comprehensive",
     name: "Comprehensive",
-    desc: "Deep, thorough reasoning — weigh trade-offs and edge cases, structure the answer.",
+    desc: "Thorough reasoning with trade-offs",
     system:
       "Response style: COMPREHENSIVE. Reason deeply and thoroughly, weigh trade-offs and edge cases, structure the answer.",
   },
   {
     id: "deep",
     name: "Deep",
-    desc: "Deep Research — plan, gather from many sources, verify, then answer (or write) with citations.",
+    desc: "Research from many sources, with citations",
     system:
       "Response style: DEEP RESEARCH. Plan, gather from many angles, verify, then answer with a research structure and sources when available.",
   },
   {
     id: "plan",
     name: "Plan",
-    desc: "Plan-first — lay out the approach as clear steps and align before executing.",
+    desc: "Lay out clear steps before executing",
     system:
       "Response style: PLAN-FIRST. Lay out the approach as clear steps and make sure it is aligned before executing.",
   },
   {
     id: "ringkas",
     name: "Concise",
-    desc: "Concise — answer in the fewest words that still fully help; lead with the point.",
+    desc: "Shortest answer that still helps",
     system:
       "Response style: CONCISE. Answer as briefly as possible while still fully helping; get straight to the point.",
   },
   {
     id: "socratic",
     name: "Socratic",
-    desc: "Teach by guiding questions — scaffold understanding instead of handing over the answer.",
+    desc: "Teach through guiding questions",
     system:
       "Response style: SOCRATIC. Teach through guiding questions — build understanding step by step, do not hand over the final answer right away.",
   },

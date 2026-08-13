@@ -401,13 +401,13 @@ export function ChatInput({
           <MenuShell
             className={cn(
               "glass-menu nice-scroll max-h-[420px] overflow-y-auto rounded-[26px] p-2",
-              pop === "modes-pill" ? "w-[min(400px,92vw)]" : "w-[min(440px,92vw)]",
+              pop === "modes-pill" ? "w-[min(320px,92vw)]" : "w-[min(440px,92vw)]",
               variant === "panel" ? "bottom-[72px]" : "bottom-[64px]",
               pop === "modes-pill" ? "right-0" : "left-0"
             )}
           >
             {pop === "plus" && (
-              <>
+              <div key="plus" className="slide-in-left">
                 <PlusRow
                   highlight
                   icon={<Paperclip size={17} />}
@@ -448,36 +448,38 @@ export function ChatInput({
                 <div className="px-3 pb-1 pt-2 text-[13px] text-slate-400">
                   Type / for agents, skills &amp; tools
                 </div>
-              </>
+              </div>
             )}
 
             {pop === "modes-pill" && (
-              <>
-                {MODES.map((m) => {
-                  const Icon = MODE_ICONS[m.id];
-                  return (
-                    <PlusRow
-                      key={m.id}
-                      icon={<Icon size={16} />}
-                      title={m.name}
-                      desc={m.desc}
-                      right={
-                        m.id === mode ? (
-                          <Check size={14} className="text-brand-400" />
-                        ) : undefined
-                      }
-                      onClick={() => {
-                        onMode(m.id);
-                        setPop(null);
-                      }}
-                    />
-                  );
-                })}
-              </>
+              <div className="divide-y divide-slate-200/60 dark:divide-white/10">
+                {MODES.map((m) => (
+                  <button
+                    key={m.id}
+                    onClick={() => {
+                      onMode(m.id);
+                      setPop(null);
+                    }}
+                    className="flex w-full items-start gap-3 rounded-2xl px-3.5 py-3 text-left transition hover:bg-slate-900/[0.05] dark:hover:bg-white/[0.07]"
+                  >
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[14px] font-medium text-slate-800 dark:text-slate-100">
+                        {m.name}
+                      </span>
+                      <span className="mt-0.5 block text-[12.5px] leading-snug text-slate-500 dark:text-slate-400">
+                        {m.desc}
+                      </span>
+                    </span>
+                    {m.id === mode && (
+                      <Check size={15} className="mt-0.5 shrink-0 text-brand-400" />
+                    )}
+                  </button>
+                ))}
+              </div>
             )}
 
             {pop === "plus-templates" && (
-              <>
+              <div key="tpl" className="slide-in-right">
                 <BackRow label="Templates" onClick={() => setPop("plus")} />
                 {TEMPLATES.map((t) => (
                   <PlusRow
@@ -491,7 +493,7 @@ export function ChatInput({
                     }}
                   />
                 ))}
-              </>
+              </div>
             )}
 
           </MenuShell>
