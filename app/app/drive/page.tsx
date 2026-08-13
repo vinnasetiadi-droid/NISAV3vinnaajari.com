@@ -83,7 +83,7 @@ function IconAction({
       title={title}
       onClick={onClick}
       className={cn(
-        "rounded-lg border border-slate-200 bg-white/90 p-1.5 shadow-glass backdrop-blur dark:border-white/10 dark:bg-[#10141c]/90",
+        "rounded-lg border border-slate-200 bg-white/[0.94] p-1.5 shadow-glass backdrop-blur dark:border-white/10 dark:bg-[#10141c]/95",
         danger
           ? "text-red-400 hover:text-red-600"
           : "text-slate-500 hover:text-slate-700 dark:text-slate-300 dark:hover:text-white"

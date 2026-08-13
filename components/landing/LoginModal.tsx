@@ -179,11 +179,13 @@ export function LoginModal({
               </button>
             </div>
 
-            {err && (
-              <div className="rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-2.5 text-[13px] text-red-300">
-                {err}
-              </div>
-            )}
+            {/* slot error tinggi tetap — ukuran modal tidak berubah saat error muncul */}
+            <div
+              aria-live="polite"
+              className="flex h-5 items-center justify-center text-[12.5px] text-red-300"
+            >
+              {err}
+            </div>
 
             <button
               disabled={busy}

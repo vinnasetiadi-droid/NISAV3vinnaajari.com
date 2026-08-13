@@ -151,7 +151,7 @@ body {
   );
   background-size: 300% 100%;
   animation: aurora-flow 9s ease-in-out infinite;
-  color: #0b0e1a;
+  color: #0b0e14;
   box-shadow: 0 0 24px rgba(0, 220, 255, 0.35),
     inset 0 1px 1px rgba(255, 255, 255, 0.8);
 }

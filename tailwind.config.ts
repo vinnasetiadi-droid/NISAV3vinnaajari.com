@@ -30,7 +30,7 @@ const config: Config = {
         },
         teal2: "#00ffff",
         cream: "#f2efe6",
-        ink: "#0b0e1a",
+        ink: "#0b0e14",
       },
       boxShadow: {
         glass: "0 8px 32px rgba(20,20,60,0.12), inset 0 1px 0 rgba(255,255,255,0.45)",

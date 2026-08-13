@@ -164,7 +164,7 @@ function Landing() {
         <img src="/logo-nisa.png" alt="NISA" className="h-7 w-auto" />
         <div className="flex-1" />
         <button className="hidden items-center gap-1.5 rounded-full px-3 py-1.5 text-[13.5px] text-slate-300 transition hover:bg-white/5 md:flex">
-          <Globe size={15} /> ID <ChevronDown size={13} />
+          <Globe size={15} /> EN <ChevronDown size={13} />
         </button>
         {mounted && session ? (
           <Link
@@ -299,7 +299,9 @@ function Landing() {
           ))}
         </div>
 
-        <footer className="pb-8 text-[12px] text-slate-600">© AJARI Technologies 2026</footer>
+        <footer className="fixed inset-x-0 bottom-2.5 z-10 text-center text-[12px] text-slate-600">
+          © AJARI Technologies 2026
+        </footer>
       </main>
 
       <LoginModal
