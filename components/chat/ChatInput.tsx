@@ -609,7 +609,7 @@ export function ChatInput({
                 aria-label="Send"
                 title="Send"
                 onClick={doSend}
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#0a70ff] text-white shadow-[0_0_18px_rgba(10,112,255,0.45)] transition hover:bg-[#2a84ff] active:scale-95"
+                className="btn-send-glow flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
               >
                 <Send size={15} className="-translate-x-[1px] translate-y-[1px]" />
               </button>
@@ -668,7 +668,7 @@ export function ChatInput({
                 className={cn(
                   "flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition",
                   text.trim() || files.length
-                    ? "bg-[#0a70ff] text-white shadow-[0_0_18px_rgba(10,112,255,0.45)] hover:bg-[#2a84ff] active:scale-95"
+                    ? "btn-send-glow"
                     : "bg-brand-400/40 text-white/80 hover:bg-brand-500 hover:text-white"
                 )}
               >

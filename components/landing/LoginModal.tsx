@@ -131,16 +131,16 @@ export function LoginModal({
             className="h-full w-full object-cover"
           />
           {variant === "limit" && (
-            <div className="absolute inset-x-0 bottom-0 top-[46%] flex flex-col items-center px-10 text-center">
+            <div className="absolute inset-x-0 bottom-0 top-[53%] flex flex-col items-center px-10 text-center">
               <h2
-                className="font-display text-[27px] font-semibold leading-tight text-white"
+                className="font-display text-[33px] font-semibold leading-tight text-white"
                 style={{ letterSpacing: "-0.02em" }}
               >
                 That&rsquo;s your 3 free chats!
               </h2>
-              <p className="mt-3 max-w-[290px] text-[14px] leading-relaxed text-slate-300">
-                Sign in to keep the conversation going — your chat stays right
-                where you left it, and quizzes, games, and documents unlock too.
+              <p className="mt-3.5 max-w-[300px] text-[14px] leading-relaxed text-slate-300">
+                Sign in to keep chatting — your history stays, and quizzes,
+                games &amp; docs unlock.
               </p>
             </div>
           )}
