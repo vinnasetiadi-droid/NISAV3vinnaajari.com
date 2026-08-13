@@ -88,7 +88,7 @@ export function HomeView({
             src="/orb-glow.png"
             alt=""
             aria-hidden
-            className="pointer-events-none absolute hidden h-[420px] w-[420px] max-w-none select-none mix-blend-hard-light dark:block"
+            className="pointer-events-none absolute hidden h-[420px] w-[420px] max-w-none select-none opacity-20 mix-blend-hard-light dark:block"
           />
         <div className="enter-orb relative h-[118px] w-[118px] overflow-hidden rounded-full bg-white [mask-image:radial-gradient(circle_closest-side,black_84%,transparent_100%)] dark:bg-[#04060b] dark:[mask-image:none]">
           <OrbVideo smoothLoop />
