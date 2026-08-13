@@ -91,7 +91,24 @@ export function HomeView({
 
       {/* hero */}
       <div className="mx-auto flex w-full max-w-[780px] flex-1 flex-col items-center justify-center py-10">
-        {/* orb video */}
+        {/* orb video + sinar & dots halftone di belakangnya (dark) */}
+        <div className="relative flex items-center justify-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/halftone.png"
+            alt=""
+            aria-hidden
+            className="pointer-events-none absolute hidden h-[350px] w-[350px] max-w-none select-none opacity-80 dark:block [mask-image:radial-gradient(circle,black_30%,rgba(0,0,0,0.5)_52%,transparent_70%)] [filter:hue-rotate(28deg)_saturate(2.6)_brightness(0.62)]"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute hidden h-[240px] w-[240px] rounded-full dark:block"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(40,130,255,0.65) 0%, rgba(20,110,255,0.28) 48%, transparent 72%)",
+              filter: "blur(18px)",
+            }}
+          />
         <div className="enter-orb relative h-[118px] w-[118px] overflow-hidden rounded-full bg-white [mask-image:radial-gradient(circle_closest-side,black_84%,transparent_100%)] dark:bg-[#04060b] dark:[mask-image:none]">
           <OrbVideo smoothLoop />
           {/* logo AJARI menempel di tengah blob */}
@@ -101,6 +118,7 @@ export function HomeView({
             alt=""
             className="absolute left-1/2 top-1/2 z-10 h-[74px] w-auto -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_1px_6px_rgba(0,40,90,0.35)]"
           />
+        </div>
         </div>
 
         <div className="enter-up mt-7 text-[14px] font-bold uppercase tracking-[0.35em] text-slate-500 [font-family:var(--font-brenda)] [animation-delay:0.15s] dark:text-slate-300">

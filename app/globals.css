@@ -251,9 +251,9 @@ body {
 .glow-ring::before {
   content: "";
   position: absolute;
-  inset: -2.5px;
-  border-radius: 24px;
-  padding: 2.5px;
+  inset: -1px;
+  border-radius: 22px;
+  padding: 1px;
   background: conic-gradient(
     from var(--ga),
     #00ffff,

@@ -12,6 +12,9 @@ import {
   Bot,
   Check,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
   FileText,
   FlaskConical,
   GraduationCap,
@@ -20,10 +23,10 @@ import {
   Mic,
   Paperclip,
   Plus,
+  Puzzle,
   Scale,
   Send,
   Settings2,
-  SlidersHorizontal,
   Sparkles,
   Square,
   X,
@@ -61,7 +64,7 @@ interface Props {
 }
 
 /** Satu menu gabungan (mode + templates + recent) + menu model. */
-type Pop = null | "tools";
+type Pop = null | "plus" | "plus-modes" | "plus-templates";
 
 const MODE_ICONS: Record<ModeId, import("lucide-react").LucideIcon> = {
   auto: Sparkles,
@@ -72,6 +75,55 @@ const MODE_ICONS: Record<ModeId, import("lucide-react").LucideIcon> = {
   ringkas: Zap,
   socratic: GraduationCap,
 };
+
+/** Baris menu ala ChatGPT: icon + judul tebal + deskripsi abu satu baris. */
+function PlusRow({
+  icon,
+  title,
+  desc,
+  right,
+  highlight,
+  onClick,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  desc?: string;
+  right?: React.ReactNode;
+  highlight?: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-left transition hover:bg-slate-900/[0.05] dark:hover:bg-white/[0.07]",
+        highlight && "bg-slate-900/[0.05] dark:bg-white/[0.07]"
+      )}
+    >
+      <span className="shrink-0 text-slate-700 dark:text-slate-200">{icon}</span>
+      <span className="shrink-0 whitespace-nowrap text-[14px] font-medium text-slate-800 dark:text-slate-100">
+        {title}
+      </span>
+      {desc && (
+        <span className="min-w-0 flex-1 truncate text-[13.5px] text-slate-400">
+          {desc}
+        </span>
+      )}
+      {right && <span className="ml-auto shrink-0">{right}</span>}
+    </button>
+  );
+}
+
+function BackRow({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="mb-1 flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-[13px] font-semibold text-slate-500 transition hover:bg-slate-900/[0.04] dark:text-slate-400 dark:hover:bg-white/5"
+    >
+      <ChevronLeft size={15} /> {label}
+    </button>
+  );
+}
 
 export function ChatInput({
   placeholder,
@@ -343,77 +395,116 @@ export function ChatInput({
         </MenuShell>
       )}
 
-      {/* ---------- popovers ---------- */}
+      {/* ---------- menu + (gabungan attach/tools) ala ChatGPT ---------- */}
       {pop && (
         <div ref={popRef}>
-          {pop === "tools" && (
-            <MenuShell
-              className={cn(
-                "nice-scroll max-h-[380px] w-[260px] overflow-y-auto p-1.5",
-                menuPos,
-                variant === "panel" ? "right-[52px]" : "left-0"
-              )}
-            >
-              <div className={sectionLabel}>Response mode</div>
-              {MODES.map((m) => {
-                const Icon = MODE_ICONS[m.id];
-                return (
-                  <button
-                    key={m.id}
-                    onClick={() => {
-                      onMode(m.id);
-                      setPop(null);
-                    }}
-                    className={rowCls(m.id === mode)}
-                  >
-                    <Icon size={15} className="shrink-0 opacity-70" />
-                    <span className="flex-1">{m.name}</span>
-                    {m.id === mode && (
-                      <Check size={13} className="text-brand-400" />
-                    )}
-                  </button>
-                );
-              })}
-
-              <div className="my-1.5 border-t border-slate-200/60 dark:border-white/10" />
-              <div className={sectionLabel}>Templates</div>
-              {TEMPLATES.map((t) => (
-                <button
-                  key={t.name}
+          <MenuShell
+            className={cn(
+              "nice-scroll max-h-[420px] w-[min(440px,92vw)] overflow-y-auto rounded-3xl p-2",
+              variant === "panel" ? "bottom-[72px] left-0" : "bottom-[64px] left-0"
+            )}
+          >
+            {pop === "plus" && (
+              <>
+                <PlusRow
+                  highlight
+                  icon={<Paperclip size={17} />}
+                  title="Add photos & files"
+                  desc="Upload from computer"
                   onClick={() => {
-                    setText(t.text);
+                    setPop(null);
+                    fileRef.current?.click();
+                  }}
+                />
+                <PlusRow
+                  icon={<FlaskConical size={17} />}
+                  title="Quiz Generator"
+                  desc="Print-ready quiz with answer key"
+                  onClick={() => {
+                    setText("/quiz ");
                     setPop(null);
                     taRef.current?.focus();
                   }}
-                  className={rowCls()}
-                >
-                  <FileText size={15} className="shrink-0 opacity-70" />
-                  {t.name}
-                </button>
-              ))}
+                />
+                <PlusRow
+                  icon={<Puzzle size={17} />}
+                  title="Word Builder"
+                  desc="Playable anagram game"
+                  onClick={() => {
+                    setText("/anagram ");
+                    setPop(null);
+                    taRef.current?.focus();
+                  }}
+                />
+                <PlusRow
+                  icon={<Settings2 size={17} />}
+                  title="Response mode"
+                  right={
+                    <span className="flex items-center gap-1.5 text-[13px] text-slate-400">
+                      {curMode.name}
+                      <ChevronRight size={15} />
+                    </span>
+                  }
+                  onClick={() => setPop("plus-modes")}
+                />
+                <PlusRow
+                  icon={<FileText size={17} />}
+                  title="Templates"
+                  desc="Starter prompts to fill in"
+                  right={<ChevronRight size={15} className="text-slate-400" />}
+                  onClick={() => setPop("plus-templates")}
+                />
+                <div className="px-3 pb-1 pt-2 text-[13px] text-slate-400">
+                  Type / for agents, skills &amp; tools
+                </div>
+              </>
+            )}
 
-              {recent.length > 0 && (
-                <>
-                  <div className="my-1.5 border-t border-slate-200/60 dark:border-white/10" />
-                  <div className={sectionLabel}>Recent prompts</div>
-                  {recent.slice(0, 5).map((r, i) => (
-                    <button
-                      key={i}
+            {pop === "plus-modes" && (
+              <>
+                <BackRow label="Response mode" onClick={() => setPop("plus")} />
+                {MODES.map((m) => {
+                  const Icon = MODE_ICONS[m.id];
+                  return (
+                    <PlusRow
+                      key={m.id}
+                      icon={<Icon size={16} />}
+                      title={m.name}
+                      desc={m.desc}
+                      right={
+                        m.id === mode ? (
+                          <Check size={14} className="text-brand-400" />
+                        ) : undefined
+                      }
                       onClick={() => {
-                        setText(r);
+                        onMode(m.id);
                         setPop(null);
-                        taRef.current?.focus();
                       }}
-                      className={cn(rowCls(), "block truncate")}
-                    >
-                      {r}
-                    </button>
-                  ))}
-                </>
-              )}
-            </MenuShell>
-          )}
+                    />
+                  );
+                })}
+              </>
+            )}
 
+            {pop === "plus-templates" && (
+              <>
+                <BackRow label="Templates" onClick={() => setPop("plus")} />
+                {TEMPLATES.map((t) => (
+                  <PlusRow
+                    key={t.name}
+                    icon={<FileText size={16} />}
+                    title={t.name}
+                    onClick={() => {
+                      setText(t.text);
+                      setPop(null);
+                      taRef.current?.focus();
+                    }}
+                  />
+                ))}
+              </>
+            )}
+
+          </MenuShell>
         </div>
       )}
 
@@ -475,10 +566,13 @@ export function ChatInput({
           <div className="mt-3 flex items-center gap-2">
             {/* zona kiri: attach + mic */}
             <button
-              aria-label="Attach file"
-              title="Attach file"
-              onClick={() => fileRef.current?.click()}
-              className={circleBtn}
+              aria-label="Add & tools"
+              title="Add & tools"
+              onClick={() => setPop(pop ? null : "plus")}
+              className={cn(
+                circleBtn,
+                mode !== "auto" && "border-brand-400/50 text-brand-500 dark:text-brand-300"
+              )}
             >
               <Plus size={17} />
             </button>
@@ -493,21 +587,6 @@ export function ChatInput({
 
             <div className="flex-1" />
 
-            {/* zona kanan: tools gabungan */}
-            <button
-              aria-label="Tools: response mode, templates, recent prompts"
-              title="Tools"
-              onClick={() => setPop(pop === "tools" ? null : "tools")}
-              className={cn(
-                pillBtn,
-                mode !== "auto" &&
-                  "border-brand-400/50 text-brand-600 dark:text-brand-300"
-              )}
-            >
-              <Settings2 size={14} />
-              {mode === "auto" ? "Tools" : curMode.name}
-              <ChevronDown size={13} className="opacity-60" />
-            </button>
 
             {/* zona paling kanan: send */}
             {streaming ? (
@@ -538,17 +617,9 @@ export function ChatInput({
           <div className="flex px-1">{textareaEl}</div>
           <div className="mt-1.5 flex items-center gap-1.5">
             <button
-              aria-label="Attach file"
-              title="Attach file"
-              onClick={() => fileRef.current?.click()}
-              className="flex h-11 w-11 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-900/[0.05] hover:text-slate-600 dark:hover:bg-white/10 dark:hover:text-slate-200"
-            >
-              <Paperclip size={17} />
-            </button>
-            <button
-              aria-label="Tools: response mode, templates, recent prompts"
-              title="Tools"
-              onClick={() => setPop(pop === "tools" ? null : "tools")}
+              aria-label="Add & tools"
+              title="Add & tools"
+              onClick={() => setPop(pop ? null : "plus")}
               className={cn(
                 "flex h-11 w-11 items-center justify-center rounded-full transition",
                 mode !== "auto"
@@ -556,7 +627,7 @@ export function ChatInput({
                   : "text-slate-400 hover:bg-slate-900/[0.05] hover:text-slate-600 dark:hover:bg-white/10 dark:hover:text-slate-200"
               )}
             >
-              <SlidersHorizontal size={17} />
+              <Plus size={18} />
             </button>
             <div className="flex-1" />
             {streaming ? (
