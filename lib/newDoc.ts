@@ -1,6 +1,6 @@
-export function newDocHTML(title = "Dokumen Baru") {
+export function newDocHTML(title = "New Document") {
   return `<!doctype html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <title>${title}</title>
@@ -20,7 +20,7 @@ export function newDocHTML(title = "Dokumen Baru") {
 </head>
 <body contenteditable="true">
   <h1>${title}</h1>
-  <p class="hint">Mulai menulis di sini… (dokumen ini bisa diedit langsung)</p>
+  <p class="hint">Start writing here… (this document can be edited directly)</p>
 </body>
 </html>`;
 }

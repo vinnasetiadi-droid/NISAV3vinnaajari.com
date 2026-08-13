@@ -120,7 +120,7 @@ function DrivePageInner() {
     let added = 0;
     for (const f of Array.from(list)) {
       if (f.size > 2 * 1024 * 1024) {
-        toast(`${f.name} dilewati (maks 2 MB untuk penyimpanan lokal)`);
+        toast(`${f.name} skipped (max 2 MB for local storage)`);
         continue;
       }
       const isText =
@@ -143,7 +143,7 @@ function DrivePageInner() {
       s.addFile(entry);
       added++;
     }
-    if (added) toast(`${added} file diunggah & diindeks`);
+    if (added) toast(`${added} file${added > 1 ? "s" : ""} uploaded & indexed`);
   };
 
   const seg = (n: number) => `${Math.max(0, (n / QUOTA) * 100)}%`;
@@ -209,7 +209,7 @@ function DrivePageInner() {
               >
                 <Download size={13} />
               </IconAction>
-              <IconAction title="Hapus" danger onClick={() => s.deleteFile(f.id)}>
+              <IconAction title="Delete" danger onClick={() => s.deleteFile(f.id)}>
                 <Trash2 size={13} />
               </IconAction>
             </>
@@ -351,13 +351,13 @@ function DrivePageInner() {
               </div>
               <button
                 onClick={() => {
-                  const name = prompt("Nama folder baru:");
+                  const name = prompt("New folder name:");
                   if (name?.trim()) s.addFolder(name.trim());
                 }}
                 className="flex items-center gap-2 rounded-full px-3 py-1.5 text-[12.5px] font-medium text-brand-600 transition hover:bg-brand-500/10 dark:text-brand-300"
               >
                 <FolderPlus size={15} />
-                Folder baru
+                New folder
               </button>
             </div>
 
@@ -379,9 +379,9 @@ function DrivePageInner() {
             )}
 
             {visibleDocs.length === 0 ? (
-              <EmptyState text="Folder kosong. Unggah file atau buat folder." />
+              <EmptyState text="This folder is empty. Upload files or create a folder." />
             ) : (
-              fileGrid(visibleDocs, "Diunggah")
+              fileGrid(visibleDocs, "Uploaded")
             )}
           </div>
         )}
@@ -390,7 +390,7 @@ function DrivePageInner() {
         {tab === "artifacts" && (
           <div className="mt-6">
             {data.artifacts.length === 0 ? (
-              <EmptyState text="Belum ada artifact. Coba /quiz atau /anagram di chat." />
+              <EmptyState text="No artifacts yet. Try /quiz or /anagram in chat." />
             ) : (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {data.artifacts.map((a) => (
@@ -421,7 +421,7 @@ function DrivePageInner() {
                           <Download size={13} />
                         </IconAction>
                         <IconAction
-                          title="Hapus"
+                          title="Delete"
                           danger
                           onClick={() => s.deleteArtifact(a.id)}
                         >
@@ -440,9 +440,9 @@ function DrivePageInner() {
         {tab === "attachments" && (
           <div className="mt-6">
             {atts.length === 0 ? (
-              <EmptyState text="Lampiran dari chat akan muncul di sini." />
+              <EmptyState text="Attachments from chat will show up here." />
             ) : (
-              fileGrid(atts, "Dilampirkan")
+              fileGrid(atts, "Attached")
             )}
           </div>
         )}
@@ -508,7 +508,7 @@ function DrivePageInner() {
               <div className="flex h-full flex-col items-center justify-center gap-3 text-slate-400">
                 <FileText size={28} />
                 <span className="text-[13.5px]">
-                  Pratinjau tidak tersedia — unduh untuk membuka.
+                  Preview not available — download to open.
                 </span>
               </div>
             )}

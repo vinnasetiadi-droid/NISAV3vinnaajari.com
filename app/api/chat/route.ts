@@ -59,11 +59,11 @@ function sleep(ms: number) {
 export async function POST(req: Request) {
   const body = (await req.json()) as ChatBody;
   const key = process.env.ANTHROPIC_API_KEY;
-  const name = body.userName || "teman";
+  const name = body.userName || "friend";
 
   // ---------- Skill runs return JSON (not a stream) ----------
   if (body.skill) {
-    const { id, topic, grade = "SD (Sekolah Dasar)", depth = "Dasar" } = body.skill;
+    const { id, topic, grade = "Elementary school", depth = "Basic" } = body.skill;
 
     if (!key) {
       await sleep(8000); // beri waktu animasi thinking (orb + kata acak) tampil (±8 detik)
@@ -140,7 +140,7 @@ export async function POST(req: Request) {
         controller.enqueue(
           encoder.encode(
             `data: ${JSON.stringify({
-              error: e?.message || "Gagal menghubungi model.",
+              error: e?.message || "Failed to reach the model.",
             })}\n\n`
           )
         );

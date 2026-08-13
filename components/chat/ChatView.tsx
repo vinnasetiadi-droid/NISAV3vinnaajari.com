@@ -51,8 +51,6 @@ export function ChatView({ conv }: { conv: Conversation }) {
     lastMsg.kind === "text" &&
     lastMsg.status === "done";
 
-  const pct = Math.min(100, (conv.tokens / 100000) * 100);
-
   const focusInput = () => {
     (document.getElementById("chat-input") as HTMLTextAreaElement)?.focus();
   };
@@ -64,23 +62,12 @@ export function ChatView({ conv }: { conv: Conversation }) {
         <h1 className="min-w-0 flex-1 truncate font-display text-[16px] font-medium text-slate-800 dark:text-slate-100">
           {conv.title}
         </h1>
-        <div className="hidden items-center gap-2 md:flex">
-          <div className="h-1.5 w-24 overflow-hidden rounded-full bg-slate-900/10 dark:bg-white/10">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-brand-500 to-teal2"
-              style={{ width: `${pct}%` }}
-            />
-          </div>
-          <span className="font-mono text-[11.5px] text-slate-400">
-            {fmtTokens(conv.tokens)}/100k
-          </span>
-        </div>
         <HeaderBtn
           icon={<FilePlus2 size={14} />}
           label="New Doc"
           onClick={() => {
             const a = s.addArtifact({
-              title: "Dokumen Baru",
+              title: "New Document",
               html: newDocHTML(),
               kind: "document",
               convId: conv.id,
@@ -90,7 +77,7 @@ export function ChatView({ conv }: { conv: Conversation }) {
         />
         <HeaderBtn
           icon={<ListChecks size={14} />}
-          label="TLDR"
+          label="Summarize"
           disabled={streaming || conv.messages.length === 0}
           onClick={() => runTLDR()}
         />
@@ -107,7 +94,7 @@ export function ChatView({ conv }: { conv: Conversation }) {
                 label="Copy"
                 onClick={() => {
                   navigator.clipboard.writeText(transcriptOf(conv));
-                  toast("Transkrip disalin");
+                  toast("Transcript copied");
                   setMoreOpen(false);
                 }}
               />
@@ -118,7 +105,7 @@ export function ChatView({ conv }: { conv: Conversation }) {
                   navigator.clipboard.writeText(
                     `NISA — ${conv.title}\n\n${transcriptOf(conv)}`
                   );
-                  toast("Transkrip siap dibagikan (tersalin)");
+                  toast("Transcript ready to share (copied)");
                   setMoreOpen(false);
                 }}
               />
@@ -126,8 +113,8 @@ export function ChatView({ conv }: { conv: Conversation }) {
                 icon={<Shrink size={14} />}
                 label="Compact"
                 onClick={() => {
-                  if (compactConversation()) toast("Percakapan dipadatkan");
-                  else toast("Belum ada yang bisa dipadatkan");
+                  if (compactConversation()) toast("Conversation compacted");
+                  else toast("Nothing to compact yet");
                   setMoreOpen(false);
                 }}
               />

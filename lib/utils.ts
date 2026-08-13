@@ -22,14 +22,13 @@ export async function sha256(text: string) {
 
 export function timeGreetingID(d = new Date()) {
   const h = d.getHours();
-  if (h < 11) return "pagi";
-  if (h < 15) return "siang";
-  if (h < 18) return "sore";
-  return "malam";
+  if (h < 11) return "morning";
+  if (h < 18) return "afternoon";
+  return "evening";
 }
 
 export function firstName(name: string) {
-  const n = (name || "").trim().split(/\s+/)[0] || "teman";
+  const n = (name || "").trim().split(/\s+/)[0] || "friend";
   return n.charAt(0).toUpperCase() + n.slice(1);
 }
 
@@ -59,16 +58,16 @@ export function titleCase(s: string) {
 
 export function timeAgo(ts: number) {
   const s = Math.max(1, Math.floor((Date.now() - ts) / 1000));
-  if (s < 60) return "baru saja";
+  if (s < 60) return "just now";
   const m = Math.floor(s / 60);
-  if (m < 60) return `${m} menit lalu`;
+  if (m < 60) return `${m}m ago`;
   const h = Math.floor(m / 60);
-  if (h < 24) return `${h} jam lalu`;
+  if (h < 24) return `${h}h ago`;
   const d = Math.floor(h / 24);
-  if (d < 7) return `${d} hari lalu`;
+  if (d < 7) return `${d}d ago`;
   const w = Math.floor(d / 7);
-  if (w < 5) return `${w} minggu lalu`;
-  return new Date(ts).toLocaleDateString("id-ID", {
+  if (w < 5) return `${w}w ago`;
+  return new Date(ts).toLocaleDateString("en-US", {
     day: "numeric",
     month: "short",
     year: "numeric",

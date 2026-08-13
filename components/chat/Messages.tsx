@@ -52,15 +52,15 @@ export function UserBubble({ msg }: { msg: Message }) {
 
 const THINKING_WORDS = [
   "Thinking…",
-  "Menimbang…",
-  "Meracik…",
-  "Menyusun…",
-  "Mengulik…",
-  "Membayangkan…",
-  "Menelaah…",
-  "Memoles…",
-  "Merangkai…",
-  "Berkelana…",
+  "Pondering…",
+  "Brewing…",
+  "Composing…",
+  "Digging in…",
+  "Imagining…",
+  "Examining…",
+  "Polishing…",
+  "Piecing together…",
+  "Wandering…",
 ];
 
 export function AssistantMessage({
@@ -114,7 +114,7 @@ export function AssistantMessage({
       )}
       {msg.status === "stopped" && (
         <div className="mt-1 text-[12px] italic text-slate-400">
-          ⏹ dihentikan
+          ⏹ stopped
         </div>
       )}
       {msg.artifactId && <ArtifactCard artifactId={msg.artifactId} />}
@@ -125,7 +125,7 @@ export function AssistantMessage({
             label="Copy"
             onClick={() => {
               navigator.clipboard.writeText(msg.content);
-              toast("Pesan disalin");
+              toast("Message copied");
             }}
           />
           <MsgAction
@@ -278,7 +278,7 @@ export function ElicitationCard({
           {q.q}
         </div>
         <button
-          title="Tutup"
+          title="Close"
           onClick={() =>
             setMsgPatch(convId, msg.id, {
               elicitation: { ...elic, answered: true },
@@ -439,7 +439,7 @@ export function ReplySuggestions({
       <button
         onClick={() => setHidden(!hidden)}
         className="mt-3 flex h-7 w-7 items-center justify-center rounded-full border border-white/60 bg-white/50 text-slate-400 backdrop-blur-md transition hover:text-slate-600 dark:border-white/10 dark:bg-white/5"
-        title={hidden ? "Tampilkan saran" : "Sembunyikan saran"}
+        title={hidden ? "Show suggestions" : "Hide suggestions"}
       >
         <ChevronDown
           size={14}

@@ -11,13 +11,13 @@ export function systemPrompt(opts: {
 }) {
   const mode = MODES.find((m) => m.id === opts.mode);
   const agentNote = opts.agent
-    ? `\nUser memanggilmu lewat agent "/${opts.agent}" — fokuslah pada spesialisasi agent itu.`
+    ? `\nThe user invoked you via the "/${opts.agent}" agent — focus on that agent's specialty.`
     : "";
   return [
-    `Kamu adalah NISA (Neural Interactive Systematic Assistant) versi 3 — "AI Operating System" pribadi milik ${opts.userName}.`,
-    `Gaya bicara: hangat, kasual, dan membantu. Gunakan "aku" untuk dirimu dan "kamu" untuk user. Panggil user dengan namanya (${opts.userName}) sesekali. Emoji secukupnya (😊 ✨ 🚀), jangan berlebihan.`,
-    `Selalu balas dalam bahasa yang dipakai user (default Bahasa Indonesia).`,
-    `Jika user meminta dokumen, halaman, materi ajar, atau permainan, keluarkan sebagai artifact: tulis HTML lengkap self-contained (CSS+JS inline, tanpa resource eksternal) di antara baris ${ARTIFACT_OPEN} title="Judul" kind="document">>> dan ${ARTIFACT_CLOSE} — tanpa code fence markdown di sekelilingnya. Sebelum/ sesudah artifact, tulis penjelasan singkat yang ramah.`,
+    `You are NISA (Neural Interactive Systematic Assistant) version 3 — ${opts.userName}'s personal "AI Operating System".`,
+    `Tone: warm, casual, and helpful. Address the user by name (${opts.userName}) occasionally. Use emoji sparingly (😊 ✨ 🚀), never excessively.`,
+    `Always reply in the language the user is using (default English).`,
+    `If the user asks for a document, page, teaching material, or game, output it as an artifact: write complete self-contained HTML (inline CSS+JS, no external resources) between the lines ${ARTIFACT_OPEN} title="Title" kind="document">>> and ${ARTIFACT_CLOSE} — without markdown code fences around it. Before/after the artifact, write a short friendly explanation.`,
     mode?.system || "",
     agentNote,
   ]
@@ -26,41 +26,41 @@ export function systemPrompt(opts: {
 }
 
 export function quizJSONPrompt(topic: string, grade: string, depth: string) {
-  return `Buat data kuis dalam JSON VALID (tanpa teks lain, tanpa markdown) untuk topik "${topic}", jenjang "${grade}", kedalaman "${depth}".
-Skema:
+  return `Create quiz data as VALID JSON (no other text, no markdown) for the topic "${topic}", level "${grade}", depth "${depth}".
+Schema:
 {
-  "title": "Kuis ...: judul menarik",
-  "subject": "mata pelajaran, mis. Ilmu Pengetahuan Alam (IPA)",
+  "title": "Quiz ...: catchy title",
+  "subject": "school subject, e.g. Natural Science",
   "grade": "${grade}",
   "minutes": 30,
-  "instructions": "instruksi singkat untuk siswa",
+  "instructions": "short instructions for students",
   "questions": [
-    { "type": "mc", "prompt": "...", "options": ["...","...","...","..."], "answer": "teks opsi yang benar", "points": 1, "explanation": "..." },
-    { "type": "tf", "prompt": "... Benar atau Salah?", "answer": "True|False", "points": 1 },
-    { "type": "fill", "prompt": "kalimat dengan ________ untuk diisi.", "answer": "...", "points": 2 },
-    { "type": "essay", "prompt": "...", "answer": "contoh jawaban ringkas", "points": 4 }
+    { "type": "mc", "prompt": "...", "options": ["...","...","...","..."], "answer": "text of the correct option", "points": 1, "explanation": "..." },
+    { "type": "tf", "prompt": "... True or False?", "answer": "True|False", "points": 1 },
+    { "type": "fill", "prompt": "a sentence with ________ to fill in.", "answer": "...", "points": 2 },
+    { "type": "essay", "prompt": "...", "answer": "short sample answer", "points": 4 }
   ]
 }
-Aturan: 8-10 soal campuran (mayoritas mc), bahasa Indonesia sesuai jenjang, total poin 18-22, soal berkualitas dan tidak ambigu.`;
+Rules: 8-10 mixed questions (mostly mc), language appropriate for the grade level, total points 18-22, high-quality unambiguous questions.`;
 }
 
 export function anagramJSONPrompt(topic: string) {
-  return `Buat data game anagram dalam JSON VALID (tanpa teks lain, tanpa markdown) untuk topik "${topic}".
-Skema:
+  return `Create anagram game data as VALID JSON (no other text, no markdown) for the topic "${topic}".
+Schema:
 {
   "title": "Word Builder: ${topic}",
   "topic": "${topic}",
   "words": [
-    { "word": "KATA", "hint": "petunjuk singkat bahasa Indonesia", "category": "kategori singkat", "level": "EASY|MEDIUM|HARD" }
+    { "word": "WORD", "hint": "short hint", "category": "short category", "level": "EASY|MEDIUM|HARD" }
   ]
 }
-Aturan: tepat 10 kata UNIK terkait topik, huruf A-Z saja TANPA spasi/tanda hubung, panjang 4-10 huruf, campuran level (4 EASY, 4 MEDIUM, 2 HARD), semua UPPERCASE.`;
+Rules: exactly 10 UNIQUE topic-related words, letters A-Z only with NO spaces/hyphens, 4-10 letters long, mixed levels (4 EASY, 4 MEDIUM, 2 HARD), all UPPERCASE.`;
 }
 
 export function tldrPrompt() {
-  return "Buat TLDR percakapan ini: 3-6 bullet ringkas dalam Bahasa Indonesia, langsung ke inti, awali dengan '**TLDR:**'.";
+  return "Write a TLDR of this conversation: 3-6 concise bullets, straight to the point, starting with '**TLDR:**'.";
 }
 
 export function titlePrompt() {
-  return "Buat judul singkat (3-6 kata, Bahasa Indonesia, Title Case, tanpa tanda kutip) yang merangkum percakapan ini. Balas judulnya saja.";
+  return "Write a short title (3-6 words, Title Case, no quotation marks) summarizing this conversation. Reply with the title only.";
 }

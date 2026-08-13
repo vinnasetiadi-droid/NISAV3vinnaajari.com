@@ -83,7 +83,7 @@ export function ArtifactPanel({
         <div className="flex-1" />
         {onToggleExpand && (
           <button
-            title={expanded ? "Kecilkan" : "Perbesar"}
+            title={expanded ? "Minimize" : "Expand"}
             onClick={onToggleExpand}
             className="rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-white/10"
           >
@@ -200,18 +200,18 @@ export function ArtifactPanel({
                 onClick={() => setView("preview")}
                 className="rounded-full px-4 py-1.5 text-[12.5px] font-medium text-slate-500 hover:bg-slate-100 dark:hover:bg-white/10"
               >
-                Batal
+                Cancel
               </button>
               <button
                 onClick={() => {
                   addVersion(artifact.id, draft);
                   setVIdx(-1);
                   setView("preview");
-                  toast(`Tersimpan sebagai v${versions.length + 1}`);
+                  toast(`Saved as v${versions.length + 1}`);
                 }}
                 className="btn-gradient rounded-full px-5 py-1.5 text-[12.5px] font-semibold"
               >
-                Simpan sebagai v{versions.length + 1}
+                Save as v{versions.length + 1}
               </button>
             </div>
           </div>

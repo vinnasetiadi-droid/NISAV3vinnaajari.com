@@ -8,7 +8,7 @@ export function wordBuilderHTML(data: AnagramData): string {
   const json = JSON.stringify(data).replace(/</g, "\\u003c");
 
   return `<!doctype html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -203,7 +203,7 @@ export function wordBuilderHTML(data: AnagramData): string {
       state.streak = 0;
       var c = document.getElementById('card');
       c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake');
-      document.getElementById('foot').textContent = 'Belum tepat — coba lagi! 🙈';
+      document.getElementById('foot').textContent = 'Not quite — try again! 🙈';
       document.getElementById('streak').textContent = '0';
     }
   }

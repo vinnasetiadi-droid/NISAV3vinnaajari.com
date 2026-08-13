@@ -9,7 +9,7 @@ export function quizHTML(data: QuizData): string {
   const json = JSON.stringify(data).replace(/</g, "\\u003c");
 
   return `<!doctype html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -90,10 +90,10 @@ export function quizHTML(data: QuizData): string {
     </div>
     <div class="instr">${esc(
       data.instructions ||
-        `Bacalah setiap pertanyaan dengan teliti. Kamu memiliki waktu ${data.minutes} menit untuk mengerjakan kuis ini. Kerjakan dengan jujur dan teliti!`
+        `Read each question carefully. You have ${data.minutes} minutes to complete this quiz. Work honestly and carefully!`
     )}</div>
     <div id="qs"></div>
-    <div class="footer"><span>${esc(data.title)}</span><span>Dibuat dengan NISA · Neural Interactive Systematic Assistant</span></div>
+    <div class="footer"><span>${esc(data.title)}</span><span>Made with NISA · Neural Interactive Systematic Assistant</span></div>
   </div>
 
 <script>
@@ -124,13 +124,13 @@ export function quizHTML(data: QuizData): string {
       body.appendChild(t);
     } else if (q.type === 'fill') {
       body.appendChild(el('div', 'fill-line'));
-      body.appendChild(el('div', 'ans', 'Jawaban: ' + esc2(q.answer || '')));
+      body.appendChild(el('div', 'ans', 'Answer: ' + esc2(q.answer || '')));
     } else {
       for (var k = 0; k < 3; k++) body.appendChild(el('div', 'essay-line'));
-      if (q.answer) body.appendChild(el('div', 'ans', 'Contoh jawaban: ' + esc2(q.answer)));
+      if (q.answer) body.appendChild(el('div', 'ans', 'Sample answer: ' + esc2(q.answer)));
     }
     if (q.type === 'mc' || q.type === 'tf') {
-      var a2 = el('div', 'ans', 'Jawaban: ' + esc2(q.answer || ''));
+      var a2 = el('div', 'ans', 'Answer: ' + esc2(q.answer || ''));
       body.appendChild(a2);
     }
     if (q.explanation) body.appendChild(el('div', 'expl', '💡 ' + esc2(q.explanation)));

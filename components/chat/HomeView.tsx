@@ -19,21 +19,21 @@ import { OrbVideo } from "@/components/OrbVideo";
 const FEATURES = [
   {
     icon: FlaskConical,
-    title: "Kuis Generator",
-    desc: "Latihan soal siap cetak lengkap dengan kunci jawaban.",
-    prompt: "/quiz buatkan latihan soal tentang fotosintesis",
+    title: "Quiz Generator",
+    desc: "Print-ready practice questions complete with an answer key.",
+    prompt: "/quiz create practice questions about photosynthesis",
   },
   {
     icon: Puzzle,
     title: "Word Builder",
-    desc: "Game anagram edukatif yang bisa langsung dimainkan.",
-    prompt: "/anagram buatkan terkait tatasurya",
+    desc: "An educational anagram game you can play right away.",
+    prompt: "/anagram create one about the solar system",
   },
   {
     icon: FileText,
     title: "Doc Assistant",
-    desc: "Susun dokumen, email, dan ringkasan dalam sekejap.",
-    prompt: "Bantu aku menyusun rencana belajar 30 hari yang realistis.",
+    desc: "Draft documents, emails, and summaries in a snap.",
+    prompt: "Help me put together a realistic 30-day study plan.",
   },
 ];
 
@@ -45,7 +45,7 @@ export function HomeView({
   const me = useDB((s) => s.me());
   const [mode, setMode] = useState<ModeId>("auto");
   const toast = useToast();
-  const name = firstName(me?.name || "teman");
+  const name = firstName(me?.name || "friend");
 
   // prompt dari landing (sebelum login) → prefill ke input, bukan auto-kirim
   const [prefill] = useState(() => {
@@ -70,7 +70,7 @@ export function HomeView({
           <button
             title="Settings"
             aria-label="Settings"
-            onClick={() => toast("Pengaturan ada di bar bawah (tema, servers)")}
+            onClick={() => toast("Settings live in the bottom bar (theme, servers)")}
             className="flex h-9 w-9 items-center justify-center rounded-full text-slate-400 transition hover:bg-white/60 hover:text-slate-600 dark:hover:bg-white/10 dark:hover:text-slate-200"
           >
             <Settings size={17} />
@@ -78,7 +78,7 @@ export function HomeView({
           <button
             title="Help & Support"
             aria-label="Help & Support"
-            onClick={() => toast("Klik ikon ? di bar bawah untuk bantuan")}
+            onClick={() => toast("Click the ? icon in the bottom bar for help")}
             className="flex h-9 w-9 items-center justify-center rounded-full text-slate-400 transition hover:bg-white/60 hover:text-slate-600 dark:hover:bg-white/10 dark:hover:text-slate-200"
           >
             <HelpCircle size={17} />
@@ -110,7 +110,7 @@ export function HomeView({
           className="enter-up mt-2.5 text-center font-display text-[32px] font-medium text-slate-800 [animation-delay:0.25s] dark:text-white md:text-[38px]"
           style={{ letterSpacing: "-0.03em" }}
         >
-          Selamat {timeGreetingID()}, {name}
+          Good {timeGreetingID()}, {name}
         </h1>
 
         {/* prompt panel */}

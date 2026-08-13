@@ -127,7 +127,7 @@ export const useDB = create<DBState>()(
       signUp: ({ name, email, pass }) => {
         const em = email.trim().toLowerCase();
         if (get().users.some((u) => u.email === em))
-          return "Email sudah terdaftar. Silakan sign in.";
+          return "This email is already registered. Please sign in.";
         const user: User = {
           id: uid("u_"),
           name: name.trim(),
@@ -148,8 +148,8 @@ export const useDB = create<DBState>()(
       signIn: (email, pass) => {
         const em = email.trim().toLowerCase();
         const user = get().users.find((u) => u.email === em);
-        if (!user) return "Akun tidak ditemukan. Coba buat akun dulu.";
-        if (user.pass !== pass) return "Password salah. Coba lagi ya.";
+        if (!user) return "Account not found. Try creating an account first.";
+        if (user.pass !== pass) return "Wrong password. Please try again.";
         set((s) => ({
           sessionUserId: user.id,
           data: s.data[user.id] ? s.data : { ...s.data, [user.id]: emptyData() },

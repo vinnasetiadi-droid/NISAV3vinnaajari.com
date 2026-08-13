@@ -23,11 +23,11 @@ export default function SignUp() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErr(null);
-    if (!name.trim()) return setErr("Nama tidak boleh kosong.");
+    if (!name.trim()) return setErr("Name cannot be empty.");
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))
-      return setErr("Format email tidak valid.");
-    if (pass.length < 8) return setErr("Password minimal 8 karakter.");
-    if (pass !== pass2) return setErr("Konfirmasi password tidak cocok.");
+      return setErr("Invalid email format.");
+    if (pass.length < 8) return setErr("Password must be at least 8 characters.");
+    if (pass !== pass2) return setErr("Password confirmation does not match.");
     setBusy(true);
     const hashed = await sha256(pass);
     const res = signUp({ name, email, pass: hashed });

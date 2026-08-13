@@ -20,38 +20,38 @@ import { COMMANDS } from "@/lib/registry";
 import { useDB } from "@/lib/store";
 
 const EXAMPLES = [
-  "Buatkan latihan soal IPA kelas 5 tentang fotosintesis.",
-  "Buatkan game anagram seru tentang tata surya.",
-  "Bantu tulis email profesional ke dosen pembimbing.",
-  "Susun rencana belajar 30 hari yang realistis untuk UTBK.",
-  "Ringkas dokumen panjang jadi poin-poin utama.",
+  "Create a 5th-grade science quiz about photosynthesis.",
+  "Build a fun anagram game about the solar system.",
+  "Help me write a professional email to my professor.",
+  "Draft a realistic 30-day study plan for my exam.",
+  "Summarize a long document into key points.",
 ];
 
 const IDEAS = [
   {
     icon: FlaskConical,
-    label: "Kuis Fotosintesis siap cetak",
-    prompt: "/quiz buatkan latihan soal tentang fotosintesis",
+    label: "Print-ready photosynthesis quiz",
+    prompt: "/quiz create practice questions about photosynthesis",
   },
   {
     icon: Puzzle,
-    label: "Anagram Tata Surya",
-    prompt: "/anagram buatkan terkait tatasurya",
+    label: "Solar system anagram game",
+    prompt: "/anagram create one about the solar system",
   },
   {
     icon: Mail,
-    label: "Email profesional dalam sekejap",
-    prompt: "Bantu aku menulis email profesional untuk dosen pembimbing.",
+    label: "Professional email in seconds",
+    prompt: "Help me write a professional email to my professor.",
   },
   {
     icon: CalendarDays,
-    label: "Rencana belajar 30 hari",
-    prompt: "Buatkan rencana belajar 30 hari untuk persiapan ujian.",
+    label: "30-day study plan",
+    prompt: "Create a 30-day study plan for exam prep.",
   },
   {
     icon: FileText,
-    label: "Ringkas dokumen apa pun",
-    prompt: "Ringkas dokumen di Drive-ku menjadi poin-poin utama.",
+    label: "Summarize any document",
+    prompt: "Summarize my Drive document into key points.",
   },
 ];
 
@@ -123,7 +123,7 @@ function Landing() {
     const prompt = (raw ?? text).trim() || EXAMPLES[exIdx];
     sessionStorage.setItem("nisa-pending", prompt);
     // sekali klik → selalu langsung pop-up sign up (flow lengkap setiap kali)
-    setModal("signup");
+    setModal("signin");
   };
 
   return (
@@ -174,20 +174,12 @@ function Landing() {
             Open App
           </Link>
         ) : (
-          <>
-            <button
-              onClick={() => setModal("signin")}
-              className="px-2 text-[13.5px] font-medium text-slate-200 transition hover:text-white"
-            >
-              Sign in
-            </button>
-            <button
-              onClick={() => setModal("signup")}
-              className="rounded-full bg-white px-5 py-2 text-[13.5px] font-semibold text-slate-900 transition hover:bg-slate-200"
-            >
-              Start for free
-            </button>
-          </>
+          <button
+            onClick={() => setModal("signin")}
+            className="rounded-full bg-white px-5 py-2 text-[13.5px] font-semibold text-slate-900 transition hover:bg-slate-200"
+          >
+            Sign in
+          </button>
         )}
       </header>
 
@@ -245,7 +237,7 @@ function Landing() {
             <button
               onClick={() => taRef.current?.focus()}
               className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 text-slate-100 backdrop-blur-md transition hover:bg-white/20"
-              title="Lampirkan (setelah masuk)"
+              title="Attach (after sign in)"
             >
               <Plus size={18} />
             </button>
@@ -291,7 +283,7 @@ function Landing() {
 
         {/* ideas */}
         <p className="mt-14 text-[13.5px] text-slate-500">
-          Belum ada ide? Coba salah satu ini:
+          No idea yet? Try one of these:
         </p>
         <div className="mb-16 mt-7 flex max-w-[820px] flex-wrap items-center justify-center gap-3">
           {IDEAS.map((idea) => (
@@ -310,14 +302,14 @@ function Landing() {
           ))}
         </div>
 
-        <footer className="pb-8 text-[12px] text-slate-600">© NISA</footer>
+        <footer className="pb-8 text-[12px] text-slate-600">© AJARI Technologies 2026</footer>
       </main>
 
       <LoginModal
         key={modal || "closed"}
         open={modal !== null}
         onClose={() => setModal(null)}
-        initialMode={modal || "signup"}
+        initialMode={modal || "signin"}
       />
     </div>
   );

@@ -92,7 +92,7 @@ export function CommandPalette() {
         icon: Trash2,
         label: "Clear all conversations",
         run: () => {
-          if (confirm("Hapus semua percakapan?")) clearAll();
+          if (confirm("Delete all conversations?")) clearAll();
         },
       },
     ],
@@ -146,7 +146,7 @@ export function CommandPalette() {
       <div className="nice-scroll max-h-[380px] overflow-y-auto p-2">
         {rows.length === 0 && (
           <div className="px-4 py-8 text-center text-[13.5px] text-slate-400">
-            Tidak ada hasil untuk “{q}”.
+            No results for “{q}”.
           </div>
         )}
         {filteredActions.length > 0 && (

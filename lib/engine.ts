@@ -24,7 +24,7 @@ function apiMessages(conv: Conversation) {
     .map((m) => ({
       role: m.role,
       content: m.artifactId
-        ? m.content + "\n[artifact terlampir]"
+        ? m.content + "\n[artifact attached]"
         : m.content,
     }));
 }
@@ -32,7 +32,7 @@ function apiMessages(conv: Conversation) {
 function ctx() {
   const s = useDB.getState();
   const me = s.me();
-  return { s, me, name: firstName(me?.name || "teman") };
+  return { s, me, name: firstName(me?.name || "friend") };
 }
 
 /** Parse streaming raw text into visible text + (maybe) artifact html. */
@@ -107,7 +107,7 @@ async function streamChat(opts: {
   const finalize = (status: Message["status"]) => {
     const parsed = parseRaw(raw);
     s.patchMsg(opts.convId, opts.msgId, {
-      content: parsed.visible || (status === "stopped" ? "(dihentikan)" : ""),
+      content: parsed.visible || (status === "stopped" ? "(stopped)" : ""),
       status,
     });
     s.recomputeTokens(opts.convId);
@@ -162,7 +162,7 @@ async function streamChat(opts: {
               status: "streaming",
               statusLine:
                 parsed.artifact && !parsed.artifact.closed
-                  ? "Membuat artifact…"
+                  ? "Creating artifact…"
                   : undefined,
             });
             if (parsed.artifact?.closed && !artifactCreated) {
@@ -196,7 +196,7 @@ async function streamChat(opts: {
       st.patchMsg(opts.convId, opts.msgId, {
         content:
           raw ||
-          "⚠️ Terjadi kesalahan saat menghubungi server. Coba lagi sebentar ya.",
+          "⚠️ Something went wrong while contacting the server. Please try again in a moment.",
         status: "error",
       });
       aborters.delete(opts.msgId);
@@ -266,18 +266,18 @@ async function runSkill(opts: {
     if (opts.skillId === "quiz") {
       const html = quizHTML(data);
       const a = st.addArtifact({
-        title: data.title || `Kuis: ${opts.topic}`,
+        title: data.title || `Quiz: ${opts.topic}`,
         html,
         kind: "document",
         convId: opts.convId,
       });
       artifactId = a.id;
-      const gradeShort = (opts.grade || "").match(/^[A-Za-z]+/)?.[0] || "SD";
+      const gradeShort = (opts.grade || "").match(/^[A-Za-z]+/)?.[0] || "Elementary";
       finalText =
-        `Latihan soal ${opts.topic} untuk tingkat ${gradeShort} sudah selesai aku buatkan, ${name}! 😊\n\n` +
-        `Soal-soalnya aku sesuaikan dengan jenjang **${opts.grade || "SD"}** dan kedalaman **${opts.depth || "dasar"}** supaya pas. ` +
-        `Kamu bisa langsung cek hasilnya di panel sebelah, dan ada tombol untuk melihat kunci jawabannya juga kalau dibutuhkan.\n\n` +
-        `Kira-kira ada yang ingin ditambah atau diubah? Atau mungkin mau aku buatkan materi ringkasnya juga biar mereka bisa belajar dulu sebelum mengerjakan?`;
+        `Your ${opts.topic} practice quiz for the ${gradeShort} level is ready, ${name}! 😊\n\n` +
+        `I tailored the questions to the **${opts.grade || "Elementary school"}** level with **${opts.depth || "basic"}** depth so they fit just right. ` +
+        `You can check the result in the side panel, and there's a button to reveal the answer key whenever you need it.\n\n` +
+        `Is there anything you'd like to add or change? Or would you like me to prepare a short study summary so they can review before taking the quiz?`;
     } else {
       const html = wordBuilderHTML(data);
       const a = st.addArtifact({
@@ -288,9 +288,9 @@ async function runSkill(opts: {
       });
       artifactId = a.id;
       finalText =
-        `Ini dia game **Word Builder** tentang ${opts.topic} untukmu, ${name}! 🎮\n\n` +
-        `Susun huruf-hurufnya jadi kata yang benar — ada skor, streak, dan hint kalau buntu. ` +
-        `Selamat bermain dan menebak! 🚀 ✨`;
+        `Here's your **Word Builder** game about ${opts.topic}, ${name}! 🎮\n\n` +
+        `Arrange the letters into the correct word — there's a score, a streak, and hints if you get stuck. ` +
+        `Have fun playing and guessing! 🚀 ✨`;
     }
 
     st.patchMsg(opts.convId, wmsg.id, {
@@ -307,7 +307,7 @@ async function runSkill(opts: {
   } catch {
     useDB.getState().patchMsg(opts.convId, wmsg.id, {
       kind: "text",
-      content: "⚠️ Gagal membuat artifact. Coba lagi sebentar ya.",
+      content: "⚠️ Failed to create the artifact. Please try again in a moment.",
       status: "error",
       steps: undefined,
       statusLine: undefined,
@@ -356,13 +356,13 @@ export async function sendMessage(
   // --- quiz: needs elicitation first ---
   if (cmd?.id === "quiz") {
     const topic =
-      arg.replace(/^buat(kan)?\s+(latihan\s+soal|soal|kuis|quiz)?\s*(tentang|mengenai)?\s*/i, "").trim() ||
+      arg.replace(/^(buat(kan)?|create|make|generate)\s+((a|some)\s+)?(latihan\s+soal|soal|kuis|quiz|practice\s+questions?)?\s*(tentang|mengenai|about|on)?\s*/i, "").trim() ||
       arg ||
-      "materi ini";
+      "this topic";
     const intro =
-      `Latihan soal tentang ${topic} sudah aku siapkan, tapi supaya hasilnya pas dan nggak terlalu mudah ` +
-      `atau terlalu sulit, boleh bantu aku jawab beberapa hal dulu ya, ${name}? 😊\n\n` +
-      `Silakan pilih atau isi di kartu pertanyaan yang muncul ya!`;
+      `I'm ready to build your practice quiz about ${topic}, but so it lands just right — not too easy ` +
+      `and not too hard — could you help me answer a few things first, ${name}? 😊\n\n` +
+      `Just pick or type your answers in the question card below!`;
     const emsg: Message = {
       id: uid("m_"),
       role: "assistant",
@@ -381,8 +381,8 @@ export async function sendMessage(
   // --- anagram: run directly ---
   if (cmd?.id === "anagram") {
     const topic =
-      arg.replace(/^buat(kan)?\s*(game|permainan)?\s*(terkait|tentang|mengenai)?\s*/i, "").trim() ||
-      "kosakata";
+      arg.replace(/^(buat(kan)?|create|make|generate)\s*((a|one)\s+)?(game|permainan)?\s*(terkait|tentang|mengenai|about|on|one\s+about)?\s*/i, "").trim() ||
+      "vocabulary";
     await runSkill({ convId, skillId: "anagram", topic });
     return;
   }
@@ -390,11 +390,11 @@ export async function sendMessage(
   // --- other commands + plain chat → LLM stream ---
   let extraContext = "";
   if (cmd)
-    extraContext += `\n[Perintah aktif: /${cmd.id} — ${cmd.desc}]`;
+    extraContext += `\n[Active command: /${cmd.id} — ${cmd.desc}]`;
   if (opts?.attachments?.length) {
     for (const a of opts.attachments) {
-      extraContext += `\n[Lampiran: ${a.name} (${a.mime}, ${a.size} B)]`;
-      if (a.text) extraContext += `\nIsi lampiran:\n${a.text.slice(0, 4000)}`;
+      extraContext += `\n[Attachment: ${a.name} (${a.mime}, ${a.size} B)]`;
+      if (a.text) extraContext += `\nAttachment content:\n${a.text.slice(0, 4000)}`;
     }
   }
   // @mentions of drive docs
@@ -405,7 +405,7 @@ export async function sendMessage(
       const nm = raw.slice(2, -1);
       const f = d.files.find((f) => f.name === nm);
       if (f?.text)
-        extraContext += `\n[Dokumen Drive: ${f.name}]\n${f.text.slice(0, 4000)}`;
+        extraContext += `\n[Drive document: ${f.name}]\n${f.text.slice(0, 4000)}`;
       const art = d.artifacts.find((a) => a.title === nm);
       if (art) extraContext += `\n[Artifact Drive: ${art.title} (${art.kind})]`;
     }
@@ -457,8 +457,8 @@ export async function submitAnswers(
   s.recomputeTokens(convId);
 
   if (elic.skillId === "quiz") {
-    const grade = answers.find((a) => a.q.includes("jenjang"))?.a || answers[0]?.a;
-    const depth = answers.find((a) => a.q.includes("mendalam"))?.a || answers[1]?.a;
+    const grade = answers.find((a) => a.q.includes("grade level"))?.a || answers[0]?.a;
+    const depth = answers.find((a) => a.q.includes("in-depth"))?.a || answers[1]?.a;
     await runSkill({
       convId,
       skillId: "quiz",
@@ -495,9 +495,9 @@ export function compactConversation() {
     id: uid("m_"),
     role: "assistant",
     kind: "text",
-    content: `🔄 *Percakapan dipadatkan (Compact) — ${
+    content: `🔄 *Conversation compacted — the previous ${
       conv.messages.length - 2
-    } pesan sebelumnya diringkas untuk menghemat konteks.*`,
+    } messages were summarized to save context.*`,
     createdAt: Date.now(),
     status: "done",
   };
@@ -509,6 +509,6 @@ export function compactConversation() {
 export function transcriptOf(conv: Conversation) {
   return conv.messages
     .filter((m) => m.kind === "text" || m.kind === "answers")
-    .map((m) => `**${m.role === "user" ? "Kamu" : "NISA"}:** ${m.content}`)
+    .map((m) => `**${m.role === "user" ? "You" : "NISA"}:** ${m.content}`)
     .join("\n\n");
 }

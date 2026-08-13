@@ -19,42 +19,42 @@ export const MODES: ModeDef[] = [
     name: "Brainstorm",
     desc: "Brainstorm — generate many ideas, build on theirs, explore before judging.",
     system:
-      "Gaya respons: BRAINSTORM. Hasilkan banyak ide beragam, bangun dari ide user, eksplorasi dulu sebelum menilai.",
+      "Response style: BRAINSTORM. Generate many diverse ideas, build on the user's ideas, explore before judging.",
   },
   {
     id: "comprehensive",
     name: "Comprehensive",
     desc: "Deep, thorough reasoning — weigh trade-offs and edge cases, structure the answer.",
     system:
-      "Gaya respons: COMPREHENSIVE. Nalar mendalam dan menyeluruh, timbang trade-off dan edge case, susun jawaban terstruktur.",
+      "Response style: COMPREHENSIVE. Reason deeply and thoroughly, weigh trade-offs and edge cases, structure the answer.",
   },
   {
     id: "deep",
     name: "Deep",
     desc: "Deep Research — plan, gather from many sources, verify, then answer (or write) with citations.",
     system:
-      "Gaya respons: DEEP RESEARCH. Rencanakan, kumpulkan dari banyak sudut, verifikasi, lalu jawab dengan struktur riset dan sumber bila ada.",
+      "Response style: DEEP RESEARCH. Plan, gather from many angles, verify, then answer with a research structure and sources when available.",
   },
   {
     id: "plan",
     name: "Plan",
     desc: "Plan-first — lay out the approach as clear steps and align before executing.",
     system:
-      "Gaya respons: PLAN-FIRST. Susun pendekatan sebagai langkah-langkah jelas dan pastikan selaras sebelum eksekusi.",
+      "Response style: PLAN-FIRST. Lay out the approach as clear steps and make sure it is aligned before executing.",
   },
   {
     id: "ringkas",
-    name: "Ringkas",
+    name: "Concise",
     desc: "Concise — answer in the fewest words that still fully help; lead with the point.",
     system:
-      "Gaya respons: RINGKAS. Jawab sesingkat mungkin namun tetap membantu penuh; langsung ke inti.",
+      "Response style: CONCISE. Answer as briefly as possible while still fully helping; get straight to the point.",
   },
   {
     id: "socratic",
     name: "Socratic",
     desc: "Teach by guiding questions — scaffold understanding instead of handing over the answer.",
     system:
-      "Gaya respons: SOCRATIC. Ajari lewat pertanyaan penuntun — bangun pemahaman bertahap, jangan langsung beri jawaban akhir.",
+      "Response style: SOCRATIC. Teach through guiding questions — build understanding step by step, do not hand over the final answer right away.",
   },
 ];
 
@@ -109,42 +109,42 @@ export const COMMANDS: CommandDef[] = [
   {
     id: "quiz",
     type: "SKILL",
-    desc: "Buat latihan soal / kuis siap cetak dengan kunci jawaban dari topik apa pun.",
+    desc: "Create a print-ready practice quiz with an answer key from any topic.",
     elicit: true,
   },
   {
     id: "anagram",
     type: "SKILL",
-    desc: "Buat game Word Builder (anagram) yang bisa langsung dimainkan dari sebuah topik.",
+    desc: "Create an instantly playable Word Builder (anagram) game from a topic.",
   },
 ];
 
 export const TEMPLATES: { name: string; text: string }[] = [
-  { name: "Ringkas teks", text: "Ringkas teks berikut menjadi poin-poin utama:\n\n" },
+  { name: "Summarize text", text: "Summarize the following text into key points:\n\n" },
   {
-    name: "Perbaiki tata bahasa",
-    text: "Perbaiki tata bahasa dan ejaan teks berikut tanpa mengubah maknanya:\n\n",
+    name: "Fix grammar",
+    text: "Fix the grammar and spelling of the following text without changing its meaning:\n\n",
   },
   {
-    name: "Jelaskan sederhana",
-    text: "Jelaskan topik berikut dengan bahasa sederhana seperti untuk pemula:\n\n",
+    name: "Explain simply",
+    text: "Explain the following topic in simple, beginner-friendly language:\n\n",
   },
   {
-    name: "Balas email",
-    text: "Bantu aku menulis balasan email yang sopan dan profesional untuk email berikut:\n\n",
+    name: "Reply to email",
+    text: "Help me write a polite, professional reply to the following email:\n\n",
   },
-  { name: "Rencana langkah", text: "Buatkan rencana langkah demi langkah untuk:\n\n" },
+  { name: "Step-by-step plan", text: "Create a step-by-step plan for:\n\n" },
   {
-    name: "Terjemahkan (EN)",
-    text: "Terjemahkan teks berikut ke bahasa Inggris yang natural:\n\n",
+    name: "Translate (EN)",
+    text: "Translate the following text into natural English:\n\n",
   },
 ];
 
 export const HOME_SUGGESTIONS = [
-  "Ringkas dokumen di Drive-ku",
-  "Bantu tulis email",
-  "Jelaskan dengan contoh",
-  "Buatkan rencana belajar",
+  "Summarize a document in my Drive",
+  "Help me write an email",
+  "Explain with an example",
+  "Create a study plan",
 ];
 
 export const REPLY_SUGGESTIONS = [
@@ -210,29 +210,29 @@ export const QUIZ_ELICITATION = (topic: string) => {
     questions: [
       {
         id: "grade",
-        q: "Untuk tingkat kelas atau jenjang pendidikan mana tes ini ditujukan?",
+        q: "What grade level or stage of education is this test for?",
         options: [
-          "SD (Sekolah Dasar)",
-          "SMP (Sekolah Menengah Pertama)",
-          "SMA (Sekolah Menengah Atas)",
-          "Perguruan Tinggi",
+          "Elementary school",
+          "Middle school",
+          "High school",
+          "College / University",
         ],
       },
       {
         id: "depth",
-        q: `Seberapa mendalam materi ${topic || "ini"} yang ingin diuji?`,
+        q: `How in-depth should the ${topic || "material"} being tested be?`,
         options: isFoto
           ? [
-              "Dasar (Kebutuhan air, cahaya, CO2)",
-              "Menengah (Struktur kloroplas dan stomata)",
-              "Lanjut (Reaksi terang, siklus Calvin, dan faktor pembatas)",
-              "Komprehensif (Dari dasar hingga biokimia)",
+              "Basic (Need for water, light, CO2)",
+              "Intermediate (Chloroplast and stomata structure)",
+              "Advanced (Light reactions, Calvin cycle, and limiting factors)",
+              "Comprehensive (From basics to biochemistry)",
             ]
           : [
-              "Dasar (konsep & istilah utama)",
-              "Menengah (penerapan konsep)",
-              "Lanjut (analisis & studi kasus)",
-              "Komprehensif (dari dasar hingga lanjutan)",
+              "Basic (core concepts & terms)",
+              "Intermediate (applying concepts)",
+              "Advanced (analysis & case studies)",
+              "Comprehensive (from basics to advanced)",
             ],
       },
     ],

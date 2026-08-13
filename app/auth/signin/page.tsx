@@ -20,7 +20,7 @@ export default function SignIn() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErr(null);
-    if (!email || !pass) return setErr("Isi email dan password dulu ya.");
+    if (!email || !pass) return setErr("Please fill in your email and password first.");
     setBusy(true);
     const hashed = await sha256(pass);
     const res = signIn(email, hashed);

@@ -56,7 +56,7 @@ function FacebookIcon() {
 export function LoginModal({
   open,
   onClose,
-  initialMode = "signup",
+  initialMode = "signin",
 }: {
   open: boolean;
   onClose: () => void;
@@ -66,7 +66,7 @@ export function LoginModal({
   const toast = useToast();
   const signUp = useDB((s) => s.signUp);
   const signIn = useDB((s) => s.signIn);
-  const [step, setStep] = useState<"options" | "email">("options");
+  const [step, setStep] = useState<"options" | "email">("email");
   const [mode, setMode] = useState<"signup" | "signin">(initialMode);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -78,7 +78,7 @@ export function LoginModal({
   if (!open) return null;
 
   const social = () =>
-    toast("Login sosial belum tersedia di demo — pakai email atau Google ya 😊");
+    toast("Social login is not available in the demo yet — use email or Google 😊");
 
   // Demo: Google login instan — masuk dengan akun Google tiruan tanpa OAuth.
   const googleDemo = async () => {
@@ -96,10 +96,10 @@ export function LoginModal({
     e.preventDefault();
     setErr(null);
     if (mode === "signup" && !name.trim())
-      return setErr("Nama tidak boleh kosong.");
+      return setErr("Name cannot be empty.");
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))
-      return setErr("Format email tidak valid.");
-    if (pass.length < 8) return setErr("Password minimal 8 karakter.");
+      return setErr("Invalid email format.");
+    if (pass.length < 8) return setErr("Password must be at least 8 characters.");
     setBusy(true);
     const hashed = await sha256(pass);
     const res =
@@ -159,7 +159,7 @@ export function LoginModal({
                   "bg-white text-slate-900 hover:bg-slate-200 disabled:opacity-60"
                 )}
               >
-                <GoogleIcon /> {busy ? "Masuk…" : "Continue with Google"}
+                <GoogleIcon /> {busy ? "Signing in…" : "Continue with Google"}
               </button>
               <button
                 onClick={() => setStep("email")}
@@ -191,10 +191,26 @@ export function LoginModal({
             </div>
           ) : (
             <form onSubmit={submit} className="space-y-3">
+              <button
+                type="button"
+                onClick={googleDemo}
+                disabled={busy}
+                className={cn(
+                  optionBtn,
+                  "bg-white text-slate-900 hover:bg-slate-200 disabled:opacity-60"
+                )}
+              >
+                <GoogleIcon /> {busy ? "Signing in…" : "Continue with Google"}
+              </button>
+              <div className="flex items-center gap-3 py-1 text-[12px] uppercase tracking-wider text-slate-600">
+                <span className="h-px flex-1 bg-white/10" />
+                or
+                <span className="h-px flex-1 bg-white/10" />
+              </div>
               {mode === "signup" && (
                 <input
                   className="w-full rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3 text-[14px] text-slate-100 placeholder:text-slate-500 focus:border-brand-400"
-                  placeholder="Nama kamu"
+                  placeholder="Your name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -209,7 +225,7 @@ export function LoginModal({
               <div className="relative">
                 <input
                   className="w-full rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3 text-[14px] text-slate-100 placeholder:text-slate-500 focus:border-brand-400"
-                  placeholder="Password (min. 8 karakter)"
+                  placeholder="Password (min. 8 characters)"
                   type={show ? "text" : "password"}
                   value={pass}
                   onChange={(e) => setPass(e.target.value)}
@@ -234,7 +250,7 @@ export function LoginModal({
                 className="btn-gradient w-full rounded-xl py-3 text-[15px] font-semibold disabled:opacity-60"
               >
                 {busy
-                  ? "Sebentar…"
+                  ? "One moment…"
                   : mode === "signup"
                   ? "Create account"
                   : "Sign in"}
@@ -246,7 +262,7 @@ export function LoginModal({
                   onClick={() => setStep("options")}
                   className="flex items-center gap-1.5 text-slate-500 hover:text-slate-300"
                 >
-                  <ArrowLeft size={13} /> Cara lain
+                  <ArrowLeft size={13} /> Other options
                 </button>
                 <button
                   type="button"
@@ -257,8 +273,8 @@ export function LoginModal({
                   className="font-semibold text-brand-600 hover:text-brand-700"
                 >
                   {mode === "signup"
-                    ? "Sudah punya akun? Sign in"
-                    : "Baru di sini? Create account"}
+                    ? "Already have an account? Sign in"
+                    : "Don\u2019t have an account yet? Sign up"}
                 </button>
               </div>
             </form>

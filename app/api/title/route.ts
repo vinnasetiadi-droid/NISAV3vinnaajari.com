@@ -11,11 +11,11 @@ export async function POST(req: Request) {
   };
   const key = process.env.ANTHROPIC_API_KEY;
   const firstUser =
-    body.messages.find((m) => m.role === "user")?.content || "Percakapan";
+    body.messages.find((m) => m.role === "user")?.content || "Conversation";
 
   if (!key) {
     return Response.json({
-      title: mockTitle(firstUser, body.userName || "Teman"),
+      title: mockTitle(firstUser, body.userName || "Friend"),
     });
   }
   try {
@@ -34,11 +34,11 @@ export async function POST(req: Request) {
       .trim()
       .replace(/^["']|["']$/g, "");
     return Response.json({
-      title: text || mockTitle(firstUser, body.userName || "Teman"),
+      title: text || mockTitle(firstUser, body.userName || "Friend"),
     });
   } catch {
     return Response.json({
-      title: mockTitle(firstUser, body.userName || "Teman"),
+      title: mockTitle(firstUser, body.userName || "Friend"),
     });
   }
 }

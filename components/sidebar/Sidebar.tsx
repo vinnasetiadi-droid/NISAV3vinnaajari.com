@@ -127,16 +127,16 @@ export function Sidebar() {
   /* ---------- collapsed ---------- */
   if (s.sidebarCollapsed) {
     return (
-      <div className="flex w-[54px] shrink-0 flex-col items-center gap-2 py-4">
+      <div className="glass-chat flex w-[54px] min-h-0 flex-1 shrink-0 flex-col items-center gap-2 rounded-2xl py-4">
         <button
           onClick={() => s.setSidebarCollapsed(false)}
           className="mb-1 flex h-9 w-9 items-center justify-center"
-          title="Buka sidebar"
+          title="Open sidebar"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/glyph-nisa.png" alt="NISA" className="h-7 w-auto" />
         </button>
-        <IconBtn title="Buka sidebar" onClick={() => s.setSidebarCollapsed(false)}>
+        <IconBtn title="Open sidebar" onClick={() => s.setSidebarCollapsed(false)}>
           <PanelLeft size={17} />
         </IconBtn>
         <IconBtn
@@ -167,7 +167,7 @@ export function Sidebar() {
   return (
     <aside
       style={{ width: s.sidebarWidth }}
-      className="relative flex shrink-0 flex-col border-r border-slate-200/70 bg-white/60 backdrop-blur-xl dark:border-white/[0.06] dark:bg-[#070a10]/85"
+      className="glass-chat relative flex min-h-0 flex-1 shrink-0 flex-col rounded-2xl"
     >
       {/* drag handle: klik = collapse (⌘B), drag = resize */}
       <div
@@ -186,7 +186,7 @@ export function Sidebar() {
       <div className="flex items-center gap-2.5 px-4 pb-1 pt-4">
         <LogoWordmark className="h-[22px]" />
         <div className="flex-1" />
-        <IconBtn title="Tutup sidebar" onClick={() => s.setSidebarCollapsed(true)}>
+        <IconBtn title="Close sidebar" onClick={() => s.setSidebarCollapsed(true)}>
           <PanelLeft size={15} />
         </IconBtn>
       </div>
@@ -242,7 +242,7 @@ export function Sidebar() {
           <button
             onClick={() => setNewProject(true)}
             className="rounded-md p-1 text-slate-400 hover:bg-white/60 hover:text-slate-600 dark:hover:bg-white/10"
-            title="Project baru"
+            title="New project"
           >
             <Plus size={13} />
           </button>
@@ -262,7 +262,7 @@ export function Sidebar() {
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
               onBlur={() => setNewProject(false)}
-              placeholder="Nama project…"
+              placeholder="Project name…"
               className="w-full rounded-lg border border-white/60 bg-white/60 px-2.5 py-1.5 text-[12.5px] dark:border-white/10 dark:bg-white/10"
             />
           </form>
@@ -307,12 +307,12 @@ export function Sidebar() {
         </div>
         {s.showArchived && (
           <div className="mx-1 mb-2 mt-1 rounded-xl border border-amber-300/40 bg-amber-100/40 px-3 py-2 text-[12px] text-amber-700 dark:border-amber-300/20 dark:bg-amber-400/10 dark:text-amber-300">
-            Menampilkan arsip.{" "}
+            Showing archived chats.{" "}
             <button
               className="font-semibold underline"
               onClick={() => s.setShowArchived(false)}
             >
-              Kembali
+              Back
             </button>
           </div>
         )}
@@ -470,10 +470,10 @@ export function Sidebar() {
       {s.selectMode && (
         <div className="mx-3 mb-2 flex items-center gap-2 rounded-2xl border border-brand-300/50 bg-brand-500/10 px-3 py-2 text-[12.5px] dark:border-brand-400/30">
           <span className="flex-1 text-slate-600 dark:text-slate-300">
-            {s.selectedIds.length} dipilih
+            {s.selectedIds.length} selected
           </span>
           <button
-            title="Arsipkan"
+            title="Archive"
             className="rounded-lg p-1.5 text-slate-500 hover:bg-white/60 dark:hover:bg-white/10"
             onClick={() => {
               s.selectedIds.forEach((id) => s.archiveConv(id, true));
@@ -483,10 +483,10 @@ export function Sidebar() {
             <Archive size={15} />
           </button>
           <button
-            title="Hapus"
+            title="Delete"
             className="rounded-lg p-1.5 text-red-500 hover:bg-red-500/10"
             onClick={() => {
-              if (confirm(`Hapus ${s.selectedIds.length} percakapan?`)) {
+              if (confirm(`Delete ${s.selectedIds.length} conversations?`)) {
                 s.selectedIds.forEach((id) => s.deleteConv(id));
                 s.setSelectMode(false);
               }
@@ -498,7 +498,7 @@ export function Sidebar() {
             className="rounded-lg px-2 py-1 font-medium text-slate-500 hover:bg-white/60 dark:hover:bg-white/10"
             onClick={() => s.setSelectMode(false)}
           >
-            Batal
+            Cancel
           </button>
         </div>
       )}
@@ -567,8 +567,8 @@ export function Sidebar() {
                     No archived chats yet
                   </div>
                   <p className="mt-1 max-w-[300px] text-[12.5px] leading-relaxed text-slate-500 dark:text-slate-400">
-                    Arsipkan percakapan lewat menu <b>⋯</b> di daftar chat —
-                    nanti semuanya muncul di sini.
+                    Archive conversations via the <b>⋯</b> menu in the chat
+                    list — they will all show up here.
                   </p>
                 </div>
               );
@@ -591,7 +591,7 @@ export function Sidebar() {
                         {c.title}
                       </span>
                       <span className="text-[11.5px] text-slate-400">
-                        Diarsipkan · {timeAgo(c.updatedAt)}
+                        Archived · {timeAgo(c.updatedAt)}
                       </span>
                     </button>
                     <div className="hidden shrink-0 items-center gap-1 group-hover:flex">
@@ -623,18 +623,18 @@ export function Sidebar() {
             className="font-display text-[17px] font-semibold text-slate-800 dark:text-white"
             style={{ letterSpacing: "-0.02em" }}
           >
-            Hapus semua chat?
+            Delete all chats?
           </div>
           <p className="mt-2 text-[13.5px] leading-relaxed text-slate-500 dark:text-slate-400">
-            Semua percakapan (termasuk arsip) akan dihapus permanen. Artifact di
-            Drive tetap aman.
+            All conversations (including archived ones) will be permanently
+            deleted. Artifacts in Drive stay safe.
           </p>
           <div className="mt-5 flex justify-end gap-2.5">
             <button
               onClick={() => setConfirmClear(false)}
               className="rounded-xl px-4 py-2 text-[13.5px] font-medium text-slate-500 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/10"
             >
-              Batal
+              Cancel
             </button>
             <button
               onClick={() => {
@@ -643,7 +643,7 @@ export function Sidebar() {
               }}
               className="rounded-xl bg-red-500 px-4 py-2 text-[13.5px] font-semibold text-white transition hover:bg-red-600"
             >
-              Hapus semua
+              Delete all
             </button>
           </div>
         </Modal>

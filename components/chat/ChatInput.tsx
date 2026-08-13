@@ -165,7 +165,7 @@ export function ChatInput({
     const out: PendingFile[] = [...files];
     for (const f of Array.from(list)) {
       if (f.size > 2 * 1024 * 1024) {
-        alert(`${f.name} terlalu besar (maks 2 MB untuk penyimpanan lokal).`);
+        alert(`${f.name} is too large (max 2 MB for local storage).`);
         continue;
       }
       const isText =
@@ -428,7 +428,7 @@ export function ChatInput({
               <Paperclip size={12} />
               {f.name}
               <button
-                aria-label={`Hapus lampiran ${f.name}`}
+                aria-label={`Remove attachment ${f.name}`}
                 onClick={() => setFiles(files.filter((_, j) => j !== i))}
                 className="rounded-full p-0.5 hover:bg-slate-900/10 dark:hover:bg-white/10"
               >
@@ -475,8 +475,8 @@ export function ChatInput({
           <div className="mt-3 flex items-center gap-2">
             {/* zona kiri: attach + mic */}
             <button
-              aria-label="Lampirkan file"
-              title="Lampirkan file"
+              aria-label="Attach file"
+              title="Attach file"
               onClick={() => fileRef.current?.click()}
               className={circleBtn}
             >
@@ -485,7 +485,7 @@ export function ChatInput({
             <button
               aria-label="Voice"
               title="Voice"
-              onClick={() => toast("Voice mode segera hadir 🎙")}
+              onClick={() => toast("Voice mode coming soon 🎙")}
               className={circleBtn}
             >
               <Mic size={15} />
@@ -495,7 +495,7 @@ export function ChatInput({
 
             {/* zona kanan: tools gabungan */}
             <button
-              aria-label="Tools: mode respons, templates, prompt terakhir"
+              aria-label="Tools: response mode, templates, recent prompts"
               title="Tools"
               onClick={() => setPop(pop === "tools" ? null : "tools")}
               className={cn(
@@ -512,8 +512,8 @@ export function ChatInput({
             {/* zona paling kanan: send */}
             {streaming ? (
               <button
-                aria-label="Hentikan"
-                title="Hentikan"
+                aria-label="Stop"
+                title="Stop"
                 onClick={onStop}
                 className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-ink text-white transition hover:bg-slate-700 dark:bg-white dark:text-ink"
               >
@@ -521,8 +521,8 @@ export function ChatInput({
               </button>
             ) : (
               <button
-                aria-label="Kirim"
-                title="Kirim"
+                aria-label="Send"
+                title="Send"
                 onClick={doSend}
                 className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#0a70ff] text-white shadow-[0_0_18px_rgba(10,112,255,0.45)] transition hover:bg-[#2a84ff] active:scale-95"
               >
@@ -538,15 +538,15 @@ export function ChatInput({
           <div className="flex px-1">{textareaEl}</div>
           <div className="mt-1.5 flex items-center gap-1.5">
             <button
-              aria-label="Lampirkan file"
-              title="Lampirkan file"
+              aria-label="Attach file"
+              title="Attach file"
               onClick={() => fileRef.current?.click()}
               className="flex h-11 w-11 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-900/[0.05] hover:text-slate-600 dark:hover:bg-white/10 dark:hover:text-slate-200"
             >
               <Paperclip size={17} />
             </button>
             <button
-              aria-label="Tools: mode respons, templates, prompt terakhir"
+              aria-label="Tools: response mode, templates, recent prompts"
               title="Tools"
               onClick={() => setPop(pop === "tools" ? null : "tools")}
               className={cn(
@@ -561,8 +561,8 @@ export function ChatInput({
             <div className="flex-1" />
             {streaming ? (
               <button
-                aria-label="Hentikan"
-                title="Hentikan"
+                aria-label="Stop"
+                title="Stop"
                 onClick={onStop}
                 className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-ink text-white transition hover:bg-slate-700 dark:bg-white dark:text-ink"
               >
@@ -570,8 +570,8 @@ export function ChatInput({
               </button>
             ) : (
               <button
-                aria-label="Kirim"
-                title="Kirim"
+                aria-label="Send"
+                title="Send"
                 onClick={doSend}
                 disabled={!text.trim() && files.length === 0}
                 className={cn(

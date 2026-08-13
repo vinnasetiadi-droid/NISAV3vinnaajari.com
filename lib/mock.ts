@@ -4,43 +4,43 @@ import type { AnagramData, QuizData } from "./types";
 
 export function mockGreeting(name: string) {
   const h = new Date().getHours();
-  const tod = h < 11 ? "pagi" : h < 15 ? "siang" : h < 18 ? "sore" : "malam";
-  return `Selamat ${tod}, ${name}! 😊 Ada yang bisa aku bantu hari ini?`;
+  const tod = h < 11 ? "morning" : h < 18 ? "afternoon" : "evening";
+  return `Good ${tod}, ${name}! 😊 How can I help you today?`;
 }
 
 export function isGreeting(text: string) {
-  return /\b(hai|halo|hallo|hello|hey|hi|pagi|siang|sore|malam|assalamualaikum)\b/i.test(
+  return /\b(hai|halo|hallo|hello|hey|hi|pagi|siang|sore|malam|morning|afternoon|evening|assalamualaikum)\b/i.test(
     text.trim()
   );
 }
 
 export function mockGeneric(name: string) {
   return (
-    `Aku lagi berjalan dalam **mode demo** karena \`ANTHROPIC_API_KEY\` belum diisi di \`.env.local\`, ` +
-    `jadi jawabanku terbatas ya, ${name} 😅\n\n` +
-    `Tapi hampir semua fitur tetap bisa dicoba:\n\n` +
-    `- ketik \`/quiz buatkan latihan soal tentang fotosintesis\` untuk kuis siap cetak\n` +
-    `- ketik \`/anagram buatkan terkait tatasurya\` untuk game Word Builder\n` +
-    `- unggah file ke **Drive**, lalu sebut dengan \`@\` di chat\n` +
-    `- coba juga tombol **TLDR**, **Compact**, dan **New Doc** di atas\n\n` +
-    `Kalau API key sudah diisi, aku akan menjawab pertanyaan apa pun secara live. ✨`
+    `I'm running in **demo mode** because \`ANTHROPIC_API_KEY\` hasn't been set in \`.env.local\`, ` +
+    `so my answers are limited for now, ${name} 😅\n\n` +
+    `Still, almost every feature can be tried:\n\n` +
+    `- type \`/quiz create practice questions about photosynthesis\` for a print-ready quiz\n` +
+    `- type \`/anagram create one about the solar system\` for a Word Builder game\n` +
+    `- upload a file to **Drive**, then mention it with \`@\` in chat\n` +
+    `- also try the **TLDR**, **Compact**, and **New Doc** buttons above\n\n` +
+    `Once the API key is set, I'll answer any question live. ✨`
   );
 }
 
 export function mockTLDR(msgCount: number) {
   return (
     `**TLDR:**\n` +
-    `- Percakapan ini berisi ${msgCount} pesan antara kamu dan NISA.\n` +
-    `- Mode demo aktif — isi \`ANTHROPIC_API_KEY\` untuk ringkasan yang sesungguhnya.\n` +
-    `- Coba \`/quiz\` atau \`/anagram\` untuk melihat artifact interaktif.`
+    `- This conversation contains ${msgCount} messages between you and NISA.\n` +
+    `- Demo mode is active — set \`ANTHROPIC_API_KEY\` for a real summary.\n` +
+    `- Try \`/quiz\` or \`/anagram\` to see an interactive artifact.`
   );
 }
 
 export function mockTitle(firstUserText: string, name: string) {
   if (isGreeting(firstUserText)) {
     const h = new Date().getHours();
-    const tod = h < 11 ? "Pagi" : h < 15 ? "Siang" : h < 18 ? "Sore" : "Malam";
-    return `Sapaan Selamat ${tod} ${cap(name)}`;
+    const tod = h < 11 ? "Morning" : h < 18 ? "Afternoon" : "Evening";
+    return `Good ${tod} Greeting From ${cap(name)}`;
   }
   const words = firstUserText
     .replace(/^\/[\w-]+\s*/, "")
@@ -49,7 +49,7 @@ export function mockTitle(firstUserText: string, name: string) {
     .slice(0, 5)
     .map(cap)
     .join(" ");
-  return words || "Percakapan Baru";
+  return words || "New Conversation";
 }
 
 function cap(s: string) {
@@ -60,123 +60,123 @@ export function mockQuiz(topic: string, grade: string): QuizData {
   const isFoto = /fotosintesis|photosint/i.test(topic);
   if (isFoto) {
     return {
-      title: "Kuis Sains: Rahasia Fotosintesis",
-      subject: "Ilmu Pengetahuan Alam (IPA)",
+      title: "Science Quiz: The Secrets of Photosynthesis",
+      subject: "Natural Science",
       grade,
       minutes: 30,
       instructions:
-        "Bacalah setiap pertanyaan dengan teliti. Kamu memiliki waktu 30 menit untuk mengerjakan kuis ini. Kerjakan dengan jujur dan teliti!",
+        "Read each question carefully. You have 30 minutes to complete this quiz. Work honestly and carefully!",
       questions: [
         {
           type: "mc",
           prompt:
-            "Apa nama proses yang digunakan tumbuhan hijau untuk membuat makanannya sendiri?",
-          options: ["Pernapasan", "Fotosintesis", "Penguapan", "Penyerapan"],
-          answer: "Fotosintesis",
+            "What is the name of the process green plants use to make their own food?",
+          options: ["Respiration", "Photosynthesis", "Evaporation", "Absorption"],
+          answer: "Photosynthesis",
           points: 1,
           explanation:
-            "Fotosintesis berasal dari kata foto (cahaya) dan sintesis (menyusun).",
+            "Photosynthesis comes from photo (light) and synthesis (putting together).",
         },
         {
           type: "mc",
           prompt:
-            "Bagian tumbuhan manakah yang paling utama berfungsi untuk melakukan fotosintesis?",
-          options: ["Akar", "Batang", "Daun", "Bunga"],
-          answer: "Daun",
+            "Which part of the plant is mainly responsible for photosynthesis?",
+          options: ["Roots", "Stem", "Leaves", "Flowers"],
+          answer: "Leaves",
           points: 1,
-          explanation: "Daun mengandung banyak klorofil pada jaringan palisadenya.",
+          explanation: "Leaves contain lots of chlorophyll in their palisade tissue.",
         },
         {
           type: "tf",
           prompt:
-            "Tumbuhan membutuhkan karbon dioksida (CO2) dari udara untuk melakukan fotosintesis. Benar atau Salah?",
+            "Plants need carbon dioxide (CO2) from the air to carry out photosynthesis. True or False?",
           answer: "True",
           points: 1,
         },
         {
           type: "fill",
           prompt:
-            "Zat hijau daun yang berfungsi menangkap energi cahaya matahari disebut dengan ________.",
-          answer: "Klorofil",
+            "The green pigment in leaves that captures energy from sunlight is called ________.",
+          answer: "Chlorophyll",
           points: 2,
         },
         {
           type: "mc",
           prompt:
-            "Apa yang diserap oleh akar tumbuhan dari dalam tanah untuk membantu proses fotosintesis?",
-          options: ["Cahaya Matahari", "Oksigen", "Air dan Mineral", "Karbon Dioksida"],
-          answer: "Air dan Mineral",
+            "What do plant roots absorb from the soil to help the process of photosynthesis?",
+          options: ["Sunlight", "Oxygen", "Water and minerals", "Carbon dioxide"],
+          answer: "Water and minerals",
           points: 2,
         },
         {
           type: "mc",
-          prompt: "Hasil fotosintesis yang menjadi makanan bagi tumbuhan adalah ...",
-          options: ["Oksigen", "Karbohidrat (amilum)", "Air", "Nitrogen"],
-          answer: "Karbohidrat (amilum)",
+          prompt: "The product of photosynthesis that becomes food for the plant is ...",
+          options: ["Oxygen", "Carbohydrates (starch)", "Water", "Nitrogen"],
+          answer: "Carbohydrates (starch)",
           points: 2,
-          explanation: "Amilum disimpan sebagai cadangan makanan.",
+          explanation: "Starch is stored as a food reserve.",
         },
         {
           type: "tf",
-          prompt: "Fotosintesis hanya dapat terjadi pada malam hari. Benar atau Salah?",
+          prompt: "Photosynthesis can only happen at night. True or False?",
           answer: "False",
           points: 1,
         },
         {
           type: "fill",
           prompt:
-            "Selain makanan, fotosintesis juga menghasilkan gas ________ yang kita hirup untuk bernapas.",
-          answer: "Oksigen",
+            "Besides food, photosynthesis also produces ________ gas, which we breathe in.",
+          answer: "Oxygen",
           points: 2,
         },
         {
           type: "mc",
-          prompt: "Manakah yang BUKAN merupakan bahan untuk fotosintesis?",
-          options: ["Air", "Cahaya matahari", "Karbon dioksida", "Oksigen"],
-          answer: "Oksigen",
+          prompt: "Which of these is NOT an ingredient of photosynthesis?",
+          options: ["Water", "Sunlight", "Carbon dioxide", "Oxygen"],
+          answer: "Oxygen",
           points: 2,
-          explanation: "Oksigen adalah hasil fotosintesis, bukan bahannya.",
+          explanation: "Oxygen is a product of photosynthesis, not an ingredient.",
         },
         {
           type: "essay",
           prompt:
-            "Jelaskan dengan kata-katamu sendiri, mengapa fotosintesis penting bagi manusia dan hewan!",
+            "In your own words, explain why photosynthesis is important for humans and animals!",
           answer:
-            "Karena fotosintesis menghasilkan oksigen untuk bernapas dan makanan yang menjadi sumber energi bagi makhluk hidup lain.",
+            "Because photosynthesis produces the oxygen we breathe and the food that becomes a source of energy for other living things.",
           points: 4,
         },
       ],
     };
   }
   return {
-    title: `Kuis: ${cap(topic || "Pengetahuan Umum")}`,
-    subject: "Pengetahuan Umum",
+    title: `Quiz: ${cap(topic || "General Knowledge")}`,
+    subject: "General Knowledge",
     grade,
     minutes: 30,
     questions: [
       {
         type: "mc",
-        prompt: `Pertanyaan pilihan ganda contoh tentang ${topic}. (Mode demo — isi API key untuk soal sungguhan.)`,
-        options: ["Opsi A", "Opsi B", "Opsi C", "Opsi D"],
-        answer: "Opsi A",
+        prompt: `Sample multiple-choice question about ${topic}. (Demo mode — set an API key for real questions.)`,
+        options: ["Option A", "Option B", "Option C", "Option D"],
+        answer: "Option A",
         points: 2,
       },
       {
         type: "tf",
-        prompt: `${cap(topic)} adalah topik yang menarik untuk dipelajari. Benar atau Salah?`,
+        prompt: `${cap(topic)} is an interesting topic to learn about. True or False?`,
         answer: "True",
         points: 2,
       },
       {
         type: "fill",
-        prompt: `Topik kuis ini adalah ________.`,
+        prompt: `The topic of this quiz is ________.`,
         answer: cap(topic),
         points: 2,
       },
       {
         type: "essay",
-        prompt: `Tuliskan tiga hal yang kamu ketahui tentang ${topic}!`,
-        answer: "Jawaban bebas sesuai pemahaman siswa.",
+        prompt: `Write down three things you know about ${topic}!`,
+        answer: "Open answer based on the student's understanding.",
         points: 4,
       },
     ],
@@ -185,34 +185,34 @@ export function mockQuiz(topic: string, grade: string): QuizData {
 
 export function mockAnagram(topic: string): AnagramData {
   const t = topic.toLowerCase();
-  const isSpace = /tata\s*surya|tatasurya|planet|antariksa|luar angkasa|astronomi/.test(t);
+  const isSpace = /tata\s*surya|tatasurya|planet|antariksa|luar angkasa|astronomi|solar\s*system|space|astronomy/.test(t);
   const words = isSpace
     ? [
-        { word: "PLANET", hint: "Benda langit yang mengorbit bintang", category: "term", level: "EASY" as const },
-        { word: "KOMET", hint: "Bintang berekor dari es dan debu", category: "benda langit", level: "EASY" as const },
-        { word: "ORBIT", hint: "Lintasan benda langit mengelilingi pusatnya", category: "term", level: "EASY" as const },
-        { word: "BULAN", hint: "Satelit alami Bumi", category: "benda langit", level: "EASY" as const },
-        { word: "METEOR", hint: "Bintang jatuh yang terbakar di atmosfer", category: "benda langit", level: "MEDIUM" as const },
-        { word: "ASTEROID", hint: "Batuan luar angkasa, banyak di antara Mars dan Jupiter", category: "term", level: "MEDIUM" as const },
-        { word: "MATAHARI", hint: "Bintang pusat tata surya kita", category: "bintang", level: "MEDIUM" as const },
-        { word: "GALAKSI", hint: "Kumpulan miliaran bintang, contohnya Bimasakti", category: "term", level: "MEDIUM" as const },
-        { word: "SATURNUS", hint: "Planet bercincin paling terkenal", category: "planet", level: "HARD" as const },
-        { word: "BINTANG", hint: "Bola gas panas yang memancarkan cahaya sendiri", category: "benda langit", level: "HARD" as const },
+        { word: "PLANET", hint: "A celestial body that orbits a star", category: "term", level: "EASY" as const },
+        { word: "COMET", hint: "A tailed object made of ice and dust", category: "celestial body", level: "EASY" as const },
+        { word: "ORBIT", hint: "The path a celestial body follows around its center", category: "term", level: "EASY" as const },
+        { word: "MOON", hint: "Earth's natural satellite", category: "celestial body", level: "EASY" as const },
+        { word: "METEOR", hint: "A shooting star burning up in the atmosphere", category: "celestial body", level: "MEDIUM" as const },
+        { word: "ASTEROID", hint: "Space rock, plentiful between Mars and Jupiter", category: "term", level: "MEDIUM" as const },
+        { word: "SUN", hint: "The star at the center of our solar system", category: "star", level: "MEDIUM" as const },
+        { word: "GALAXY", hint: "A collection of billions of stars, like the Milky Way", category: "term", level: "MEDIUM" as const },
+        { word: "SATURN", hint: "The most famous ringed planet", category: "planet", level: "HARD" as const },
+        { word: "STAR", hint: "A ball of hot gas that shines with its own light", category: "celestial body", level: "HARD" as const },
       ]
     : [
-        { word: "BELAJAR", hint: "Kegiatan menambah ilmu", category: "umum", level: "EASY" as const },
-        { word: "BUKU", hint: "Sumber bacaan", category: "umum", level: "EASY" as const },
-        { word: "GURU", hint: "Pengajar di sekolah", category: "umum", level: "EASY" as const },
-        { word: "SEKOLAH", hint: "Tempat menuntut ilmu", category: "umum", level: "EASY" as const },
-        { word: "PINTAR", hint: "Hasil dari rajin belajar", category: "umum", level: "MEDIUM" as const },
-        { word: "MEMBACA", hint: "Jendela dunia", category: "umum", level: "MEDIUM" as const },
-        { word: "MENULIS", hint: "Menuangkan ide ke kertas", category: "umum", level: "MEDIUM" as const },
-        { word: "ILMUWAN", hint: "Orang yang meneliti ilmu pengetahuan", category: "umum", level: "MEDIUM" as const },
-        { word: "PERPUSTAKAAN", hint: "Rumah ribuan buku", category: "umum", level: "HARD" as const },
-        { word: "PENGETAHUAN", hint: "Hasil dari rasa ingin tahu", category: "umum", level: "HARD" as const },
+        { word: "LEARNING", hint: "The activity of gaining knowledge", category: "general", level: "EASY" as const },
+        { word: "BOOK", hint: "A source of reading", category: "general", level: "EASY" as const },
+        { word: "TEACHER", hint: "The person who teaches at school", category: "general", level: "EASY" as const },
+        { word: "SCHOOL", hint: "A place to pursue knowledge", category: "general", level: "EASY" as const },
+        { word: "CLEVER", hint: "The result of diligent studying", category: "general", level: "MEDIUM" as const },
+        { word: "READING", hint: "A window to the world", category: "general", level: "MEDIUM" as const },
+        { word: "WRITING", hint: "Putting ideas onto paper", category: "general", level: "MEDIUM" as const },
+        { word: "SCIENTIST", hint: "Someone who researches science", category: "general", level: "MEDIUM" as const },
+        { word: "LIBRARY", hint: "Home to thousands of books", category: "general", level: "HARD" as const },
+        { word: "KNOWLEDGE", hint: "The result of curiosity", category: "general", level: "HARD" as const },
       ];
   return {
-    title: `Word Builder: ${topic || "kata"}`,
+    title: `Word Builder: ${topic || "words"}`,
     topic,
     words,
   };
