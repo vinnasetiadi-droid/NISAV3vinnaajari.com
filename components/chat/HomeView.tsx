@@ -88,7 +88,7 @@ export function HomeView({
             src="/orb-glow.png"
             alt=""
             aria-hidden
-            className="pointer-events-none absolute hidden h-[420px] w-[420px] max-w-none select-none opacity-50 brightness-125 mix-blend-hard-light dark:block"
+            className="pointer-events-none absolute hidden h-[340px] w-[340px] max-w-none select-none opacity-40 brightness-125 mix-blend-hard-light dark:block"
           />
         <div className="enter-orb relative h-[118px] w-[118px] overflow-hidden rounded-full bg-white [mask-image:radial-gradient(circle_closest-side,black_84%,transparent_100%)] dark:bg-[#04060b] dark:[mask-image:none]">
           <OrbVideo smoothLoop />
@@ -131,7 +131,7 @@ export function HomeView({
             <button
               key={f.title}
               onClick={() => onSend(f.prompt, [])}
-              className="rounded-2xl border border-slate-300/60 bg-white/60 p-4 text-left transition hover:bg-white dark:border-white/10 dark:bg-white/[0.04] dark:hover:border-white/20 dark:hover:bg-white/[0.08]"
+              className="glass-chat rounded-2xl p-4 text-left transition hover:brightness-110 dark:hover:brightness-125"
             >
               <div className="text-[15px] font-semibold text-slate-800 dark:text-slate-100">
                 {f.title}
