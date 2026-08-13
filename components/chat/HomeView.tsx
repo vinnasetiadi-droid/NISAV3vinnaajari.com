@@ -81,15 +81,8 @@ export function HomeView({
 
       {/* hero */}
       <div className="mx-auto flex w-full max-w-[780px] flex-1 flex-col items-center justify-center py-10">
-        {/* orb video + sinar & dots halftone di belakangnya (dark) */}
+        {/* orb video */}
         <div className="relative flex items-center justify-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/orb-glow.png"
-            alt=""
-            aria-hidden
-            className="orb-pulse pointer-events-none absolute hidden h-[300px] w-[300px] max-w-none select-none brightness-125 mix-blend-hard-light dark:block"
-          />
         <div className="enter-orb relative h-[118px] w-[118px] overflow-hidden rounded-full bg-white [mask-image:radial-gradient(circle_closest-side,black_84%,transparent_100%)] dark:bg-[#04060b] dark:[mask-image:none]">
           <OrbVideo smoothLoop />
           {/* logo AJARI menempel di tengah blob */}

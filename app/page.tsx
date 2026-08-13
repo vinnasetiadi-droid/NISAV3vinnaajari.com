@@ -239,13 +239,6 @@ function Landing() {
       <main className="relative z-10 mx-auto flex max-w-[1060px] flex-col items-center px-5 pt-10 md:pt-14">
         {/* bola AI — sama seperti di dalam app */}
         <div className="relative mb-6 flex items-center justify-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/orb-glow.png"
-            alt=""
-            aria-hidden
-            className="orb-pulse pointer-events-none absolute h-[300px] w-[300px] max-w-none select-none brightness-125 mix-blend-hard-light"
-          />
           <div className="relative h-[104px] w-[104px] overflow-hidden rounded-full bg-[#04060b]">
             <video
               src="/orb.mp4"
@@ -269,8 +262,8 @@ function Landing() {
           </div>
         </div>
 
-        <h1 className="bg-gradient-to-r from-white/40 via-white to-white/30 bg-clip-text font-display text-[38px] font-medium leading-none text-transparent md:text-[52px]">
-          Ask NISA
+        <h1 className="mt-4 bg-gradient-to-r from-white/40 via-white to-white/30 bg-clip-text font-display text-[34px] font-medium leading-none text-transparent md:text-[46px]">
+          Ask NISA to Build
         </h1>
 
         {/* prompt card */}
