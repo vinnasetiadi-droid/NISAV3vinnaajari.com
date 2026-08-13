@@ -312,32 +312,10 @@ body {
 }
 .glow-ring {
   border-radius: 26px;
-  /* cahaya biru meluber dari sisi bawah box */
-  box-shadow: 0 10px 24px -4px rgba(60, 170, 255, 1),
-    0 22px 46px -6px rgba(40, 150, 255, 0.8),
-    0 40px 90px -8px rgba(25, 120, 240, 0.55);
+  /* glow tipis di sekeliling ring */
+  box-shadow: 0 6px 26px -4px rgba(50, 160, 255, 0.35);
 }
-.glow-ring::after {
-  content: "";
-  position: absolute;
-  left: 1%;
-  right: 1%;
-  bottom: -34px;
-  height: 84px;
-  z-index: 0;
-  pointer-events: none;
-  border-radius: 9999px;
-  background: radial-gradient(
-    ellipse 62% 100% at 50% 0%,
-    rgba(110, 195, 255, 0.8) 0%,
-    rgba(60, 170, 255, 0.55) 34%,
-    rgba(30, 130, 250, 0.28) 60%,
-    rgba(20, 110, 235, 0.08) 78%,
-    transparent 90%
-  );
-  filter: blur(14px);
-  animation: glow-breathe 4s ease-in-out infinite;
-}
+
 .glow-ring::before {
   content: "";
   position: absolute;
@@ -363,29 +341,6 @@ body {
   animation: glow-spin 5s linear infinite;
 }
 
-
-/* Sinar segitiga PNG (Vector 11): apex di sudut bawah box, ekor menyebar ke tengah */
-.glow-beam {
-  position: absolute;
-  top: calc(100% - 6px);
-  z-index: 0;
-  width: 42%;
-  max-width: none;
-  pointer-events: none;
-  user-select: none;
-  opacity: 0.8;
-  filter: blur(16px) saturate(1.25);
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.6) 55%, transparent 95%);
-  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.6) 55%, transparent 95%);
-  animation: glow-breathe 4s ease-in-out infinite;
-}
-.glow-beam-l {
-  left: 0;
-}
-.glow-beam-r {
-  right: 0;
-  transform: scaleX(-1);
-}
 
 /* isi box ber-glow: gelap tapi tetap glass — tint hitam pekat + blur tetap hidup */
 .dark .glow-ring > .glass-chat {
