@@ -343,19 +343,27 @@ body {
   animation: glow-spin 5s linear infinite;
 }
 .glow-ring::after {
+  /* glow lembut yang ikut berputar mengikuti ring */
   content: "";
   position: absolute;
-  inset: auto 12% -20px 12%;
-  height: 26px;
-  border-radius: 9999px;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0, 200, 255, 0.5),
-    rgba(10, 112, 255, 0.25) 55%,
-    transparent 75%
+  inset: -3px;
+  border-radius: 28px;
+  padding: 3px;
+  background: conic-gradient(
+    from var(--ga),
+    #00ffff,
+    #0a70ff 30%,
+    #00e5c7 55%,
+    #4db4ff 78%,
+    #00ffff
   );
-  filter: blur(26px);
-  animation: glow-breathe 4s ease-in-out infinite;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  filter: blur(10px);
+  opacity: 0.75;
+  animation: glow-spin 5s linear infinite, glow-breathe 4s ease-in-out infinite;
 }
 /* isi box ber-glow: gelap tapi tetap glass — tint hitam pekat + blur tetap hidup */
 .dark .glow-ring > .glass-chat {
