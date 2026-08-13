@@ -97,8 +97,21 @@ export function AssistantMessage({
         <div className="relative h-10 w-10 shrink-0 animate-pulse overflow-hidden rounded-full bg-white [mask-image:radial-gradient(circle_closest-side,black_84%,transparent_100%)] dark:bg-[#04060b] dark:[mask-image:none] [animation-duration:2.4s]">
           <OrbVideo />
         </div>
-        <div key={word} className="shimmer-text animate-rise text-[16px] font-medium">
-          {word}
+        <div className="min-w-0">
+          <div
+            key={word}
+            className="shimmer-text animate-rise text-[16px] font-medium"
+          >
+            {word}
+          </div>
+          {msg.statusLine && (
+            <div
+              key={msg.statusLine}
+              className="animate-rise mt-0.5 text-[12.5px] text-slate-400"
+            >
+              {msg.statusLine}
+            </div>
+          )}
         </div>
       </div>
     );

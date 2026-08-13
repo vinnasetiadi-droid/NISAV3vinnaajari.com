@@ -241,6 +241,30 @@ async function runSkill(opts: {
   };
   s.appendMsg(opts.convId, wmsg);
 
+  // Progres bertahap khusus skill (quiz / word builder) — ditampilkan di bawah "Thinking…"
+  const steps =
+    opts.skillId === "quiz"
+      ? [
+          "Reading your topic…",
+          "Drafting the first questions…",
+          "Balancing difficulty…",
+          "Writing the answer key…",
+          "Final touches…",
+        ]
+      : [
+          "Picking the best words…",
+          "Scrambling the letters…",
+          "Writing the hints…",
+          "Setting up the board…",
+          "Final touches…",
+        ];
+  let stepIdx = 0;
+  useDB.getState().patchMsg(opts.convId, wmsg.id, { statusLine: steps[0] });
+  const stepTimer = setInterval(() => {
+    stepIdx = Math.min(stepIdx + 1, steps.length - 1);
+    useDB.getState().patchMsg(opts.convId, wmsg.id, { statusLine: steps[stepIdx] });
+  }, 1600);
+
   try {
     const res = await fetch("/api/chat", {
       method: "POST",
@@ -258,6 +282,7 @@ async function runSkill(opts: {
     });
     const { data } = await res.json();
     if (!data) throw new Error("no data");
+    clearInterval(stepTimer);
 
     const st = useDB.getState();
     let artifactId: string;
@@ -305,6 +330,7 @@ async function runSkill(opts: {
     st.recomputeTokens(opts.convId);
     maybeTitle(opts.convId);
   } catch {
+    clearInterval(stepTimer);
     useDB.getState().patchMsg(opts.convId, wmsg.id, {
       kind: "text",
       content: "⚠️ Failed to create the artifact. Please try again in a moment.",
