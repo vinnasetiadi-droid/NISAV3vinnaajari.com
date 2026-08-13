@@ -232,13 +232,44 @@ function Landing() {
         </main>
       ) : (
       <main className="relative z-10 mx-auto flex max-w-[1060px] flex-col items-center px-5 pt-10 md:pt-14">
-        <h1 className="bg-gradient-to-r from-white/40 via-white to-white/30 bg-clip-text font-display text-[56px] font-medium leading-none text-transparent md:text-[84px]">
+        {/* bola AI — sama seperti di dalam app */}
+        <div className="relative mb-6 flex items-center justify-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/orb-glow.png"
+            alt=""
+            aria-hidden
+            className="orb-pulse pointer-events-none absolute h-[300px] w-[300px] max-w-none select-none brightness-125 mix-blend-hard-light"
+          />
+          <div className="relative h-[104px] w-[104px] overflow-hidden rounded-full bg-[#04060b]">
+            <video
+              src="/orb.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              onTimeUpdate={(e) => {
+                const v = e.currentTarget;
+                if (v.duration && v.duration - v.currentTime < 0.1)
+                  v.currentTime = 0.02;
+              }}
+              className="absolute left-1/2 top-1/2 h-[112%] w-auto max-w-none -translate-x-1/2 -translate-y-1/2"
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/ajari-mark.png"
+              alt=""
+              className="absolute left-1/2 top-1/2 z-10 h-[64px] w-auto -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_1px_6px_rgba(0,40,90,0.35)]"
+            />
+          </div>
+        </div>
+
+        <h1 className="bg-gradient-to-r from-white/40 via-white to-white/30 bg-clip-text font-display text-[38px] font-medium leading-none text-transparent md:text-[52px]">
           Ask NISA
         </h1>
 
-        {/* prompt card + ring glow persis seperti di dalam */}
-        <div className="glow-ring relative z-10 mt-10 w-full rounded-[26px]">
-        <div className="glass-mac relative z-10 rounded-[26px] p-6 pb-4">
+        {/* prompt card */}
+        <div className="glass-mac relative z-10 mt-8 w-full rounded-[26px] p-6 pb-4">
           <div className="relative">
             {/* overlay: /perintah tampil biru */}
             <div
@@ -373,7 +404,6 @@ function Landing() {
               ))}
             </div>
           )}
-        </div>
         </div>
 
         {/* ideas */}
