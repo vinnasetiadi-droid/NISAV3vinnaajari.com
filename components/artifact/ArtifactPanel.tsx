@@ -69,7 +69,7 @@ export function ArtifactPanel({
         "flex min-w-0 flex-col overflow-hidden bg-white text-slate-700 dark:bg-[#0b0e14] dark:text-slate-200",
         floating
           ? "h-full w-full rounded-3xl border border-slate-200 dark:border-white/10"
-          : "panel-in h-full flex-1 border-l border-slate-200/80 dark:border-white/10"
+          : "panel-in h-full flex-1 rounded-[26px] border border-slate-200/80 shadow-glass dark:border-white/10 dark:shadow-glass-dark"
       )}
     >
       {/* header */}

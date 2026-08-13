@@ -74,10 +74,10 @@ export default function AppPage() {
             }
             className={
               expandArtifact
-                ? "flex min-w-0 flex-1"
+                ? "flex min-w-0 flex-1 p-2.5 pl-0"
                 : panelW
-                ? "relative hidden shrink-0 md:flex"
-                : "relative hidden w-[52%] min-w-[420px] max-w-[900px] md:flex"
+                ? "relative hidden shrink-0 p-2.5 pl-0 md:flex"
+                : "relative hidden w-[52%] min-w-[420px] max-w-[900px] p-2.5 pl-0 md:flex"
             }
           >
             {!expandArtifact && (
