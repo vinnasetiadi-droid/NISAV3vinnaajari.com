@@ -98,7 +98,7 @@ export function HomeView({
             src="/halftone.png"
             alt=""
             aria-hidden
-            className="pointer-events-none absolute hidden h-[350px] w-[350px] max-w-none select-none opacity-80 dark:block [mask-image:radial-gradient(circle,black_30%,rgba(0,0,0,0.5)_52%,transparent_70%)] [filter:hue-rotate(28deg)_saturate(2.6)_brightness(0.62)]"
+            className="pointer-events-none absolute hidden h-[360px] w-[360px] max-w-none select-none mix-blend-hard-light dark:block [mask-image:radial-gradient(circle,black_20%,rgba(0,0,0,0.45)_42%,rgba(0,0,0,0.12)_56%,transparent_66%)] [filter:sepia(1)_saturate(5)_hue-rotate(192deg)_brightness(0.95)]"
           />
           <div
             aria-hidden
