@@ -95,19 +95,10 @@ export function HomeView({
         <div className="relative flex items-center justify-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/halftone.png"
+            src="/orb-glow.png"
             alt=""
             aria-hidden
-            className="pointer-events-none absolute hidden h-[360px] w-[360px] max-w-none select-none mix-blend-hard-light dark:block [mask-image:radial-gradient(circle,black_20%,rgba(0,0,0,0.45)_42%,rgba(0,0,0,0.12)_56%,transparent_66%)] [filter:sepia(1)_saturate(5)_hue-rotate(192deg)_brightness(0.95)]"
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute hidden h-[240px] w-[240px] rounded-full dark:block"
-            style={{
-              background:
-                "radial-gradient(circle, rgba(40,130,255,0.65) 0%, rgba(20,110,255,0.28) 48%, transparent 72%)",
-              filter: "blur(18px)",
-            }}
+            className="pointer-events-none absolute hidden h-[420px] w-[420px] max-w-none select-none mix-blend-hard-light dark:block"
           />
         <div className="enter-orb relative h-[118px] w-[118px] overflow-hidden rounded-full bg-white [mask-image:radial-gradient(circle_closest-side,black_84%,transparent_100%)] dark:bg-[#04060b] dark:[mask-image:none]">
           <OrbVideo smoothLoop />

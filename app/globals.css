@@ -51,9 +51,9 @@ body {
   background-image: linear-gradient(
     to top,
     rgba(10, 112, 255, 0.42) 0%,
-    rgba(0, 140, 255, 0.2) 18%,
-    rgba(0, 80, 200, 0.08) 38%,
-    transparent 62%
+    rgba(0, 140, 255, 0.18) 12%,
+    rgba(0, 80, 200, 0.06) 26%,
+    transparent 44%
   );
   background-size: 100% 100%;
   background-repeat: no-repeat;
