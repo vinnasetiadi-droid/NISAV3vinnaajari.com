@@ -64,7 +64,7 @@ interface Props {
 }
 
 /** Satu menu gabungan (mode + templates + recent) + menu model. */
-type Pop = null | "plus" | "plus-modes" | "plus-templates";
+type Pop = null | "plus" | "plus-modes" | "plus-templates" | "modes-pill";
 
 const MODE_ICONS: Record<ModeId, import("lucide-react").LucideIcon> = {
   auto: Sparkles,
@@ -400,8 +400,10 @@ export function ChatInput({
         <div ref={popRef}>
           <MenuShell
             className={cn(
-              "nice-scroll max-h-[420px] w-[min(440px,92vw)] overflow-y-auto rounded-3xl p-2",
-              variant === "panel" ? "bottom-[72px] left-0" : "bottom-[64px] left-0"
+              "glass-chat nice-scroll max-h-[420px] overflow-y-auto rounded-3xl p-2",
+              pop === "modes-pill" ? "w-[min(400px,92vw)]" : "w-[min(440px,92vw)]",
+              variant === "panel" ? "bottom-[72px]" : "bottom-[64px]",
+              pop === "modes-pill" ? "right-0" : "left-0"
             )}
           >
             {pop === "plus" && (
@@ -460,9 +462,11 @@ export function ChatInput({
               </>
             )}
 
-            {pop === "plus-modes" && (
+            {(pop === "plus-modes" || pop === "modes-pill") && (
               <>
-                <BackRow label="Response mode" onClick={() => setPop("plus")} />
+                {pop === "plus-modes" && (
+                  <BackRow label="Response mode" onClick={() => setPop("plus")} />
+                )}
                 {MODES.map((m) => {
                   const Icon = MODE_ICONS[m.id];
                   return (
@@ -591,7 +595,7 @@ export function ChatInput({
             <button
               aria-label="Response mode"
               title="Response mode"
-              onClick={() => setPop(pop === "plus-modes" ? null : "plus-modes")}
+              onClick={() => setPop(pop === "modes-pill" ? null : "modes-pill")}
               className={cn(
                 "flex min-h-[44px] items-center gap-1.5 rounded-full px-3 text-[12.5px] font-medium transition hover:bg-slate-900/[0.05] dark:hover:bg-white/10",
                 mode !== "auto"
@@ -647,7 +651,7 @@ export function ChatInput({
             <button
               aria-label="Response mode"
               title="Response mode"
-              onClick={() => setPop(pop === "plus-modes" ? null : "plus-modes")}
+              onClick={() => setPop(pop === "modes-pill" ? null : "modes-pill")}
               className={cn(
                 "flex min-h-[44px] items-center gap-1.5 rounded-full px-3 text-[12.5px] font-medium transition hover:bg-slate-900/[0.05] dark:hover:bg-white/10",
                 mode !== "auto"
