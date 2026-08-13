@@ -284,6 +284,13 @@ body {
   filter: blur(26px);
   animation: glow-breathe 4s ease-in-out infinite;
 }
+/* isi box ber-glow tetap hitam pekat — hanya garis bordernya yang berwarna */
+.dark .glow-ring > .glass-chat {
+  background: #0b0e14;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
 @keyframes glow-spin {
   to {
     --ga: 360deg;

@@ -69,17 +69,7 @@ export function StatusBar() {
   };
 
   return (
-    <div className="glass-chat relative z-40 flex w-full shrink-0 items-center gap-1 rounded-full px-3 py-1.5 text-[12px] text-slate-500 dark:text-slate-400">
-      <button
-        onClick={() => setPaletteOpen(true)}
-        title="Search & commands (⌘K)"
-        className="flex min-w-0 items-center gap-2 rounded-lg px-2 py-1 transition hover:bg-white/60 hover:text-slate-700 dark:hover:bg-white/10 dark:hover:text-slate-200"
-      >
-        <Search size={13} className="shrink-0" />
-        <span className="truncate">Search &amp; commands</span>
-        <kbd>⌘K</kbd>
-      </button>
-
+    <div className="relative z-40 flex w-full shrink-0 items-center gap-1 px-2 py-0.5 text-[12px] text-slate-500 dark:text-slate-400">
       <div className="flex-1" />
 
       <div ref={ref} className="relative flex items-center gap-1">

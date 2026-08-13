@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   Archive,
   ArchiveRestore,
+  Search,
   Check,
   Folder,
   HardDrive,
@@ -505,6 +506,14 @@ export function Sidebar() {
 
       {/* bottom */}
       <div className="border-t border-white/50 p-3 pt-2.5 dark:border-white/10">
+        <button
+          onClick={() => s.setPaletteOpen(true)}
+          className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-[13px] text-slate-500 transition hover:bg-white/60 dark:text-slate-400 dark:hover:bg-white/5"
+        >
+          <Search size={15} />
+          <span className="flex-1 text-left">Search &amp; commands</span>
+          <kbd>⌘K</kbd>
+        </button>
         <button
           onClick={() => setArchOpen(true)}
           className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-[13px] text-slate-500 transition hover:bg-white/60 dark:text-slate-400 dark:hover:bg-white/5"
