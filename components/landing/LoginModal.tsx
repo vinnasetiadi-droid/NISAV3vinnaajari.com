@@ -116,9 +116,9 @@ export function LoginModal({
       className="fixed inset-0 z-[95] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
       onMouseDown={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="animate-rise grid w-full max-w-[960px] overflow-hidden rounded-[26px] border border-white/10 bg-[#0b0e14] shadow-2xl md:grid-cols-2">
+      <div className="animate-rise grid w-full max-w-[960px] overflow-hidden rounded-[26px] border border-white/10 shadow-2xl md:grid-cols-2">
         {/* left preview pane — ilustrasi NISA */}
-        <div className="hidden md:block">
+        <div className="hidden bg-[#0b0e14] md:block">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/login-preview.png"
@@ -128,7 +128,7 @@ export function LoginModal({
         </div>
 
         {/* right auth pane */}
-        <div className="relative flex flex-col justify-center px-8 py-10 md:px-12">
+        <div className="glass-mac relative flex flex-col justify-center rounded-none border-0 px-8 py-10 md:px-12">
           <button
             onClick={onClose}
             className="absolute right-5 top-5 rounded-lg p-1.5 text-slate-500 transition hover:bg-white/10 hover:text-slate-200"
