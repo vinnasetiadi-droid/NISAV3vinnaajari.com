@@ -271,19 +271,17 @@ body {
 }
 
 /* Dots + glow di belakang orb: bernapas pelan (pulsing) */
-@keyframes orb-pulse {
+@keyframes orb-fade {
   0%,
   100% {
-    opacity: 0.32;
-    transform: scale(0.97);
+    opacity: 0.22;
   }
   50% {
-    opacity: 0.5;
-    transform: scale(1.04);
+    opacity: 0.4;
   }
 }
 .orb-pulse {
-  animation: orb-pulse 6s ease-in-out infinite;
+  animation: orb-fade 6s ease-in-out infinite;
 }
 
 /* Glass untuk menu/popover: frosted tebal + dispersion — tetap terbaca di atas konten apa pun */
