@@ -266,10 +266,10 @@ body {
 @keyframes orb-fade {
   0%,
   100% {
-    opacity: 0.22;
+    opacity: 0.32;
   }
   50% {
-    opacity: 0.4;
+    opacity: 0.5;
   }
 }
 .orb-pulse {
@@ -312,8 +312,9 @@ body {
 }
 .glow-ring {
   border-radius: 26px;
-  /* glow tipis di sekeliling ring */
-  box-shadow: 0 6px 26px -4px rgba(50, 160, 255, 0.35);
+  /* glow lembut di sekeliling ring */
+  box-shadow: 0 0 18px rgba(60, 175, 255, 0.35),
+    0 8px 34px -4px rgba(50, 160, 255, 0.5);
 }
 
 .glow-ring::before {

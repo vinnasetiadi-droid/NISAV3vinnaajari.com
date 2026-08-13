@@ -130,7 +130,7 @@ export function HomeView({
         </div>
 
         {/* pinned project cards — skenario penting, ala reference */}
-        <div className="enter-up mt-12 grid w-full grid-cols-1 gap-3 [animation-delay:0.5s] sm:grid-cols-3">
+        <div className="enter-up mt-5 grid w-full grid-cols-1 gap-3 [animation-delay:0.5s] sm:grid-cols-3">
           {FEATURES.map((f) => (
             <button
               key={f.title}
