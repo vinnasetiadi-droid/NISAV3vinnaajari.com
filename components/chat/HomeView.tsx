@@ -131,7 +131,7 @@ export function HomeView({
             <button
               key={f.title}
               onClick={() => onSend(f.prompt, [])}
-              className="glass-chat rounded-2xl p-4 text-left transition hover:brightness-110 dark:hover:brightness-125"
+              className="glass-chat rounded-[26px] p-4 text-left transition hover:brightness-110 dark:hover:brightness-125"
             >
               <div className="text-[15px] font-semibold text-slate-800 dark:text-slate-100">
                 {f.title}

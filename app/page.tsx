@@ -190,7 +190,7 @@ function Landing() {
         </h1>
 
         {/* prompt card */}
-        <div className="glass-mac relative z-10 mt-10 w-full rounded-[28px] p-6 pb-4">
+        <div className="glass-mac relative z-10 mt-10 w-full rounded-[26px] p-6 pb-4">
           <div className="relative">
             {/* overlay: /perintah tampil biru */}
             <div
@@ -249,7 +249,7 @@ function Landing() {
 
           {/* dropdown fungsi saat mengetik "/" */}
           {slashItems.length > 0 && (
-            <div className="nice-scroll absolute inset-x-6 top-full z-30 mt-2 max-h-[280px] overflow-y-auto rounded-2xl border border-white/10 bg-[#10141c]/95 p-1.5 shadow-pop backdrop-blur-xl">
+            <div className="nice-scroll absolute inset-x-6 top-full z-30 mt-2 max-h-[280px] overflow-y-auto rounded-[26px] border border-white/10 bg-[#10141c]/95 p-1.5 shadow-pop backdrop-blur-xl">
               {slashItems.map((c) => (
                 <button
                   key={c.id}

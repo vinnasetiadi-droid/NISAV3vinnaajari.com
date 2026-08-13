@@ -91,7 +91,7 @@ export function Modal({
       className="fixed inset-0 z-[90] flex items-center justify-center bg-ink/40 p-6 backdrop-blur-sm"
       onMouseDown={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className={cn("glass-pop animate-rise rounded-3xl", className)}>
+      <div className={cn("glass-pop animate-rise rounded-[26px]", className)}>
         {children}
       </div>
     </div>,
@@ -111,7 +111,7 @@ export function MenuShell({
   return (
     <div
       className={cn(
-        "glass-pop animate-rise absolute z-50 overflow-hidden rounded-2xl",
+        "glass-pop animate-rise absolute z-50 overflow-hidden rounded-[26px]",
         className
       )}
     >

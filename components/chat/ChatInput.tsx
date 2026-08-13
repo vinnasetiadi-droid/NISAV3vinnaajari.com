@@ -64,7 +64,7 @@ interface Props {
 }
 
 /** Satu menu gabungan (mode + templates + recent) + menu model. */
-type Pop = null | "plus" | "plus-modes" | "plus-templates" | "modes-pill";
+type Pop = null | "plus" | "plus-templates" | "modes-pill";
 
 const MODE_ICONS: Record<ModeId, import("lucide-react").LucideIcon> = {
   auto: Sparkles,
@@ -400,7 +400,7 @@ export function ChatInput({
         <div ref={popRef}>
           <MenuShell
             className={cn(
-              "glass-chat nice-scroll max-h-[420px] overflow-y-auto rounded-3xl p-2",
+              "glass-menu nice-scroll max-h-[420px] overflow-y-auto rounded-[26px] p-2",
               pop === "modes-pill" ? "w-[min(400px,92vw)]" : "w-[min(440px,92vw)]",
               variant === "panel" ? "bottom-[72px]" : "bottom-[64px]",
               pop === "modes-pill" ? "right-0" : "left-0"
@@ -439,17 +439,6 @@ export function ChatInput({
                   }}
                 />
                 <PlusRow
-                  icon={<Settings2 size={17} />}
-                  title="Response mode"
-                  right={
-                    <span className="flex items-center gap-1.5 text-[13px] text-slate-400">
-                      {curMode.name}
-                      <ChevronRight size={15} />
-                    </span>
-                  }
-                  onClick={() => setPop("plus-modes")}
-                />
-                <PlusRow
                   icon={<FileText size={17} />}
                   title="Templates"
                   desc="Starter prompts to fill in"
@@ -462,11 +451,8 @@ export function ChatInput({
               </>
             )}
 
-            {(pop === "plus-modes" || pop === "modes-pill") && (
+            {pop === "modes-pill" && (
               <>
-                {pop === "plus-modes" && (
-                  <BackRow label="Response mode" onClick={() => setPop("plus")} />
-                )}
                 {MODES.map((m) => {
                   const Icon = MODE_ICONS[m.id];
                   return (
@@ -547,8 +533,8 @@ export function ChatInput({
 
       {variant === "panel" ? (
         /* ---------- panel (dashboard): 3 zona — kiri | tools+model | send ---------- */
-        <div className="glow-ring relative rounded-[20px]">
-        <div className="glass-chat relative z-10 rounded-[20px] p-4">
+        <div className="glow-ring relative rounded-[26px]">
+        <div className="glass-chat relative z-10 rounded-[26px] p-4">
           <div className="flex items-start gap-2.5 px-1 pt-0.5">
             <svg width="0" height="0" className="absolute">
               <defs>
@@ -631,7 +617,7 @@ export function ChatInput({
         </div>
       ) : (
         /* ---------- pill (chat): teks di atas, 3 zona di bawah ---------- */
-        <div className="glass-chat flex flex-col rounded-[24px] px-3.5 pb-2.5 pt-3">
+        <div className="glass-chat flex flex-col rounded-[26px] px-3.5 pb-2.5 pt-3">
           <div className="flex px-1">{textareaEl}</div>
           <div className="mt-1.5 flex items-center gap-1.5">
             <button
