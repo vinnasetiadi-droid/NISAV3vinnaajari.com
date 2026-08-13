@@ -263,7 +263,7 @@ async function runSkill(opts: {
   const stepTimer = setInterval(() => {
     stepIdx = Math.min(stepIdx + 1, steps.length - 1);
     useDB.getState().patchMsg(opts.convId, wmsg.id, { statusLine: steps[stepIdx] });
-  }, 1600);
+  }, 1000);
 
   try {
     const res = await fetch("/api/chat", {

@@ -28,7 +28,7 @@ function mockStream(text: string): Response {
   const chunks = text.match(/[\s\S]{1,7}/g) || [];
   const stream = new ReadableStream({
     async start(controller) {
-      await sleep(8000); // beri ruang animasi "Thinking…" tampil dulu (request: ±8 detik)
+      await sleep(5000); // beri ruang animasi "Thinking…" tampil (±5 detik)
       for (const c of chunks) {
         controller.enqueue(
           encoder.encode(`data: ${JSON.stringify({ t: c })}\n\n`)
@@ -66,7 +66,7 @@ export async function POST(req: Request) {
     const { id, topic, grade = "Elementary school", depth = "Basic" } = body.skill;
 
     if (!key) {
-      await sleep(8000); // beri waktu animasi thinking (orb + kata acak) tampil (±8 detik)
+      await sleep(5000); // beri waktu animasi thinking + progres skill tampil (±5 detik)
       const data = id === "quiz" ? mockQuiz(topic, grade) : mockAnagram(topic);
       return Response.json({ data, demo: true });
     }
