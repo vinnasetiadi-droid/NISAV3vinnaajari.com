@@ -100,7 +100,7 @@ export function AssistantMessage({
           <img
             src="/ajari-mark.png"
             alt=""
-            className="absolute left-1/2 top-1/2 z-10 h-[15px] w-auto -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_1px_3px_rgba(0,40,90,0.4)]"
+            className="absolute left-1/2 top-1/2 z-10 h-[22px] w-auto -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_1px_3px_rgba(0,40,90,0.4)]"
           />
         </div>
         <div className="min-w-0">
