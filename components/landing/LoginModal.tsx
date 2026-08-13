@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Eye, EyeOff, Mail, X } from "lucide-react";
+import { Eye, EyeOff, X } from "lucide-react";
 import { useToast } from "@/components/ui";
 import { useDB } from "@/lib/store";
 import { cn, sha256 } from "@/lib/utils";
@@ -66,7 +66,6 @@ export function LoginModal({
   const toast = useToast();
   const signUp = useDB((s) => s.signUp);
   const signIn = useDB((s) => s.signIn);
-  const [step, setStep] = useState<"options" | "email">("email");
   const [mode, setMode] = useState<"signup" | "signin">(initialMode);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -111,8 +110,6 @@ export function LoginModal({
     router.push("/app");
   };
 
-  const optionBtn =
-    "flex w-full items-center justify-center gap-3 rounded-xl px-5 py-3.5 text-[15px] font-semibold transition active:scale-[0.99]";
 
   return (
     <div
@@ -131,7 +128,7 @@ export function LoginModal({
         </div>
 
         {/* right auth pane */}
-        <div className="relative flex flex-col justify-center px-8 py-12 md:px-12">
+        <div className="relative flex flex-col justify-center px-8 py-10 md:px-12">
           <button
             onClick={onClose}
             className="absolute right-5 top-5 rounded-lg p-1.5 text-slate-500 transition hover:bg-white/10 hover:text-slate-200"
@@ -149,142 +146,106 @@ export function LoginModal({
             </p>
           )}
 
-          {step === "options" ? (
-            <div className="space-y-3">
-              <button
-                onClick={googleDemo}
-                disabled={busy}
-                className={cn(
-                  optionBtn,
-                  "bg-white text-slate-900 hover:bg-slate-200 disabled:opacity-60"
-                )}
-              >
-                <GoogleIcon /> {busy ? "Signing in…" : "Continue with Google"}
-              </button>
-              <button
-                onClick={() => setStep("email")}
-                className={cn(
-                  optionBtn,
-                  "border border-white/10 bg-white/[0.06] text-slate-200 hover:bg-white/[0.12]"
-                )}
-              >
-                <Mail size={17} /> Continue with email
-              </button>
-              <button
-                onClick={social}
-                className={cn(
-                  optionBtn,
-                  "border border-white/10 bg-white/[0.06] text-slate-200 hover:bg-white/[0.12]"
-                )}
-              >
-                <TikTokIcon /> Continue with TikTok
-              </button>
-              <button
-                onClick={social}
-                className={cn(
-                  optionBtn,
-                  "border border-white/10 bg-white/[0.06] text-slate-200 hover:bg-white/[0.12]"
-                )}
-              >
-                <FacebookIcon /> Continue with Facebook
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={submit} className="space-y-3">
-              <button
-                type="button"
-                onClick={googleDemo}
-                disabled={busy}
-                className={cn(
-                  optionBtn,
-                  "bg-white text-slate-900 hover:bg-slate-200 disabled:opacity-60"
-                )}
-              >
-                <GoogleIcon /> {busy ? "Signing in…" : "Continue with Google"}
-              </button>
-              <div className="flex items-center gap-3 py-1 text-[12px] uppercase tracking-wider text-slate-600">
-                <span className="h-px flex-1 bg-white/10" />
-                or
-                <span className="h-px flex-1 bg-white/10" />
-              </div>
-              {mode === "signup" && (
-                <input
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3 text-[14px] text-slate-100 placeholder:text-slate-500 focus:border-brand-400"
-                  placeholder="Your name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              )}
+          <form onSubmit={submit} className="space-y-3">
+            {mode === "signup" && (
               <input
                 className="w-full rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3 text-[14px] text-slate-100 placeholder:text-slate-500 focus:border-brand-400"
-                placeholder="you@example.com"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
-              <div className="relative">
-                <input
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3 text-[14px] text-slate-100 placeholder:text-slate-500 focus:border-brand-400"
-                  placeholder="Password (min. 8 characters)"
-                  type={show ? "text" : "password"}
-                  value={pass}
-                  onChange={(e) => setPass(e.target.value)}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShow(!show)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
-                >
-                  {show ? <EyeOff size={17} /> : <Eye size={17} />}
-                </button>
-              </div>
-
-              {err && (
-                <div className="rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-2.5 text-[13px] text-red-300">
-                  {err}
-                </div>
-              )}
-
+            )}
+            <input
+              className="w-full rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3 text-[14px] text-slate-100 placeholder:text-slate-500 focus:border-brand-400"
+              placeholder="you@example.com"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <div className="relative">
+              <input
+                className="w-full rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3 text-[14px] text-slate-100 placeholder:text-slate-500 focus:border-brand-400"
+                placeholder="Password (min. 8 characters)"
+                type={show ? "text" : "password"}
+                value={pass}
+                onChange={(e) => setPass(e.target.value)}
+              />
               <button
-                disabled={busy}
-                className="btn-gradient w-full rounded-xl py-3 text-[15px] font-semibold disabled:opacity-60"
+                type="button"
+                onClick={() => setShow(!show)}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
               >
-                {busy
-                  ? "One moment…"
-                  : mode === "signup"
-                  ? "Create account"
-                  : "Sign in"}
+                {show ? <EyeOff size={17} /> : <Eye size={17} />}
               </button>
+            </div>
 
-              <div className="flex items-center justify-between pt-1 text-[13px]">
-                <button
-                  type="button"
-                  onClick={() => setStep("options")}
-                  className="flex items-center gap-1.5 text-slate-500 hover:text-slate-300"
-                >
-                  <ArrowLeft size={13} /> Other options
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMode(mode === "signup" ? "signin" : "signup");
-                    setErr(null);
-                  }}
-                  className="font-semibold text-brand-600 hover:text-brand-700"
-                >
-                  {mode === "signup"
-                    ? "Already have an account? Sign in"
-                    : "Don\u2019t have an account yet? Sign up"}
-                </button>
+            {err && (
+              <div className="rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-2.5 text-[13px] text-red-300">
+                {err}
               </div>
-            </form>
-          )}
+            )}
 
-          <p className="mt-8 text-center text-[13px] leading-relaxed text-slate-500">
-            By continuing, you agree to the{" "}
-            <b className="font-semibold text-slate-300">Terms of Service</b> and{" "}
-            <b className="font-semibold text-slate-300">Privacy Policy</b>.
-          </p>
+            <button
+              disabled={busy}
+              className="w-full rounded-xl bg-[#0a70ff] py-3 text-[15px] font-semibold text-white transition hover:bg-[#2a84ff] disabled:opacity-60"
+            >
+              {busy
+                ? "One moment…"
+                : mode === "signup"
+                ? "Create account"
+                : "Sign in"}
+            </button>
+
+            <div className="pt-1 text-center text-[13px] text-slate-500">
+              {mode === "signup"
+                ? "Already have an account? "
+                : "Don\u2019t have an account yet? "}
+              <button
+                type="button"
+                onClick={() => {
+                  setMode(mode === "signup" ? "signin" : "signup");
+                  setErr(null);
+                }}
+                className="font-semibold text-brand-400 hover:text-brand-300"
+              >
+                {mode === "signup" ? "Sign in" : "Sign up"}
+              </button>
+            </div>
+
+            {/* social sign-in: baris ikon di bawah */}
+            <div className="flex items-center gap-3 pt-2 text-[12px] uppercase tracking-wider text-slate-600">
+              <span className="h-px flex-1 bg-white/10" />
+              or continue with
+              <span className="h-px flex-1 bg-white/10" />
+            </div>
+            <div className="flex items-center justify-center gap-3 pt-1">
+              <button
+                type="button"
+                title="Continue with Google"
+                onClick={googleDemo}
+                disabled={busy}
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-white transition hover:bg-slate-200 disabled:opacity-60"
+              >
+                <GoogleIcon />
+              </button>
+              <button
+                type="button"
+                title="Continue with TikTok"
+                onClick={social}
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-slate-200 transition hover:bg-white/[0.12]"
+              >
+                <TikTokIcon />
+              </button>
+              <button
+                type="button"
+                title="Continue with Facebook"
+                onClick={social}
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-slate-200 transition hover:bg-white/[0.12]"
+              >
+                <FacebookIcon />
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
