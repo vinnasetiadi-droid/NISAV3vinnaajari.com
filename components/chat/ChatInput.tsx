@@ -588,6 +588,20 @@ export function ChatInput({
             <div className="flex-1" />
 
 
+            <button
+              aria-label="Response mode"
+              title="Response mode"
+              onClick={() => setPop(pop === "plus-modes" ? null : "plus-modes")}
+              className={cn(
+                "flex min-h-[44px] items-center gap-1.5 rounded-full px-3 text-[12.5px] font-medium transition hover:bg-slate-900/[0.05] dark:hover:bg-white/10",
+                mode !== "auto"
+                  ? "text-brand-500 dark:text-brand-300"
+                  : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+              )}
+            >
+              {curMode.name}
+              <ChevronDown size={13} className="opacity-60" />
+            </button>
             {/* zona paling kanan: send */}
             {streaming ? (
               <button
@@ -630,6 +644,20 @@ export function ChatInput({
               <Plus size={18} />
             </button>
             <div className="flex-1" />
+            <button
+              aria-label="Response mode"
+              title="Response mode"
+              onClick={() => setPop(pop === "plus-modes" ? null : "plus-modes")}
+              className={cn(
+                "flex min-h-[44px] items-center gap-1.5 rounded-full px-3 text-[12.5px] font-medium transition hover:bg-slate-900/[0.05] dark:hover:bg-white/10",
+                mode !== "auto"
+                  ? "text-brand-500 dark:text-brand-300"
+                  : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+              )}
+            >
+              {curMode.name}
+              <ChevronDown size={13} className="opacity-60" />
+            </button>
             {streaming ? (
               <button
                 aria-label="Stop"
