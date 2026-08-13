@@ -127,7 +127,7 @@ export function Sidebar() {
   /* ---------- collapsed ---------- */
   if (s.sidebarCollapsed) {
     return (
-      <div className="glass-chat flex w-[54px] min-h-0 flex-1 shrink-0 flex-col items-center gap-2 rounded-2xl py-4">
+      <div className="glass-chat flex w-[54px] min-h-0 flex-1 shrink-0 flex-col items-center gap-2 rounded-[26px] py-4">
         <button
           onClick={() => s.setSidebarCollapsed(false)}
           className="mb-1 flex h-9 w-9 items-center justify-center"
@@ -167,7 +167,7 @@ export function Sidebar() {
   return (
     <aside
       style={{ width: s.sidebarWidth }}
-      className="glass-chat relative flex min-h-0 flex-1 shrink-0 flex-col rounded-2xl"
+      className="glass-chat relative flex min-h-0 flex-1 shrink-0 flex-col rounded-[26px]"
     >
       {/* drag handle: klik = collapse (⌘B), drag = resize */}
       <div

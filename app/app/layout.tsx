@@ -42,15 +42,20 @@ export default function AppLayout({
 
   return (
     <ToastProvider>
-      <div className="bg-app-light flex h-screen overflow-hidden">
-        {/* kolom kiri: sidebar floating + pill search/commands tepat di bawahnya */}
-        <div className="flex min-h-0 shrink-0 flex-col gap-2 p-2.5 pr-0">
-          <Suspense fallback={<div className="w-[236px] flex-1" />}>
-            <Sidebar />
-          </Suspense>
+      <div className="bg-app-light flex h-screen flex-col overflow-hidden">
+        <div className="flex min-h-0 flex-1">
+          {/* sidebar floating glass */}
+          <div className="flex min-h-0 shrink-0 flex-col p-2.5 pb-0 pr-0">
+            <Suspense fallback={<div className="w-[236px] flex-1" />}>
+              <Sidebar />
+            </Suspense>
+          </div>
+          <div className="flex min-h-0 min-w-0 flex-1">{children}</div>
+        </div>
+        {/* pill search/commands melebar sampai ujung kanan */}
+        <div className="px-2.5 pb-2.5 pt-2">
           <StatusBar />
         </div>
-        <div className="flex min-h-0 min-w-0 flex-1">{children}</div>
         <CommandPalette />
       </div>
     </ToastProvider>
